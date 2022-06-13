@@ -22,7 +22,7 @@
     "test:inte": "yarn prisma:migrate && jest --config ./jest-integration.json --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "husky install",
-    "pre-commit": "npm run format && npm test"
+    "pre-commit": "npm run format && npm run lint && npm test"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
