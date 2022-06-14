@@ -10,8 +10,9 @@ const config: Config.InitialOptions = {
   verbose: true,
   testEnvironment: 'node',
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.{tsx,ts}',
+    '<rootDir>/src/**/*.{ts}',
     '!<rootDir>/src/app.module.ts',
+    '!<rootDir>/src/health/*.{ts}',
     '!<rootDir>/src/main.ts',
     '!<rootDir>/node_modules/',
     '!<rootDir>/**/__tests__/**',
