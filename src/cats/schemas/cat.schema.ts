@@ -1,7 +1,20 @@
-import * as mongoose from 'mongoose';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-export const CatSchema = new mongoose.Schema({
-  name: String,
-  age: Number,
-  breed: String,
-});
+/* maps our cat class to our mongoDB collection of the same name */
+@Schema()
+export class Cat extends Document {
+  @Prop()
+  name: string;
+
+  @Prop()
+  age: number;
+
+  @Prop()
+  breed: string;
+
+  @Prop([String])
+  tags: string[];
+}
+
+export const CatSchema = SchemaFactory.createForClass(Cat);
