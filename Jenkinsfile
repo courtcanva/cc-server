@@ -11,7 +11,7 @@ pipeline {
         AWS_ECS_TASKDEF_NAME = 'CCS-F-UAT-task'
         task_def_arn = 'arn:aws:ecs:ap-southeast-2:497551902879:task-definition/CCS-F-UAT-task'
         AWS_ECS_CLUSTER = 'CCS-F-UAT-cluster'
-        AWS_ECS_SERVICE = 'CCS-F-UAT-service'Ｆ
+        AWS_ECS_SERVICE = 'CCS-F-UAT-service'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
     }
 
