@@ -1,0 +1,20 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testMatch": ["**/integration/**"],
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "collectCoverageFrom": ["**/src/**.ts"],
+  "coverageThreshold": {
+    "**/adapters/secondaries/real/**.ts": {
+      "branches": 80,
+      "functions": 80,
+      "lines": 80,
+      "statements": 80
+    }
+  },
+  "coverageDirectory": "./coverage",
+  "testEnvironment": "node",
+  "roots": ["<rootDir>/src"]
+}

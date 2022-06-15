@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CourtSpecModule } from './modules/court_spec/court_spec.module';
+import { CatsModule } from './cats/cats.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [CourtSpecModule],
-  controllers: [],
-  providers: [],
+  imports: [CatsModule, MongooseModule.forRoot('mongodb://localhost/test')],
 })
 export class AppModule {}
