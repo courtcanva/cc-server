@@ -1,0 +1,14 @@
+{
+    "name": "Pro Full Court ",
+    "length": 28000,
+    "width": 15000,
+    "centre_circle_radius": 1800,
+    "three_point_radius": 6750,
+    "three_point_line": 900,
+    "length_of_corner": 2990,
+    "restricted_area_length": 5800,
+    "restricted_area_width": 4900,
+    "side_border_width": 2000,
+    "line_border_width": 50,
+    "description": "This is the default PRO Full Court "
+}
