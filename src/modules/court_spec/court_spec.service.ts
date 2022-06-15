@@ -7,19 +7,19 @@ import { CourtSpec } from './schemas/court_spec.schema';
 
 @Injectable()
 export class CourtSpecService {
-  constructor(@InjectModel(CourtSpec.name) private readonly courtspecModel: Model<CourtSpec>) {}
+  constructor(@InjectModel(CourtSpec.name) private readonly courtSpecModel: Model<CourtSpec>) {}
 
   async create(createCourtSpecDto: CreateCourtSpecDto): Promise<CourtSpec> {
-    const court_spec = await this.courtspecModel.create(createCourtSpecDto);
+    const court_spec = await this.courtSpecModel.create(createCourtSpecDto);
     return court_spec;
   }
 
   async getAllCourtSizes(): Promise<CourtSpec[]> {
-    return await this.courtspecModel.find().exec();
+    return await this.courtSpecModel.find().exec();
   }
 
   async getCourtSpecByName(name: string): Promise<CourtSpec> {
-    const court = await this.courtspecModel.findOne({ name: name }).exec();
+    const court = await this.courtSpecModel.findOne({ name: name }).exec();
     if (!court) {
       throw new NotFoundException(`court ${name} not found`);
     }
@@ -30,19 +30,15 @@ export class CourtSpecService {
     name: string,
     updateCourtSpecDto: UpdateCourtSpecDto,
   ): Promise<CourtSpec> {
-    const existingCourtSpec = await this.courtspecModel
+    const existingCourtSpec = await this.courtSpecModel
       .findOneAndUpdate({ name: name }, { $set: updateCourtSpecDto }, { new: true })
       .exec();
-
-    // if (!existingCat) {
-    //   throw new NotFoundException(`Cat ${id} not found`);
-    // }
     return existingCourtSpec;
   }
 
   async removeCourtSpecByName(name: string): Promise<{ deleted: boolean; message?: string }> {
     try {
-      await this.courtspecModel.remove({ name });
+      await this.courtSpecModel.remove({ name });
       return { deleted: true };
     } catch (err) {
       return { deleted: false, message: err.message };

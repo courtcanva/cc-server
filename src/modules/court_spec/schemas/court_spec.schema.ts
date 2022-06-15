@@ -41,17 +41,14 @@ export class CourtSpec extends Document {
   @Prop()
   description: string;
 
-  // @Prop()
-  // created_at: {
-  //   type: timestamp;
-  //   default: new Date();
-  // };
+  @Prop({ type: Date, default: new Date() })
+  created_at: Date;
 
-  // @Prop()
-  // updated_at: {
-  //   type: timestamp;
-  //   default: new Date();
-  // }
+  @Prop({ type: Date, default: new Date() })
+  updated_at: Date;
+
+  @Prop({ type: Boolean, default: false })
+  isDeleted: boolean;
 }
 
 export const CourtSpecSchema = SchemaFactory.createForClass(CourtSpec);
