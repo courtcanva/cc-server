@@ -8,6 +8,8 @@ $ npm i
 ```
 
 ## Docker MongoDB
+Please make sure you have installed Docker in your local environment.
+[You can download Docker from here](https://docs.docker.com/get-docker/)
 
 ```bash
 $ docker compose up
