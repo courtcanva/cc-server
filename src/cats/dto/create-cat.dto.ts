@@ -1,4 +1,4 @@
-import { IsNumber, IsPositive, IsString } from 'class-validator';
+import { IsNumber, IsPositive, IsString } from "class-validator";
 export class CreateCatDto {
   @IsString()
   readonly name: string;

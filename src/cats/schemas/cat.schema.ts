@@ -1,5 +1,5 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 
 /* maps our cat class to our mongoDB collection of the same name */
 @Schema()
