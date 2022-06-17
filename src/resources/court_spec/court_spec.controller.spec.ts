@@ -207,6 +207,6 @@ const sum = (a, b) => {
   return a + b;
 };
 
-test('sum should return correct value', () => {
+test("sum should return correct value", () => {
   expect(sum(1, 2)).toBe(3);
 });

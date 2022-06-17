@@ -151,6 +151,6 @@ const sub = (a: number, b: number): number => {
   return a - b;
 };
 
-test('sub should return correct value', () => {
+test("sub should return correct value", () => {
   expect(sub(2, 1)).toBe(1);
 });

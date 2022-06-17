@@ -1,5 +1,5 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 
 export type CourtSpecDocument = CourtSpec & Document;
 
@@ -47,7 +47,7 @@ export class CourtSpec extends Document {
   @Prop({ default: 50 })
   line_border_width: number;
 
-  @Prop({ default: '' })
+  @Prop({ default: "" })
   description: string;
 
   @Prop({ default: new Date() })

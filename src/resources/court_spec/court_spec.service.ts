@@ -1,9 +1,9 @@
-import { Injectable, HttpException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateCourtSpecDto } from './dto/create-court_spec.dto';
-import { UpdateCourtSpecDto } from './dto/update-court_spec.dto';
-import { CourtSpec } from './schemas/court_spec.schema';
+import { Injectable, HttpException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { CreateCourtSpecDto } from "./dto/create-court_spec.dto";
+import { UpdateCourtSpecDto } from "./dto/update-court_spec.dto";
+import { CourtSpec } from "./schemas/court_spec.schema";
 
 @Injectable()
 export class CourtSpecService {

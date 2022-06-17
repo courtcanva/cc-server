@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString } from "class-validator";
 export class CreateCourtSpecDto {
   @IsString()
   readonly name: string;
