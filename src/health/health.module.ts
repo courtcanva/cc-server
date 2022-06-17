@@ -6,12 +6,7 @@ import { HttpModule } from "@nestjs/axios";
 import { HealthController } from "./health.controller";
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.DATABASE_URL),
-    TerminusModule,
-    HttpModule,
-  ],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), MongooseModule, TerminusModule, HttpModule],
   controllers: [HealthController],
 })
 export class HealthModule {}
