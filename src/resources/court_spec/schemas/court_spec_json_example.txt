@@ -1,5 +1,5 @@
 {
-    "name": "Pro Full Court ",
+    "name": "Pro Full Court",
     "length": 28000,
     "width": 15000,
     "centre_circle_radius": 1800,

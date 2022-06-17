@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
 import { CourtSpecService } from './court_spec.service';
 import { CreateCourtSpecDto } from './dto/create-court_spec.dto';
 import { UpdateCourtSpecDto } from './dto/update-court_spec.dto';
 import { CourtSpec } from './schemas/court_spec.schema';
 
-@Controller('court_spec')
+@Controller('courts')
 export class CourtSpecController {
   constructor(private readonly courtSpecService: CourtSpecService) {}
 
@@ -13,9 +13,9 @@ export class CourtSpecController {
     return await this.courtSpecService.getAllCourtSizes();
   }
 
-  @Get(':name')
-  async getCourtSpecByName(@Param('name') name: string): Promise<CourtSpec> {
-    return await this.courtSpecService.getCourtSpecByName(name);
+  @Get(':courtId')
+  async getCourtSpecById(@Param('courtId') courtId: string): Promise<CourtSpec> {
+    return await this.courtSpecService.getCourtSpecById(courtId);
   }
 
   @Post()
@@ -23,16 +23,16 @@ export class CourtSpecController {
     return await this.courtSpecService.create(createCourtSpecDto);
   }
 
-  @Patch(':name')
+  @Put(':courtId')
   async update(
-    @Param('name') name: string,
+    @Param('courtId') courtId: string,
     @Body() updateCourtSpecDto: UpdateCourtSpecDto,
   ): Promise<CourtSpec> {
-    return await this.courtSpecService.updateCourtSpecByName(name, updateCourtSpecDto);
+    return await this.courtSpecService.updateCourtSpecById(courtId, updateCourtSpecDto);
   }
 
-  @Delete(':name')
-  async remove(@Param('name') name: string): Promise<{ deleted: boolean; message?: string }> {
-    return await this.courtSpecService.removeCourtSpecByName(name);
+  @Delete(':courtId')
+  async remove(@Param('courtId') courtId: string): Promise<{ message: string }> {
+    return await this.courtSpecService.removeCourtSpecById(courtId);
   }
 }

@@ -5,49 +5,58 @@ export type CourtSpecDocument = CourtSpec & Document;
 
 @Schema()
 export class CourtSpec extends Document {
-  @Prop({ type: String, required: true })
+  // user need to name their court name
+  @Prop({ required: true, minLength: 5, maxLength: 50 })
   name: string;
 
-  @Prop({ type: Number, required: true })
+  // if not input , will get default value of 28m
+  @Prop({ default: 28000 })
   length: number;
 
-  @Prop({ type: Number, required: true })
+  // if not input , will get default value of 15m
+  @Prop({ default: 15000 })
   width: number;
 
-  @Prop({ type: Number, required: true })
+  // constant, will get this value based on court size
+  @Prop({ default: 1800 })
   centre_circle_radius: number;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ default: 6750 })
   three_point_radius: number;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ default: 900 })
   three_point_line: number;
 
-  @Prop({ type: Number, required: true })
+  // constant, will get this value based on court size
+  @Prop({ default: 2990 })
   length_of_corner: number;
 
-  @Prop({ type: Number, required: true })
+  // constant
+  @Prop({ default: 5800 })
   restricted_area_length: number;
 
-  @Prop({ type: Number, required: true })
+  // constant
+  @Prop({ default: 4900 })
   restricted_area_width: number;
 
-  @Prop({ type: Number, required: true })
+  // constant, will get this value based on court size
+  @Prop({ default: 1000 })
   side_border_width: number;
 
-  @Prop({ type: Number, required: true })
+  // constant
+  @Prop({ default: 50 })
   line_border_width: number;
 
-  @Prop()
+  @Prop({ default: '' })
   description: string;
 
-  @Prop({ type: Date, default: new Date() })
+  @Prop({ default: new Date() })
   created_at: Date;
 
-  @Prop({ type: Date, default: new Date() })
+  @Prop({ default: new Date() })
   updated_at: Date;
 
-  @Prop({ type: Boolean, default: false })
+  @Prop({ default: false })
   isDeleted: boolean;
 }
 
