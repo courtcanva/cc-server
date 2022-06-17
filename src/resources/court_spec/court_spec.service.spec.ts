@@ -1,4 +1,4 @@
-/*import { getModelToken } from '@nestjs/mongoose';
+import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourtSpecService } from './court_spec.service';
 import { CourtSpec } from './schemas/court_spec.schema';
@@ -144,13 +144,4 @@ describe('CourtSpecService', () => {
       message: 'Bad delete',
     });
   });
-});
-*/
-
-const sub = (a: number, b: number): number => {
-  return a - b;
-};
-
-test("sub should return correct value", () => {
-  expect(sub(2, 1)).toBe(1);
 });
