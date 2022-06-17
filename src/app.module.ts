@@ -11,7 +11,7 @@ import { MongooseModule } from "@nestjs/mongoose";
     ConfigModule.forRoot({ isGlobal: true }),
     HealthModule,
     CatsModule,
-    MongooseModule.forRoot(process.env.CATS_URL),
+    MongooseModule.forRoot(process.env.DATABASE_URL),
   ],
 })
 export class AppModule {}
