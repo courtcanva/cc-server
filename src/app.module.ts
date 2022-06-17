@@ -7,6 +7,7 @@ import { HealthModule } from "./health/health.module";
 
 import { CatsModule } from "./cats/cats.module";
 import { MongooseModule } from "@nestjs/mongoose";
+import { AuthModule } from "./resources/auth/auth.module";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { MongooseModule } from "@nestjs/mongoose";
     HealthModule,
     CatsModule,
     MongooseModule.forRoot("mongodb://localhost/test"),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
