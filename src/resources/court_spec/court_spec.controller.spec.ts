@@ -1,4 +1,4 @@
-/*import { Test, TestingModule } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { UpdateCourtSpecDto } from './dto/update-court_spec.dto';
 import { CreateCourtSpecDto } from './dto/create-court_spec.dto';
 import { CourtSpecController } from './court_spec.controller';
@@ -200,13 +200,4 @@ describe('CourtSpecController', () => {
   //     expect(deleteSpy).toBeCalledWith('a uuid that does not exist');
   //   });
   // });
-});
-*/
-
-const sum = (a, b) => {
-  return a + b;
-};
-
-test("sum should return correct value", () => {
-  expect(sum(1, 2)).toBe(3);
 });
