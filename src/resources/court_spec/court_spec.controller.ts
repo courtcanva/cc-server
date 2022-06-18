@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  UsePipes,
+  ValidationPipe,
+} from "@nestjs/common";
 import { CourtSpecService } from "./court_spec.service";
 import { CreateCourtSpecDto } from "./dto/create-court_spec.dto";
 import { UpdateCourtSpecDto } from "./dto/update-court_spec.dto";
@@ -19,11 +29,13 @@ export class CourtSpecController {
   }
 
   @Post()
+  @UsePipes(new ValidationPipe())
   async create(@Body() createCourtSpecDto: CreateCourtSpecDto): Promise<CourtSpec> {
     return await this.courtSpecService.create(createCourtSpecDto);
   }
 
   @Put(":courtId")
+  @UsePipes(new ValidationPipe())
   async update(
     @Param("courtId") courtId: string,
     @Body() updateCourtSpecDto: UpdateCourtSpecDto,

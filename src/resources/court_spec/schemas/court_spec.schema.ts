@@ -2,59 +2,49 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
 export type CourtSpecDocument = CourtSpec & Document;
-
 @Schema()
 export class CourtSpec extends Document {
-  // user need to name their court name
   @Prop({ required: true, minLength: 5, maxLength: 50 })
   name: string;
 
-  // if not input , will get default value of 28m
   @Prop({ default: 28000 })
   length: number;
 
-  // if not input , will get default value of 15m
   @Prop({ default: 15000 })
   width: number;
 
-  // constant, will get this value based on court size
   @Prop({ default: 1800 })
-  centre_circle_radius: number;
+  centreCircleRadius: number;
 
   @Prop({ default: 6750 })
-  three_point_radius: number;
+  threePointRadius: number;
 
   @Prop({ default: 900 })
-  three_point_line: number;
+  threePointLine: number;
 
-  // constant, will get this value based on court size
   @Prop({ default: 2990 })
-  length_of_corner: number;
+  lengthOfCorner: number;
 
-  // constant
   @Prop({ default: 5800 })
-  restricted_area_length: number;
+  restrictedAreaLength: number;
 
-  // constant
   @Prop({ default: 4900 })
-  restricted_area_width: number;
+  restrictedAreaWidth: number;
 
-  // constant, will get this value based on court size
   @Prop({ default: 1000 })
-  side_border_width: number;
+  sideBorderWidth: number;
 
-  // constant
   @Prop({ default: 50 })
-  line_border_width: number;
+  lineBorderWidth: number;
 
   @Prop({ default: "" })
   description: string;
 
-  @Prop({ default: new Date() })
-  created_at: Date;
+  @Prop({ timestamp: true })
+  createdAt: Date;
 
-  @Prop({ default: new Date() })
-  updated_at: Date;
+  @Prop({ timestamp: true })
+  updatedAt: Date;
 
   @Prop({ default: false })
   isDeleted: boolean;

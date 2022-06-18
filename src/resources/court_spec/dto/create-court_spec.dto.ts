@@ -1,38 +1,52 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString, Length } from "class-validator";
 export class CreateCourtSpecDto {
+  @Length(5, 50, {
+    message: "the court name need to be longer than 5 characters or shorter than 50 characters",
+  })
   @IsString()
   readonly name: string;
 
   @IsNumber()
+  @IsOptional()
   readonly length: number;
 
   @IsNumber()
+  @IsOptional()
   readonly width: number;
 
   @IsNumber()
-  readonly centre_circle_radius: number;
+  @IsOptional()
+  readonly centreCircleRadius: number;
 
   @IsNumber()
-  readonly three_point_radius: number;
+  @IsOptional()
+  readonly threePointRadius: number;
 
   @IsNumber()
-  readonly three_point_line: number;
+  @IsOptional()
+  readonly threePointLine: number;
 
   @IsNumber()
-  readonly length_of_corner: number;
+  @IsOptional()
+  readonly lengthOfCorner: number;
 
   @IsNumber()
-  readonly restricted_area_length: number;
+  @IsOptional()
+  readonly restrictedAreaLength: number;
 
   @IsNumber()
-  readonly restricted_area_width: number;
+  @IsOptional()
+  readonly restrictedAreaWidth: number;
 
   @IsNumber()
-  readonly side_border_width: number;
+  @IsOptional()
+  readonly sideBorderWidth: number;
 
   @IsNumber()
-  readonly line_border_width: number;
+  @IsOptional()
+  readonly lineBorderWidth: number;
 
   @IsString()
+  @IsOptional()
   readonly description: string;
 }

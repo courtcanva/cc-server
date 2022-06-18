@@ -1,10 +1,10 @@
-/*import { Test, TestingModule } from '@nestjs/testing';
-import { UpdateCourtSpecDto } from './dto/update-court_spec.dto';
-import { CreateCourtSpecDto } from './dto/create-court_spec.dto';
-import { CourtSpecController } from './court_spec.controller';
-import { CourtSpecService } from './court_spec.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { UpdateCourtSpecDto } from "./dto/update-court_spec.dto";
+import { CreateCourtSpecDto } from "./dto/create-court_spec.dto";
+import { CourtSpecController } from "./court_spec.controller";
+import { CourtSpecService } from "./court_spec.service";
 
-describe('CourtSpecController', () => {
+describe("CourtSpecController", () => {
   let controller: CourtSpecController;
   let service: CourtSpecService;
 
@@ -17,7 +17,7 @@ describe('CourtSpecController', () => {
           useValue: {
             getAllCourtSizes: jest.fn().mockResolvedValue([
               {
-                name: 'Court #1',
+                name: "Court #1",
                 length: 10000,
                 width: 2000,
                 centre_circle_radius: 1800,
@@ -28,10 +28,10 @@ describe('CourtSpecController', () => {
                 restricted_area_width: 2000,
                 side_border_width: 2000,
                 line_border_width: 50,
-                description: 'Court #1',
+                description: "Court #1",
               },
               {
-                name: 'Court #2',
+                name: "Court #2",
                 length: 10000,
                 width: 2000,
                 centre_circle_radius: 1800,
@@ -42,12 +42,12 @@ describe('CourtSpecController', () => {
                 restricted_area_width: 2000,
                 side_border_width: 2000,
                 line_border_width: 50,
-                description: 'Court #2',
+                description: "Court #2",
               },
             ]),
             getCourtSpecById: jest.fn().mockImplementation((courtId: string) =>
               Promise.resolve({
-                name: 'Court #1',
+                name: "Court #1",
                 length: 10000,
                 width: 2000,
                 centre_circle_radius: 1800,
@@ -58,18 +58,18 @@ describe('CourtSpecController', () => {
                 restricted_area_width: 2000,
                 side_border_width: 2000,
                 line_border_width: 50,
-                description: 'Court #1',
+                description: "Court #1",
               }),
             ),
             create: jest
               .fn()
               .mockImplementation((createCourtSpecDto: CreateCourtSpecDto) =>
-                Promise.resolve({ name: 'Court #1', ...createCourtSpecDto }),
+                Promise.resolve({ name: "Court #1", ...createCourtSpecDto }),
               ),
             update: jest
               .fn()
               .mockImplementation((name: string, updateCourtSpecDto: UpdateCourtSpecDto) =>
-                Promise.resolve({ name: 'Court #1', ...updateCourtSpecDto }),
+                Promise.resolve({ name: "Court #1", ...updateCourtSpecDto }),
               ),
             remove: jest.fn().mockResolvedValue({ deleted: true }),
           },
@@ -81,15 +81,15 @@ describe('CourtSpecController', () => {
     service = module.get<CourtSpecService>(CourtSpecService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 
-  describe('getAllCourtSizes', () => {
-    it('should get an array of courts', () => {
+  describe("getAllCourtSizes", () => {
+    it("should get an array of courts", () => {
       expect(controller.getAllCourtSizes()).resolves.toEqual([
         {
-          name: 'Court #1',
+          name: "Court #1",
           length: 10000,
           width: 2000,
           centre_circle_radius: 1800,
@@ -100,10 +100,10 @@ describe('CourtSpecController', () => {
           restricted_area_width: 2000,
           side_border_width: 2000,
           line_border_width: 50,
-          description: 'Court #1',
+          description: "Court #1",
         },
         {
-          name: 'Court #2',
+          name: "Court #2",
           length: 10000,
           width: 2000,
           centre_circle_radius: 1800,
@@ -114,16 +114,16 @@ describe('CourtSpecController', () => {
           restricted_area_width: 2000,
           side_border_width: 2000,
           line_border_width: 50,
-          description: 'Court #2',
+          description: "Court #2",
         },
       ]);
     });
   });
 
-  describe('getCourtSpecById', () => {
-    it('should get a single court', () => {
-      expect(controller.getCourtSpecById('Court #1')).resolves.toEqual({
-        name: 'Court #1',
+  describe("getCourtSpecById", () => {
+    it("should get a single court", () => {
+      expect(controller.getCourtSpecById("Court #1")).resolves.toEqual({
+        name: "Court #1",
         length: 10000,
         width: 2000,
         centre_circle_radius: 1800,
@@ -134,7 +134,7 @@ describe('CourtSpecController', () => {
         restricted_area_width: 2000,
         side_border_width: 2000,
         line_border_width: 50,
-        description: 'Court #1',
+        description: "Court #1",
       });
     });
   });
@@ -200,13 +200,4 @@ describe('CourtSpecController', () => {
   //     expect(deleteSpy).toBeCalledWith('a uuid that does not exist');
   //   });
   // });
-});
-*/
-
-const sum = (a, b) => {
-  return a + b;
-};
-
-test("sum should return correct value", () => {
-  expect(sum(1, 2)).toBe(3);
 });
