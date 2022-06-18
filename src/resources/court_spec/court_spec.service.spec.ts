@@ -93,7 +93,7 @@ describe("CourtSpecService", () => {
     expect(courts).toEqual(courtArray);
   });
 
-  /* it("should get one court by name", async () => {
+   it("should get one court by name", async () => {
     jest.spyOn(model, "findOne").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockCourt),
@@ -101,7 +101,7 @@ describe("CourtSpecService", () => {
     );
     const courts = await service.getCourtSpecById("1");
     expect(courts).toEqual(mockCourt);
-  });*/
+  });
 
   it("should insert a new court", async () => {
     const foundCourt = jest.spyOn(model, "findOne").mockReturnValueOnce(
@@ -123,7 +123,7 @@ describe("CourtSpecService", () => {
     expect(newCourt).toEqual(mockCourt);
   });
 
-  /*it("should update a court successfully", async () => {
+  it("should update a court successfully", async () => {
     jest.spyOn(model, "findOneAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockCourt),
@@ -143,5 +143,5 @@ describe("CourtSpecService", () => {
       deleted: false,
       message: "Bad delete",
     });
-  });*/
+  });
 });
