@@ -139,65 +139,65 @@ describe("CourtSpecController", () => {
     });
   });
 
-  // describe('create()', () => {
-  //   it('should create a new court spec', async () => {
-  //     const createCourtSpecDto: CreateCourtSpecDto = {
-  //       name: 'Court #1',
-  //       length: 10000,
-  //       width: 2000,
-  //       centre_circle_radius: 1800,
-  //       three_point_radius: 6000,
-  //       three_point_line: 2300,
-  //       length_of_corner: 2000,
-  //       restricted_area_length: 2000,
-  //       restricted_area_width: 2000,
-  //       side_border_width: 2000,
-  //       line_border_width: 50,
-  //       description: 'Court #1',
-  //     };
+  describe('create()', () => {
+    it('should create a new court spec', async () => {
+      const createCourtSpecDto: CreateCourtSpecDto = {
+        name: 'Court #1',
+        length: 10000,
+        width: 2000,
+        centre_circle_radius: 1800,
+        three_point_radius: 6000,
+        three_point_line: 2300,
+        length_of_corner: 2000,
+        restricted_area_length: 2000,
+        restricted_area_width: 2000,
+        side_border_width: 2000,
+        line_border_width: 50,
+        description: 'Court #1',
+      };
 
-  //     expect(controller.create(createCourtSpecDto)).resolves.toEqual({
-  //       _id: '1',
-  //       ...createCourtSpecDto,
-  //     });
-  //   });
-  // });
-  // describe('updateCourt', () => {
-  //   it('should update a court', () => {
-  //     const updateCourtSpecDto: UpdateCourtSpecDto = {
-  //       name: 'Court #2',
-  //       length: 10000,
-  //       width: 2000,
-  //       centre_circle_radius: 1800,
-  //       three_point_radius: 6000,
-  //       three_point_line: 2300,
-  //       length_of_corner: 2000,
-  //       restricted_area_length: 2000,
-  //       restricted_area_width: 2000,
-  //       side_border_width: 2000,
-  //       line_border_width: 50,
-  //       description: 'Court #2',
-  //     };
-  //     expect(controller.update('Court #2', updateCourtSpecDto)).resolves.toEqual({
-  //       _id: '2',
-  //       ...updateCourtSpecDto,
-  //     });
-  //   });
-  // });
-  // describe('deleteCourt', () => {
-  //   it('should return that it deleted a court', () => {
-  //     expect(controller.remove('a uuid that exists')).resolves.toEqual({
-  //       deleted: true,
-  //     });
-  //   });
-  //   it('should return that it did not delete a court', () => {
-  //     const deleteSpy = jest
-  //       .spyOn(service, 'removeCourtSpecById')
-  //       .mockResolvedValueOnce({ deleted: false });
-  //     expect(controller.remove('a uuid that does not exist')).resolves.toEqual({
-  //       deleted: false,
-  //     });
-  //     expect(deleteSpy).toBeCalledWith('a uuid that does not exist');
-  //   });
-  // });
+      expect(controller.create(createCourtSpecDto)).resolves.toEqual({
+        _id: '1',
+        ...createCourtSpecDto,
+      });
+    });
+  });
+  describe('updateCourt', () => {
+    it('should update a court', () => {
+      const updateCourtSpecDto: UpdateCourtSpecDto = {
+        name: 'Court #2',
+        length: 10000,
+        width: 2000,
+        centre_circle_radius: 1800,
+        three_point_radius: 6000,
+        three_point_line: 2300,
+        length_of_corner: 2000,
+        restricted_area_length: 2000,
+        restricted_area_width: 2000,
+        side_border_width: 2000,
+        line_border_width: 50,
+        description: 'Court #2',
+      };
+      expect(controller.update('Court #2', updateCourtSpecDto)).resolves.toEqual({
+        _id: '2',
+        ...updateCourtSpecDto,
+      });
+    });
+  });
+  describe('deleteCourt', () => {
+    it('should return that it deleted a court', () => {
+      expect(controller.remove('a uuid that exists')).resolves.toEqual({
+        deleted: true,
+      });
+    });
+    it('should return that it did not delete a court', () => {
+      const deleteSpy = jest
+        .spyOn(service, 'removeCourtSpecById')
+        .mockResolvedValueOnce({ deleted: false });
+      expect(controller.remove('a uuid that does not exist')).resolves.toEqual({
+        deleted: false,
+      });
+      expect(deleteSpy).toBeCalledWith('a uuid that does not exist');
+    });
+  });
 });
