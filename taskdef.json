@@ -1,0 +1,30 @@
+{
+    "family": "CCS-F-UAT-task",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+        {
+            "name": "CCS-F-UAT-container",
+            "image": "{{image}}",
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp"
+                }
+            ],
+            "environmentFiles": [
+                {
+                    "value": "arn:aws:s3:::cc-server-environment-variables/for-newbie-test/tim-backend-uat.env",
+                    "type": "s3"
+                }
+            ],
+            "essential": true
+        }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1vCPU",
+    "memory": "2GB",
+    "executionRoleArn": "arn:aws:iam::497551902879:role/ecsTaskExecutionRole"
+}
