@@ -1,4 +1,4 @@
-import { Injectable, HttpException, BadRequestException } from "@nestjs/common";
+import { Injectable, BadRequestException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { CreateCourtSpecDto } from "./dto/create-court_spec.dto";
