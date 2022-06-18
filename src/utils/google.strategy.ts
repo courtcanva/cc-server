@@ -11,6 +11,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       clientSecret: process.env.GOOGLE_SECRET,
       callbackURL: "http://localhost:8080/google/redirect",
       scope: ["email", "profile"],
+      failureRedirect: "https://www.bilibili.com/",
     });
   }
 
@@ -28,7 +29,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       picture: photos[0].value,
       accessToken,
     };
-    console.log("successful");
+    console.log(profile);
     done(null, user);
   }
 }

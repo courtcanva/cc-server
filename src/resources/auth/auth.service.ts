@@ -12,4 +12,11 @@ export class AuthService {
       user: req.user,
     };
   }
+
+  googleLogout(req, res) {
+    if (req.user) {
+      req.logout();
+      res.send("done");
+    }
+  }
 }
