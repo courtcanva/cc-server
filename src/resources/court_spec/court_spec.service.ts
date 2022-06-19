@@ -20,46 +20,34 @@ export class CourtSpecService {
   }
 
   async getCourtSpecById(courtId: string): Promise<CourtSpec> {
-    try {
-      const court = await this.courtSpecModel.findById(courtId).exec();
-      if (!court || court.isDeleted) {
-        throw new BadRequestException({ status: 400, message: "court not found!" });
-      }
-      return court;
-    } catch (error) {
+    const court = await this.courtSpecModel.findById(courtId).exec();
+    if (!court || court.isDeleted) {
       throw new BadRequestException({ status: 400, message: "court not found!" });
     }
+    return court;
   }
 
   async updateCourtSpecById(
     courtId: string,
     updateCourtSpecDto: UpdateCourtSpecDto,
   ): Promise<CourtSpec> {
-    try {
-      const updatedCourtSpec = await this.courtSpecModel
-        .findByIdAndUpdate(courtId, { $set: updateCourtSpecDto }, { new: true })
-        .exec();
-      return updatedCourtSpec;
-    } catch (error) {
-      throw new BadRequestException({ status: 400, message: "court not found and update failed!" });
-    }
+    const updatedCourtSpec = await this.courtSpecModel
+      .findByIdAndUpdate(courtId, { $set: updateCourtSpecDto }, { new: true })
+      .exec();
+    return updatedCourtSpec;
   }
 
   async removeCourtSpecById(courtId: string): Promise<{ message: string }> {
-    try {
-      const isNotDeleted = await this.courtSpecModel.findByIdAndUpdate(courtId, {
-        isDeleted: true,
+    const isNotDeleted = await this.courtSpecModel.findByIdAndUpdate(courtId, {
+      isDeleted: true,
+    });
+    console.log(isNotDeleted);
+    if (!isNotDeleted || isNotDeleted.isDeleted) {
+      throw new BadRequestException({
+        status: 400,
+        message: "court not found and deletion failed",
       });
-      console.log(isNotDeleted);
-      if (!isNotDeleted || isNotDeleted.isDeleted) {
-        throw new BadRequestException({
-          status: 400,
-          message: "court not found and deletion failed",
-        });
-      }
-      return { message: `Court ${isNotDeleted.name.toUpperCase()} deleted successfully` };
-    } catch (error) {
-      throw new BadRequestException({ status: 400, message: "court not found!" });
     }
+    return { message: `Court ${isNotDeleted.name.toUpperCase()} deleted successfully` };
   }
 }

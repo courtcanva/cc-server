@@ -4,9 +4,10 @@ import { CourtSpecService } from "./court_spec.service";
 import { CourtSpec } from "./schemas/court_spec.schema";
 import { createMock } from "@golevelup/ts-jest";
 import { Model, Query } from "mongoose";
-import { HttpException } from "@nestjs/common";
+import { BadRequestException, HttpException } from "@nestjs/common";
 
 const mockCourt = {
+  id: 1,
   name: "Court #1",
   length: 10000,
   width: 2000,
@@ -23,6 +24,7 @@ const mockCourt = {
 
 const courtArray = [
   {
+    id: 1,
     name: "Court #1",
     length: 10000,
     width: 2000,
@@ -37,6 +39,7 @@ const courtArray = [
     description: "Court #1",
   },
   {
+    id: 2,
     name: "Court #2",
     length: 10000,
     width: 2000,
@@ -93,7 +96,7 @@ describe("CourtSpecService", () => {
     expect(courts).toEqual(courtArray);
   });
 
-  /* it("should get one court by name", async () => {
+  /*it("should get one court by id", async () => {
     jest.spyOn(model, "findOne").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockCourt),
@@ -137,6 +140,7 @@ describe("CourtSpecService", () => {
     jest.spyOn(model, "remove").mockResolvedValueOnce(true as any);
     expect(await service.removeCourtSpecById("1")).toEqual({ deleted: true });
   });
+
   it("should not delete a court", async () => {
     jest.spyOn(model, "remove").mockRejectedValueOnce(new Error("Bad delete"));
     expect(await service.removeCourtSpecById("1")).toEqual({
