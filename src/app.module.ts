@@ -1,10 +1,9 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-
-import { HealthModule } from "./health/health.module";
-
-import { CatsModule } from "./cats/cats.module";
 import { MongooseModule } from "@nestjs/mongoose";
+import { AppController } from "./app.controller";
+import { HealthModule } from "./health/health.module";
+import { CatsModule } from "./cats/cats.module";
 
 @Module({
   imports: [
@@ -13,5 +12,6 @@ import { MongooseModule } from "@nestjs/mongoose";
     CatsModule,
     MongooseModule.forRoot(process.env.DATABASE_URL),
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
