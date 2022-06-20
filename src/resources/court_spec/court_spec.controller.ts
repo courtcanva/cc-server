@@ -26,11 +26,11 @@ export class CourtSpecController {
 
   @Get(":courtId")
   async getCourtSpecById(@Param("courtId") courtId: string): Promise<CourtSpec> {
-    try {
-      return await this.courtSpecService.getCourtSpecById(courtId);
-    } catch (error) {
-      throw new BadRequestException({ status: 400, message: "court not found!" });
-    }
+    // try {
+    return await this.courtSpecService.getCourtSpecById(courtId);
+    // } catch (error) {
+    // return (error.message = { status: 400, message: "court not found!" });
+    // }
   }
 
   @Post()
@@ -48,7 +48,7 @@ export class CourtSpecController {
     try {
       return await this.courtSpecService.updateCourtSpecById(courtId, updateCourtSpecDto);
     } catch (error) {
-      throw new BadRequestException({ status: 400, message: "court not found!" });
+      throw new BadRequestException({ status: 400, message: "court not found and update failed!" });
     }
   }
 
@@ -57,7 +57,7 @@ export class CourtSpecController {
     try {
       return await this.courtSpecService.removeCourtSpecById(courtId);
     } catch (error) {
-      throw new BadRequestException({ status: 400, message: "court not found!" });
+      return (error.message = { status: 400, message: "court not found!" });
     }
   }
 }
