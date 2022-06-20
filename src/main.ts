@@ -22,6 +22,8 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  await app.listen(8080);
+  // await app.listen(8080);
+  app.enableCors();
+  await app.listen(process.env.PORT || 8080);
 }
 bootstrap();
