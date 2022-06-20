@@ -4,7 +4,7 @@ import { CreateCourtSpecDto } from "./dto/create-court_spec.dto";
 import { CourtSpecController } from "./court_spec.controller";
 import { CourtSpecService } from "./court_spec.service";
 
-/*describe("CourtSpecController", () => {
+describe("CourtSpecController", () => {
   let controller: CourtSpecController;
   let service: CourtSpecService;
 
@@ -200,8 +200,4 @@ import { CourtSpecService } from "./court_spec.service";
       expect(deleteSpy).toBeCalledWith("a uuid that does not exist");
     });
   });
-});*/
-
-test("sum gets the correct result", () => {
-  expect(1 + 1).toBe(2);
 });
