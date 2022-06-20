@@ -16,7 +16,8 @@ export class AuthService {
   googleLogout(req, res) {
     if (req.user) {
       req.logout();
-      res.send("done");
+      res.redirect("http://localhost:3000");
+      // res.send("done");
     }
   }
 }
