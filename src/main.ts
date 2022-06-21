@@ -7,7 +7,10 @@ import { AppModule } from "./app.module";
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.set("trust proxy", 1); //
-  app.enableCors();
+  app.enableCors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  });
   app.use(
     session({
       secret: "my-secret",

@@ -49,7 +49,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       if (!doc) {
         const newUser = new this.userModel({
           googleId: profile.id,
-          email: profile.email,
+          email: profile.emails[0].value,
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
           picture: profile.photos[0].value,
