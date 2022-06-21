@@ -8,6 +8,38 @@ describe("CourtSpecController", () => {
   let controller: CourtSpecController;
   let service: CourtSpecService;
 
+  const courtArray = [
+    {
+      id: 1,
+      name: "Court #1",
+      length: 10000,
+      width: 2000,
+      centreCircleRadius: 1800,
+      threePointRadius: 6000,
+      threePointLine: 2300,
+      lengthOfCorner: 2000,
+      restrictedAreaLength: 2000,
+      restrictedAreaWidth: 2000,
+      sideBorderWidth: 2000,
+      lineBorderWidth: 50,
+      description: "Court #1",
+    },
+    {
+      id: 2,
+      name: "Court #2",
+      length: 10000,
+      width: 2000,
+      centreCircleRadius: 1800,
+      threePointRadius: 6000,
+      threePointLine: 2300,
+      lengthOfCorner: 2000,
+      restrictedAreaLength: 2000,
+      restrictedAreaWidth: 2000,
+      sideBorderWidth: 2000,
+      lineBorderWidth: 50,
+      description: "Court #2",
+    },
+  ];
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CourtSpecController],
@@ -15,52 +47,10 @@ describe("CourtSpecController", () => {
         {
           provide: CourtSpecService,
           useValue: {
-            getAllCourtSizes: jest.fn().mockResolvedValue([
-              {
-                name: "Court #1",
-                length: 10000,
-                width: 2000,
-                centreCircleRadius: 1800,
-                threePointRadius: 6000,
-                threePointLine: 2300,
-                lengthOfCorner: 2000,
-                restrictedAreaLength: 2000,
-                restrictedAreaWidth: 2000,
-                sideBorderWidth: 2000,
-                lineBorderWidth: 50,
-                description: "Court #1",
-              },
-              {
-                name: "Court #2",
-                length: 10000,
-                width: 2000,
-                centreCircleRadius: 1800,
-                threePointRadius: 6000,
-                threePointLine: 2300,
-                lengthOfCorner: 2000,
-                restrictedAreaLength: 2000,
-                restrictedAreaWidth: 2000,
-                sideBorderWidth: 2000,
-                lineBorderWidth: 50,
-                description: "Court #2",
-              },
-            ]),
-            getCourtSpecById: jest.fn().mockImplementation((courtId: string) =>
-              Promise.resolve({
-                name: "Court #1",
-                length: 10000,
-                width: 2000,
-                centreCircleRadius: 1800,
-                threePointRadius: 6000,
-                threePointLine: 2300,
-                lengthOfCorner: 2000,
-                restrictedAreaLength: 2000,
-                restrictedAreaWidth: 2000,
-                sideBorderWidth: 2000,
-                lineBorderWidth: 50,
-                description: "Court #1",
-              }),
-            ),
+            getAllCourtSizes: jest.fn().mockResolvedValue(courtArray),
+            getCourtSpecById: jest
+              .fn()
+              .mockImplementation((courtId: string) => Promise.resolve(courtArray[0])),
             create: jest
               .fn()
               .mockImplementation((createCourtSpecDto: CreateCourtSpecDto) =>
@@ -87,100 +77,29 @@ describe("CourtSpecController", () => {
 
   describe("getAllCourtSizes", () => {
     it("should get an array of courts", () => {
-      expect(controller.getAllCourtSizes()).resolves.toEqual([
-        {
-          name: "Court #1",
-          length: 10000,
-          width: 2000,
-          centreCircleRadius: 1800,
-          threePointRadius: 6000,
-          threePointLine: 2300,
-          lengthOfCorner: 2000,
-          restrictedAreaLength: 2000,
-          restrictedAreaWidth: 2000,
-          sideBorderWidth: 2000,
-          lineBorderWidth: 50,
-          description: "Court #1",
-        },
-        {
-          name: "Court #2",
-          length: 10000,
-          width: 2000,
-          centreCircleRadius: 1800,
-          threePointRadius: 6000,
-          threePointLine: 2300,
-          lengthOfCorner: 2000,
-          restrictedAreaLength: 2000,
-          restrictedAreaWidth: 2000,
-          sideBorderWidth: 2000,
-          lineBorderWidth: 50,
-          description: "Court #2",
-        },
-      ]);
+      expect(controller.getAllCourtSizes()).resolves.toEqual(courtArray);
     });
   });
 
   describe("getCourtSpecById", () => {
     it("should get a single court", () => {
-      expect(controller.getCourtSpecById("1")).resolves.toEqual({
-        name: "Court #1",
-        length: 10000,
-        width: 2000,
-        centreCircleRadius: 1800,
-        threePointRadius: 6000,
-        threePointLine: 2300,
-        lengthOfCorner: 2000,
-        restrictedAreaLength: 2000,
-        restrictedAreaWidth: 2000,
-        sideBorderWidth: 2000,
-        lineBorderWidth: 50,
-        description: "Court #1",
-      });
+      expect(controller.getCourtSpecById("1")).resolves.toEqual(courtArray[0]);
     });
   });
 
   describe("create()", () => {
     it("should create a new court spec", async () => {
-      const createCourtSpecDto: CreateCourtSpecDto = {
-        name: "Court #1",
-        length: 10000,
-        width: 2000,
-        centre_circle_radius: 1800,
-        three_point_radius: 6000,
-        three_point_line: 2300,
-        length_of_corner: 2000,
-        restricted_area_length: 2000,
-        restricted_area_width: 2000,
-        side_border_width: 2000,
-        line_border_width: 50,
-        description: "Court #1",
-      };
-
-      expect(controller.create(createCourtSpecDto)).resolves.toEqual({
+      expect(controller.create(courtArray[0])).resolves.toEqual({
         _id: "1",
-        ...createCourtSpecDto,
+        ...courtArray[0],
       });
     });
   });
   describe("updateCourt", () => {
     it("should update a court", () => {
-      const updateCourtSpecDto: UpdateCourtSpecDto = {
-        name: "Court #2",
-        length: 10000,
-        width: 2000,
-        centre_circle_radius: 1800,
-        three_point_radius: 6000,
-        three_point_line: 2300,
-        length_of_corner: 2000,
-        restricted_area_length: 2000,
-        restricted_area_width: 2000,
-        side_border_width: 2000,
-        line_border_width: 50,
-        description: "Court #2",
-      };
-      expect(controller.update("Court #2", updateCourtSpecDto)).resolves.toEqual({
+      expect(controller.update("Court #2", courtArray[1])).resolves.toEqual({
         _id: "2",
-        ...updateCourtSpecDto,
+        ...courtArray[1],
       });
     });
   });
@@ -193,9 +112,9 @@ describe("CourtSpecController", () => {
     it("should return that it did not delete a court", () => {
       const deleteSpy = jest
         .spyOn(service, "removeCourtSpecById")
-        .mockResolvedValueOnce({ deleted: false });
+        .mockResolvedValueOnce({ message: "Court  deleted successfully" });
       expect(controller.remove("a uuid that does not exist")).resolves.toEqual({
-        deleted: false,
+        message: "Court  deleted successfully",
       });
       expect(deleteSpy).toBeCalledWith("a uuid that does not exist");
     });

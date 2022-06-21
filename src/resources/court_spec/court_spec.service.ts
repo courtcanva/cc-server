@@ -10,6 +10,7 @@ export class CourtSpecService {
   constructor(@InjectModel(CourtSpec.name) private readonly courtSpecModel: Model<CourtSpec>) {}
 
   async create(createCourtSpecDto: CreateCourtSpecDto): Promise<CourtSpec> {
+    createCourtSpecDto = { ...createCourtSpecDto, createdAt: new Date(), updatedAt: new Date() };
     const court_spec = await this.courtSpecModel.create(createCourtSpecDto);
     return court_spec;
   }
@@ -31,6 +32,12 @@ export class CourtSpecService {
     courtId: string,
     updateCourtSpecDto: UpdateCourtSpecDto,
   ): Promise<CourtSpec> {
+    const court = await this.courtSpecModel.findById(courtId);
+    console.log(court);
+    if (!court || court.isDeleted) {
+      throw new BadRequestException({ status: 400, message: "court not found!" });
+    }
+    updateCourtSpecDto = { ...updateCourtSpecDto, updatedAt: new Date() };
     const updatedCourtSpec = await this.courtSpecModel
       .findByIdAndUpdate(courtId, { $set: updateCourtSpecDto }, { new: true })
       .exec();
@@ -38,16 +45,17 @@ export class CourtSpecService {
   }
 
   async removeCourtSpecById(courtId: string): Promise<{ message: string }> {
-    const isNotDeleted = await this.courtSpecModel.findByIdAndUpdate(courtId, {
-      isDeleted: true,
-    });
-    console.log(isNotDeleted);
-    if (!isNotDeleted || isNotDeleted.isDeleted) {
+    const court = await this.courtSpecModel.findById(courtId).exec();
+    if (!court || court.isDeleted) {
       throw new BadRequestException({
         status: 400,
-        message: "court not found and deletion failed",
+        message: "court not found and deletion failed.",
       });
     }
-    return { message: `Court ${isNotDeleted.name.toUpperCase()} deleted successfully` };
+    const DeletedCount = await this.courtSpecModel.findByIdAndUpdate(courtId, {
+      isDeleted: true,
+      updatedAt: new Date(),
+    });
+    return { message: `Court ${DeletedCount.name.toUpperCase()} deleted successfully` };
   }
 }

@@ -45,11 +45,7 @@ export class CourtSpecController {
     @Param("courtId") courtId: string,
     @Body() updateCourtSpecDto: UpdateCourtSpecDto,
   ): Promise<CourtSpec> {
-    try {
-      return await this.courtSpecService.updateCourtSpecById(courtId, updateCourtSpecDto);
-    } catch (error) {
-      throw new BadRequestException({ status: 400, message: "court not found and update failed!" });
-    }
+    return await this.courtSpecService.updateCourtSpecById(courtId, updateCourtSpecDto);
   }
 
   @Delete(":courtId")
