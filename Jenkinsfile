@@ -40,51 +40,66 @@ pipeline {
                 sh 'docker build -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} .'
             }
         }
-        stage('Push to ECR') {
-            when {
-                branch 'feature/ccd-0034-new-backend-pipeline'
-            }
-            steps {
-                echo 'Logging into ECR...'
-                sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com'
+        // stage('Push to ECR') {
+        //     when {
+        //         branch 'feature/ccd-0034-new-backend-pipeline'
+        //     }
+        //     steps {
+        //         echo 'Logging into ECR...'
+        //         sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com'
 
-                echo 'Pushing docker image to ECR...'
-                sh 'docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}'
-                sh 'docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}'
-            }
-        }
+        //         echo 'Pushing docker image to ECR...'
+        //         sh 'docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}'
+        //         sh 'docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}'
+        //     }
+        // }
 
-        stage('Deploy to UAT Environment') {
-            when {
-                branch 'feature/ccd-0034-new-backend-pipeline'
-            }
-            steps {
-                // AWS CLI must be installed in the Jenkins server first.
-                // Below is used to upgrade/replace the existing service, which may be created manually or through terraform.
-                echo "=========== Update ECS cluster's service ================="
-                // Override image field in taskdef file
-                sh "sed -i 's|{{image}}|${REPOSITORY_URI}:${IMAGE_TAG}|' taskdef.json"
-                // Create a new task definition revision
-                sh "aws ecs register-task-definition --execution-role-arn ${exec_role_arn} --cli-input-json file://taskdef.json --region ${AWS_DEFAULT_REGION}"
-                // Update service on Fargate
-                sh "aws ecs update-service --cluster ${AWS_ECS_CLUSTER} --service ${AWS_ECS_SERVICE} --task-definition ${task_def_arn} --region ${AWS_DEFAULT_REGION}"
-            }
+        // stage('Deploy to UAT Environment') {
+        //     when {
+        //         branch 'feature/ccd-0034-new-backend-pipeline'
+        //     }
+        //     steps {
+        //         // AWS CLI must be installed in the Jenkins server first.
+        //         // Below is used to upgrade/replace the existing service, which may be created manually or through terraform.
+        //         echo "=========== Update ECS cluster's service ================="
+        //         // Override image field in taskdef file
+        //         sh "sed -i 's|{{image}}|${REPOSITORY_URI}:${IMAGE_TAG}|' taskdef.json"
+        //         // Create a new task definition revision
+        //         sh "aws ecs register-task-definition --execution-role-arn ${exec_role_arn} --cli-input-json file://taskdef.json --region ${AWS_DEFAULT_REGION}"
+        //         // Update service on Fargate
+        //         sh "aws ecs update-service --cluster ${AWS_ECS_CLUSTER} --service ${AWS_ECS_SERVICE} --task-definition ${task_def_arn} --region ${AWS_DEFAULT_REGION}"
+        //     }
 
-            post {
-                success {
-                    echo 'Deploy to ECS successfully!'
-                }
-                failure {
-                    echo 'The deploy stage failed.'
-                    echo 'Roll back to last deployment.'
-                }
-            }
-        }
+        //     post {
+        //         success {
+        //             echo 'Deploy to ECS successfully!'
+        //         }
+        //         failure {
+        //             echo 'The deploy stage failed.'
+        //             echo 'Roll back to last deployment.'
+        //         }
+        //     }
+        // }
 
         stage('Clear Up Docker Image') {
             steps {
-                echo 'Clear Up Docker Image...'
-                sh 'docker rmi ${IMAGE_REPO_NAME}:${IMAGE_TAG}'
+                script { 
+                    echo 'Clear Up Docker Image...'
+                    def imageId = sh( 
+                                        script: 'docker images -qf reference=\${IMAGE_REPO_NAME}:\${IMAGE_TAG}',
+                                        returnStdout: true
+                                    )
+
+                    echo "Image Name: ${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+                    echo "imageId: ${imageId}"
+
+                    if ("${imageId}" != '') {
+                        echo "Deleting image id: ${imageId}..."
+                        sh 'docker rmi -f $imageID'
+                    } else {
+                        echo "No image to delete..."
+                    }
+                }
             }
         }
     }
