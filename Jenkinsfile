@@ -95,7 +95,7 @@ pipeline {
 
                     if ("${imageId}" != '') {
                         echo "Deleting image id: ${imageId}..."
-                        sh 'docker rmi -f $imageID'
+                        sh 'docker rmi -f $imageId'
                     } else {
                         echo "No image to delete..."
                     }
