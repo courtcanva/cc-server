@@ -14,7 +14,7 @@
             ],
             "environmentFiles": [
                 {
-                    "value": "arn:aws:s3:::cc-server-environment-variables/for-newbie-test/tim-backend-uat.env",
+                    "value": "arn:aws:s3:::cc-server-environment-variables/ccs/ccsuat.env",
                     "type": "s3"
                 }
             ],
