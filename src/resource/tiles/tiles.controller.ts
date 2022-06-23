@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param, Put, Delete } from "@nestjs/common";
 import { TilesService } from "./tiles.service";
 import { Tile } from "./schemas/tile.schema";
 import { CreateTileDto } from "./dto/create-tile.dto";
@@ -22,7 +22,7 @@ export class TilesController {
     return await this.tilesService.create(createTileDto);
   }
 
-  @Patch(":id")
+  @Put(":id")
   async update(@Param("id") id: string, @Body() updateTileTo: UpdateTileDto): Promise<Tile> {
     return await this.tilesService.update(id, updateTileTo);
   }

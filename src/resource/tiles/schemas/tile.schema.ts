@@ -4,7 +4,7 @@ import { Document } from "mongoose";
 /* maps our cat class to our mongoDB collection of the same name */
 @Schema()
 export class Tile extends Document {
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, unique: true })
   name: string;
 
   @Prop({ type: Object, required: true })

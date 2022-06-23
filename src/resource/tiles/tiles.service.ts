@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, HttpStatus } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { Tile } from "./schemas/tile.schema";
@@ -18,7 +18,6 @@ export class TilesService {
       return tile;
     } catch {
       throw new NotFoundException({
-        status: HttpStatus.NOT_FOUND,
         message: "Tile cannot be find, please search again",
       });
     }
@@ -41,17 +40,22 @@ export class TilesService {
       return existingTile;
     } catch {
       throw new NotFoundException({
-        status: HttpStatus.NOT_FOUND,
         message: "Tile cannot be find, please search again",
       });
     }
   }
 
   async remove(id: string, updateTileDto: UpdateTileDto): Promise<string> {
-    await this.tileModel.findOneAndUpdate(
-      { _id: id },
-      { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
-    );
-    return "Tile deleted successfully";
+    try {
+      await this.tileModel.findOneAndUpdate(
+        { _id: id },
+        { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
+      );
+      return "Tile deleted successfully";
+    } catch {
+      throw new NotFoundException({
+        message: "Tile cannot be find, please try again",
+      });
+    }
   }
 }
