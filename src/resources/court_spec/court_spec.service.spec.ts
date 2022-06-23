@@ -3,9 +3,9 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { CourtSpecService } from "./court_spec.service";
 import { CourtSpec } from "./schemas/court_spec.schema";
 import { createMock } from "@golevelup/ts-jest";
-import { Model, Query } from "mongoose";
+import { model, Model, Query } from "mongoose";
 import { CreateCourtSpecDto } from "./dto/create-court_spec.dto";
-import { BadRequestException } from "@nestjs/common";
+import { NotFoundException } from "@nestjs/common";
 
 const court: CreateCourtSpecDto = {
   name: "Court #1",
@@ -25,7 +25,7 @@ const court: CreateCourtSpecDto = {
 };
 
 const updatedCourt = {
-  id: 1,
+  id: Object("62ad9efe1bc0ca4561d9ca45"),
   name: "Court #1",
   length: 10000,
   width: 2000,
@@ -44,7 +44,7 @@ const updatedCourt = {
 
 const courtArray = [
   {
-    id: 1,
+    id: "62ad9efe1bc0ca4561d9ca45",
     name: "Court #1",
     length: 10000,
     width: 2000,
@@ -118,7 +118,7 @@ describe("CourtSpecService", () => {
         exec: jest.fn().mockResolvedValueOnce(courtArray[0]),
       }) as any,
     );
-    const courts = await service.getCourtSpecById("1");
+    const courts = await service.getCourtSpecById(Object("62ad9efe1bc0ca4561d9ca45"));
     expect(courts).toEqual(courtArray[0]);
   });
 
@@ -127,44 +127,4 @@ describe("CourtSpecService", () => {
     const newCourt = await service.create(court);
     expect(newCourt).toEqual(court);
   });
-
-  // it.only("should update a court successfully", async () => {
-  //   // const throwException = jest
-  //   //   .spyOn(model, "findById")
-  //   //   .mockRejectedValueOnce(new BadRequestException({ status: 400, message: "court not found!" }));
-  //   // await throwException;
-  //   jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
-  //     createMock<Query<any, any>>({
-  //       exec: jest.fn().mockResolvedValueOnce(updatedCourt),
-  //     }) as any,
-  //   );
-  //   try {
-  //     await service.updateCourtSpecById("3", updatedCourt);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // });
-
-  // it("should delete a court successfully", async () => {
-  //   const mockDeletedCourt = {
-  //     id: 1,
-  //     name: "Court #1",
-  //     length: 10000,
-  //     width: 2000,
-  //     centreCircleRadius: 1800,
-  //     threePointRadius: 6000,
-  //     threePointLine: 2300,
-  //     lengthOfCorner: 2000,
-  //     restrictedAreaLength: 2000,
-  //     restrictedAreaWidth: 2000,
-  //     sideBorderWidth: 2000,
-  //     lineBorderWidth: 50,
-  //     description: "Court #1",
-  //     isDeleted: true,
-  //   };
-  //   jest.spyOn(model, "findByIdAndUpdate").mockResolvedValueOnce(() => mockDeletedCourt);
-
-  //   const removeSuccessMsg = { message: "Court  deleted successfully" };
-  //   expect(await service.removeCourtSpecById("1")).toEqual(removeSuccessMsg);
-  // });
 });

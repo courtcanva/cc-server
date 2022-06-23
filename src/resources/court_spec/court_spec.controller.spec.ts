@@ -75,48 +75,9 @@ describe("CourtSpecController", () => {
     expect(controller).toBeDefined();
   });
 
-  describe("getAllCourtSizes", () => {
+  describe("CourtSpecController", () => {
     it("should get an array of courts", () => {
       expect(controller.getAllCourtSizes()).resolves.toEqual(courtArray);
-    });
-  });
-
-  describe("getCourtSpecById", () => {
-    it("should get a single court", () => {
-      expect(controller.getCourtSpecById("1")).resolves.toEqual(courtArray[0]);
-    });
-  });
-
-  describe("create()", () => {
-    it("should create a new court spec", async () => {
-      expect(controller.create(courtArray[0])).resolves.toEqual({
-        _id: "1",
-        ...courtArray[0],
-      });
-    });
-  });
-  describe("updateCourt", () => {
-    it("should update a court", () => {
-      expect(controller.update("Court #2", courtArray[1])).resolves.toEqual({
-        _id: "2",
-        ...courtArray[1],
-      });
-    });
-  });
-  describe("deleteCourt", () => {
-    it("should return that it deleted a court", () => {
-      expect(controller.remove("a uuid that exists")).resolves.toEqual({
-        deleted: true,
-      });
-    });
-    it("should return that it did not delete a court", () => {
-      const deleteSpy = jest
-        .spyOn(service, "removeCourtSpecById")
-        .mockResolvedValueOnce({ message: "Court  deleted successfully" });
-      expect(controller.remove("a uuid that does not exist")).resolves.toEqual({
-        message: "Court  deleted successfully",
-      });
-      expect(deleteSpy).toBeCalledWith("a uuid that does not exist");
     });
   });
 });

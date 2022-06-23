@@ -8,12 +8,13 @@ import {
   Delete,
   UsePipes,
   ValidationPipe,
-  BadRequestException,
 } from "@nestjs/common";
 import { CourtSpecService } from "./court_spec.service";
 import { CreateCourtSpecDto } from "./dto/create-court_spec.dto";
 import { UpdateCourtSpecDto } from "./dto/update-court_spec.dto";
 import { CourtSpec } from "./schemas/court_spec.schema";
+import { ParseObjectIdPipe } from "../../utils/ParseObjectIdPipe";
+import { ObjectId } from "mongoose";
 
 @Controller("courts")
 export class CourtSpecController {
@@ -25,12 +26,10 @@ export class CourtSpecController {
   }
 
   @Get(":courtId")
-  async getCourtSpecById(@Param("courtId") courtId: string): Promise<CourtSpec> {
-    // try {
+  async getCourtSpecById(
+    @Param("courtId", ParseObjectIdPipe) courtId: ObjectId,
+  ): Promise<CourtSpec> {
     return await this.courtSpecService.getCourtSpecById(courtId);
-    // } catch (error) {
-    // return (error.message = { status: 400, message: "court not found!" });
-    // }
   }
 
   @Post()
@@ -42,18 +41,16 @@ export class CourtSpecController {
   @Put(":courtId")
   @UsePipes(new ValidationPipe())
   async update(
-    @Param("courtId") courtId: string,
+    @Param("courtId", ParseObjectIdPipe) courtId: ObjectId,
     @Body() updateCourtSpecDto: UpdateCourtSpecDto,
   ): Promise<CourtSpec> {
     return await this.courtSpecService.updateCourtSpecById(courtId, updateCourtSpecDto);
   }
 
   @Delete(":courtId")
-  async remove(@Param("courtId") courtId: string): Promise<{ message: string }> {
-    try {
-      return await this.courtSpecService.removeCourtSpecById(courtId);
-    } catch (error) {
-      return (error.message = { status: 400, message: "court not found!" });
-    }
+  async remove(
+    @Param("courtId", ParseObjectIdPipe) courtId: ObjectId,
+  ): Promise<{ message: string }> {
+    return await this.courtSpecService.removeCourtSpecById(courtId);
   }
 }
