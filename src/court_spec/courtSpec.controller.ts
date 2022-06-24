@@ -9,11 +9,11 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
-import { CourtSpecService } from "./court_spec.service";
-import { CreateCourtSpecDto } from "./dto/create-court_spec.dto";
-import { UpdateCourtSpecDto } from "./dto/update-court_spec.dto";
-import { CourtSpec } from "./schemas/court_spec.schema";
-import { ParseObjectIdPipe } from "../../utils/ParseObjectIdPipe";
+import { CourtSpecService } from "./courtSpec.service";
+import { CreateCourtSpecDto } from "./dto/create-courtSpec.dto";
+import { UpdateCourtSpecDto } from "./dto/update-courtSpec.dto";
+import { CourtSpec } from "./schemas/courtSpec.schema";
+import { ParseObjectIdPipe } from "../utils/ParseObjectIdPipe";
 import { ObjectId } from "mongoose";
 
 @Controller("courts")

@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { CreateCourtSpecDto } from "./dto/create-court_spec.dto";
-import { UpdateCourtSpecDto } from "./dto/update-court_spec.dto";
-import { CourtSpec } from "./schemas/court_spec.schema";
+import { CreateCourtSpecDto } from "./dto/create-courtSpec.dto";
+import { UpdateCourtSpecDto } from "./dto/update-courtSpec.dto";
+import { CourtSpec } from "./schemas/courtSpec.schema";
 import { ObjectId } from "mongoose";
 
 @Injectable()

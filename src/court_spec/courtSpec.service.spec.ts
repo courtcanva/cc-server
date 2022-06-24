@@ -1,11 +1,10 @@
 import { getModelToken } from "@nestjs/mongoose";
 import { Test, TestingModule } from "@nestjs/testing";
-import { CourtSpecService } from "./court_spec.service";
-import { CourtSpec } from "./schemas/court_spec.schema";
+import { CourtSpecService } from "./courtSpec.service";
+import { CourtSpec } from "./schemas/courtSpec.schema";
 import { createMock } from "@golevelup/ts-jest";
 import { model, Model, Query } from "mongoose";
-import { CreateCourtSpecDto } from "./dto/create-court_spec.dto";
-import { NotFoundException } from "@nestjs/common";
+import { CreateCourtSpecDto } from "./dto/create-courtSpec.dto";
 
 const court: CreateCourtSpecDto = {
   name: "Court #1",

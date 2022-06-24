@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { CourtSpecController } from "./court_spec.controller";
-import { CourtSpecService } from "./court_spec.service";
-import { CourtSpec, CourtSpecSchema } from "./schemas/court_spec.schema";
+import { CourtSpecController } from "./courtSpec.controller";
+import { CourtSpecService } from "./courtSpec.service";
+import { CourtSpec, CourtSpecSchema } from "./schemas/courtSpec.schema";
 
 @Module({
   imports: [
