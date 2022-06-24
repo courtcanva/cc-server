@@ -3,46 +3,11 @@ import { UpdateCourtSpecDto } from "./dto/update-courtSpec.dto";
 import { CreateCourtSpecDto } from "./dto/create-courtSpec.dto";
 import { CourtSpecController } from "./courtSpec.controller";
 import { CourtSpecService } from "./courtSpec.service";
+import { court, updatedCourt } from "./courtSpec.testData";
 
 describe("CourtSpecController", () => {
   let controller: CourtSpecController;
   let service: CourtSpecService;
-
-  const court = {
-    id: Object("62ad9efe1bc0ca4561d9ca45"),
-    name: "Court #1",
-    length: 10000,
-    width: 2000,
-    centreCircleRadius: 1800,
-    threePointRadius: 6000,
-    threePointLine: 2300,
-    lengthOfCorner: 2000,
-    restrictedAreaLength: 2000,
-    restrictedAreaWidth: 2000,
-    sideBorderWidth: 2000,
-    lineBorderWidth: 50,
-    description: "Court #1",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
-  const updatedCourt = {
-    id: Object("62ad9efe1bc0ca4561d9ca45"),
-    name: "Court #1",
-    length: 10000,
-    width: 2000,
-    centreCircleRadius: 1800,
-    threePointRadius: 6000,
-    threePointLine: 2300,
-    lengthOfCorner: 2000,
-    restrictedAreaLength: 2000,
-    restrictedAreaWidth: 2000,
-    sideBorderWidth: 2000,
-    lineBorderWidth: 50,
-    description: "Court #1",
-    createdAt: new Date("2022-06-18T09:44:29.044+00:00"),
-    updatedAt: new Date(),
-  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
