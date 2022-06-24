@@ -77,6 +77,6 @@ describe("TileService", () => {
       }) as any,
     );
     const deleteTile = await service.remove("1", mockTile);
-    expect(deleteTile).toEqual("Tile deleted successfully");
+    expect(deleteTile).toEqual(true);
   });
 });

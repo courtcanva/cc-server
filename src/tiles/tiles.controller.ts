@@ -28,7 +28,7 @@ export class TilesController {
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string, @Body() updateTileTo: UpdateTileDto): Promise<string> {
+  async remove(@Param("id") id: string, @Body() updateTileTo: UpdateTileDto): Promise<boolean> {
     return await this.tilesService.remove(id, updateTileTo);
   }
 }

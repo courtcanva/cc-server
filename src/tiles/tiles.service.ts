@@ -4,6 +4,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Tile } from "./schemas/tile.schema";
 import { CreateTileDto } from "./dto/create-tile.dto";
 import { UpdateTileDto } from "./dto/update-tile.dto";
+import { animationFrameScheduler } from "rxjs";
 
 @Injectable()
 export class TilesService {
@@ -45,17 +46,15 @@ export class TilesService {
     }
   }
 
-  async remove(id: string, updateTileDto: UpdateTileDto): Promise<string> {
+  async remove(id: string, updateTileDto: UpdateTileDto): Promise<boolean> {
     try {
       await this.tileModel.findOneAndUpdate(
         { _id: id },
         { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
       );
-      return "Tile deleted successfully";
+      return true;
     } catch {
-      throw new NotFoundException({
-        message: "Tile cannot be find, please try again",
-      });
+      return false;
     }
   }
 }

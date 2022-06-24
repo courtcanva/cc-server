@@ -64,7 +64,7 @@ $ npm run test:cov
 
 ### Environment Variables
 
-Add a file named `.env` at the root directory. Copy the .env code from Frontend ENV ticket on notion(Get notion access permission from the development group) and paste it in .env. You can refer to the `.env.example` file in the directory and repo.
+Add a file named `.env` at the root directory. Copy the .env code from Backend ENV ticket on notion(Get notion access permission from the development group) and paste it in .env. You can refer to the `.env.example` file in the directory and repo.
 
 ## Notion Board
 We put our ticket board and other important information in the notion board. Please advise our BA to get access to it.
