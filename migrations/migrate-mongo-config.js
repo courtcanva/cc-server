@@ -3,10 +3,10 @@
 const config = {
   mongodb: {
     // TODO Change (or review) the url to your MongoDB:
-    url: "mongodb://localhost/court_spec",
+    url: "mongodb://localhost/courts",
 
     // TODO Change this to your database name:
-    databaseName: "court_spec",
+    databaseName: "courtcanvas",
 
     options: {
       useNewUrlParser: true, // removes a deprecation warning when connecting
