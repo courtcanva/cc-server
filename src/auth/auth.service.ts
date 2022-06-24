@@ -85,12 +85,17 @@ export class AuthService {
     }
   }
 
-  async removeUserById(id: string): Promise<{ deleted: boolean; message?: string }> {
-    try {
-      await this.userModel.remove({ id });
-      return { deleted: true };
-    } catch (err) {
-      return { deleted: false, message: err.message };
+  async removeUserById(id: string): Promise<{ user: User; message?: string }> {
+    const user = await this.userModel.findById(id).exec();
+    if (!user || user.isDeleted) {
+      throw new NotFoundException("court not found");
     }
+    const DeletedUser = await this.userModel.findByIdAndUpdate(id, {
+      isDeleted: true,
+      updatedAt: new Date(),
+    });
+
+    // return { message: `Court ${DeletedCount.name.toUpperCase()} deleted successfully` };
+    return { user: DeletedUser, message: `User deleted successfully` };
   }
 }
