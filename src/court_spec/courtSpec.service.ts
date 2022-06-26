@@ -54,7 +54,6 @@ export class CourtSpecService {
       updatedAt: new Date(),
     });
 
-    // return { message: `Court ${DeletedCount.name.toUpperCase()} deleted successfully` };
-    return { message: `Court deleted successfully` };
+    return { message: `Court ${DeletedCount.name.toUpperCase()} deleted successfully` };
   }
 }
