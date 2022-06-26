@@ -2,7 +2,7 @@ const config = {
   mongodb: {
     url: process.env.DATA_MIGRATION_URL,
 
-    databaseName: "courtcanvas",
+    databaseName: process.env.DATABASE_NAME,
 
     options: {
       useNewUrlParser: true,
