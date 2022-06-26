@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Injectable, NotFoundException, Req, Res } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { CreateUserDto } from "./dto/createUser.dto";
@@ -126,7 +126,7 @@ export class AuthService {
     if (!user || user.isDeleted) {
       throw new NotFoundException("court not found");
     }
-    const DeletedUser = await this.userModel.findByIdAndUpdate(id, {
+    await this.userModel.findByIdAndUpdate(id, {
       isDeleted: true,
       updatedAt: new Date(),
     });

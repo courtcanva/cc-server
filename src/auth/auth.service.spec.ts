@@ -5,7 +5,6 @@ import { AuthService } from "./auth.service";
 import { User } from "./schemas/user.schema";
 import { user, updatedUser, userArray } from "./auth.testData";
 import { createMock } from "@golevelup/ts-jest";
-import { userInfo } from "os";
 import { NotFoundException } from "@nestjs/common";
 
 describe("AuthService", () => {

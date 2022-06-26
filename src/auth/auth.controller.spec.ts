@@ -5,7 +5,6 @@ import { user } from "./auth.testData";
 
 describe("AuthController", () => {
   let controller: AuthController;
-  let service: AuthService;
   // Initialize the testing module
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,7 +21,6 @@ describe("AuthController", () => {
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
-    service = module.get<AuthService>(AuthService);
   });
 
   it("should be defined", () => {
