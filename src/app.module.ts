@@ -6,6 +6,9 @@ import { HealthModule } from "./health/health.module";
 import { CatsModule } from "./cats/cats.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AuthModule } from "./auth/auth.module";
+import { UserController } from "./user/user.controller";
+import { UserService } from "./user/user.service";
+import { UserModule } from "./user/user.module";
 
 @Module({
   imports: [
@@ -14,6 +17,7 @@ import { AuthModule } from "./auth/auth.module";
     CatsModule,
     MongooseModule.forRoot(process.env.DATABASE_URL),
     AuthModule,
+    UserModule,
   ],
 })
 export class AppModule {}
