@@ -2,7 +2,7 @@ import { Optional } from "@nestjs/common";
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-/* maps our cat class to our mongoDB collection of the same name */
+/* maps our user class to our mongoDB collection of the same name */
 @Schema({ timestamps: true })
 export class User extends Document {
   @Prop()
