@@ -5,6 +5,7 @@ import { CreateUserDto } from "../user/dto/createUser.dto";
 import { UpdateUserDto } from "../user/dto/updateUser.dto";
 import { User } from "../user/schemas/user.schema";
 import { OAuth2Client } from "google-auth-library";
+import { ReturnUserInfo } from "./ReturnUserInfo";
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,7 @@ export class AuthService {
    * @param {string} code The one-time code got from client side.
    * @returns {User}
    */
-  async googleLogin(code: string): Promise<any> {
+  async googleLogin(code: string): Promise<ReturnUserInfo> {
     // Initialize the Oauth2 Client
     const client = new OAuth2Client(
       process.env.GOOGLE_CLIENT_ID,
