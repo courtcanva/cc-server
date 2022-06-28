@@ -71,7 +71,7 @@ export class UserService {
 
     // if there is no such a user or the user has been deleted, then throw an error.
     if (!user || user.isDeleted) {
-      throw new NotFoundException("court not found");
+      throw new NotFoundException("User not found");
     }
     await this.userModel.findByIdAndUpdate(id, {
       isDeleted: true,
