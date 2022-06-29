@@ -2,8 +2,8 @@ import { getModelToken } from "@nestjs/mongoose";
 import { Test, TestingModule } from "@nestjs/testing";
 import { Model, Query } from "mongoose";
 import { AuthService } from "./auth.service";
-import { User } from "../user/schemas/user.schema";
-import { user, updatedUser, userArray } from "../user/user.testData";
+import { User } from "../users/schemas/user.schema";
+import { user, updatedUser, userArray } from "../users/user.testData";
 import { createMock } from "@golevelup/ts-jest";
 import { NotFoundException } from "@nestjs/common";
 

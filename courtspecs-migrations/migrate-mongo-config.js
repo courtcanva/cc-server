@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-// require("dotenv").config();
-console.log(process.env.DATA_MIGRATION_URL);
 const config = {
   mongodb: {
     url: process.env.DATA_MIGRATION_URL,

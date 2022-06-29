@@ -1,22 +1,21 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { MongooseModule } from "@nestjs/mongoose";
 import { HealthModule } from "./health/health.module";
+import { CourtSpecModule } from "./court_spec/courtSpec.module";
+import { MongooseModule } from "@nestjs/mongoose";
 import { CatsModule } from "./cats/cats.module";
 import { TilesModule } from "./tiles/tiles.module";
 import { AuthModule } from "./auth/auth.module";
-import { UserController } from "./user/user.controller";
-import { UserService } from "./user/user.service";
-import { UserModule } from "./user/user.module";
+import { UserModule } from "./users/user.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.DATABASE_URL),
     HealthModule,
+    CourtSpecModule,
     CatsModule,
     TilesModule,
-    MongooseModule.forRoot(process.env.DATABASE_URL),
     AuthModule,
     UserModule,
   ],
