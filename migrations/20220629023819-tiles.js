@@ -1,5 +1,5 @@
 module.exports = {
-  async up(db, client) {
+  async up(db) {
     await db.collection("tiles").updateOne(
       { name: "Elite X II" },
       {
@@ -32,7 +32,7 @@ module.exports = {
     );
   },
 
-  async down(db, client) {
+  async down(db) {
     await db;
     await db.collection("tiles").updateOne(
       { name: "Elite X II" },

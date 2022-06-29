@@ -3,7 +3,7 @@ import { TilesController } from "./tiles.controller";
 import { TilesService } from "./tiles.service";
 import { CreateTileDto } from "./dto/create-tile.dto";
 import { UpdateTileDto } from "./dto/update-tile.dto";
-import { mockTile } from "./mock-tile";
+import { mockTile } from "./tile.testData";
 
 describe("TilesController", () => {
   let controller: TilesController;
@@ -48,7 +48,7 @@ describe("TilesController", () => {
 
   describe("findOne", () => {
     it("should get a tile", () => {
-      expect(controller.findOne("1")).resolves.toEqual(mockTile);
+      expect(controller.findOne(Object("1"))).resolves.toEqual(mockTile);
     });
   });
 
@@ -66,7 +66,7 @@ describe("TilesController", () => {
   describe("updateTile", () => {
     it("should update a new Tile", () => {
       const updateTileDto: UpdateTileDto = mockTile;
-      expect(controller.update("1", updateTileDto)).resolves.toEqual({
+      expect(controller.update(Object("1"), updateTileDto)).resolves.toEqual({
         _id: "1",
         ...updateTileDto,
       });
@@ -76,7 +76,7 @@ describe("TilesController", () => {
   describe("deleteTile", () => {
     it("should return Tile deleted successfully", () => {
       const updateTileDto: UpdateTileDto = mockTile;
-      expect(controller.remove("1", updateTileDto)).resolves.toEqual({ isDeleted: true });
+      expect(controller.remove(Object("1"), updateTileDto)).resolves.toEqual({ isDeleted: true });
     });
   });
 });

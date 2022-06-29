@@ -3,7 +3,7 @@ import { Model, Query } from "mongoose";
 import { Test, TestingModule } from "@nestjs/testing";
 import { createMock } from "@golevelup/ts-jest";
 import { Tile } from "./schemas/tile.schema";
-import { mockTile } from "./mock-tile";
+import { mockTile } from "./tile.testData";
 import { TilesService } from "./tiles.service";
 
 describe("TileService", () => {
@@ -53,7 +53,7 @@ describe("TileService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockTile),
       }) as any,
     );
-    const tiles = await service.findOne("1");
+    const tiles = await service.findOne(Object("1"));
     expect(tiles).toEqual(mockTile);
   });
   it("should insert a new Tile", async () => {
@@ -67,7 +67,7 @@ describe("TileService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockTile),
       }) as any,
     );
-    const updatedTile = await service.update("1", mockTile);
+    const updatedTile = await service.update(Object("1"), mockTile);
     expect(updatedTile).toEqual(mockTile);
   });
   it("should delete a tile successfully", async () => {
@@ -76,7 +76,7 @@ describe("TileService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockTile),
       }) as any,
     );
-    const deleteTile = await service.remove("1", mockTile);
+    const deleteTile = await service.remove(Object("1"), mockTile);
     expect(deleteTile).toEqual(true);
   });
 });

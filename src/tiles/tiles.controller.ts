@@ -3,6 +3,7 @@ import { TilesService } from "./tiles.service";
 import { Tile } from "./schemas/tile.schema";
 import { CreateTileDto } from "./dto/create-tile.dto";
 import { UpdateTileDto } from "./dto/update-tile.dto";
+import { ObjectId } from "mongoose";
 
 @Controller("tiles")
 export class TilesController {
@@ -13,7 +14,7 @@ export class TilesController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string): Promise<Tile> {
+  async findOne(@Param("id") id: ObjectId): Promise<Tile> {
     return await this.tilesService.findOne(id);
   }
 
@@ -23,12 +24,12 @@ export class TilesController {
   }
 
   @Put(":id")
-  async update(@Param("id") id: string, @Body() updateTileTo: UpdateTileDto): Promise<Tile> {
+  async update(@Param("id") id: ObjectId, @Body() updateTileTo: UpdateTileDto): Promise<Tile> {
     return await this.tilesService.update(id, updateTileTo);
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string, @Body() updateTileTo: UpdateTileDto): Promise<boolean> {
+  async remove(@Param("id") id: ObjectId, @Body() updateTileTo: UpdateTileDto): Promise<boolean> {
     return await this.tilesService.remove(id, updateTileTo);
   }
 }

@@ -1,19 +1,18 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Model } from "mongoose";
+import { Model, ObjectId } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { Tile } from "./schemas/tile.schema";
 import { CreateTileDto } from "./dto/create-tile.dto";
 import { UpdateTileDto } from "./dto/update-tile.dto";
-import { animationFrameScheduler } from "rxjs";
 
 @Injectable()
 export class TilesService {
   constructor(@InjectModel(Tile.name) private readonly tileModel: Model<Tile>) {}
   async findAll(): Promise<Tile[]> {
-    return await (await this.tileModel.find().exec()).filter((tile) => tile.isDeleted !== true);
+    return (await this.tileModel.find().exec()).filter((tile) => tile.isDeleted !== true);
   }
 
-  async findOne(id: string): Promise<Tile> {
+  async findOne(id: ObjectId): Promise<Tile> {
     try {
       const tile = await this.tileModel.findOne({ _id: id }).exec();
       return tile;
@@ -29,7 +28,7 @@ export class TilesService {
     return tile;
   }
 
-  async update(id: string, updateTileDto: UpdateTileDto): Promise<Tile> {
+  async update(id: ObjectId, updateTileDto: UpdateTileDto): Promise<Tile> {
     try {
       const existingTile = await this.tileModel
         .findOneAndUpdate(
@@ -41,12 +40,12 @@ export class TilesService {
       return existingTile;
     } catch {
       throw new NotFoundException({
-        message: "Tile cannot be find, please search again",
+        message: "Tile cannot be found, please search again",
       });
     }
   }
 
-  async remove(id: string, updateTileDto: UpdateTileDto): Promise<boolean> {
+  async remove(id: ObjectId, updateTileDto: UpdateTileDto): Promise<boolean> {
     try {
       await this.tileModel.findOneAndUpdate(
         { _id: id },

@@ -1,6 +1,7 @@
-import { IsNumber, IsObject, IsPositive, IsString } from "class-validator";
+import { IsNumber, IsObject, IsPositive, IsString, IsNotEmpty } from "class-validator";
 export class CreateTileDto {
   @IsString()
+  @IsNotEmpty()
   readonly name: string;
 
   @IsObject()

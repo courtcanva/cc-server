@@ -1,20 +1,27 @@
-import { IsNumber, IsObject, IsPositive, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsPositive, IsString } from "class-validator";
 export class UpdateTileDto {
+  @IsOptional()
   @IsString()
-  readonly name: string;
+  @IsNotEmpty()
+  name: string;
 
+  @IsOptional()
   @IsObject()
-  readonly colors: object;
+  @IsNotEmpty()
+  colors: object;
 
+  @IsOptional()
   @IsNumber()
   @IsPositive()
-  readonly length: number;
+  length: number;
 
+  @IsOptional()
   @IsNumber()
   @IsPositive()
-  readonly width: number;
+  width: number;
 
+  @IsOptional()
   @IsNumber()
   @IsPositive()
-  readonly height: number;
+  height: number;
 }
