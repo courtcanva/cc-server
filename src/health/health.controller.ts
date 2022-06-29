@@ -17,9 +17,6 @@ export class HealthController {
   @Get()
   @HealthCheck()
   check() {
-    return this.health.check([
-      () => this.http.pingCheck("courtcanva", process.env.FRONTEND_URL),
-      () => this.db.pingCheck("mongoose"),
-    ]);
+    return this.health.check([() => this.db.pingCheck("mongoose")]);
   }
 }
