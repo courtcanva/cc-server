@@ -8,8 +8,8 @@ import { MongooseModule } from "@nestjs/mongoose";
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     HealthModule,
+    
     CourtSpecModule,
-    MongooseModule.forRoot(process.env.DATABASE_URL || "mongodb://localhost:27017/courtcanvas"),
   ],
 })
 export class AppModule {}
