@@ -67,12 +67,8 @@ describe("CourtSpecController", () => {
     });
 
     it("should delete a court", () => {
-      jest
-        .spyOn(service, "removeCourtSpecById")
-        .mockResolvedValueOnce({ message: "Court #1 deleted successfully" });
-      expect(controller.remove(Object("62ad9efe1bc0ca4561d9ca45"))).resolves.toEqual({
-        message: "Court #1 deleted successfully",
-      });
+      jest.spyOn(service, "removeCourtSpecById").mockResolvedValueOnce(true);
+      expect(controller.remove(Object("62ad9efe1bc0ca4561d9ca45"))).resolves.toEqual(true);
     });
   });
 });

@@ -97,7 +97,7 @@ describe("CourtSpecService", () => {
   it("should delete a court", async () => {
     jest.spyOn(model, "findById").mockReturnValueOnce(
       createMock<Query<any, any>>({
-        exec: jest.fn().mockResolvedValueOnce({ message: "Court deleted successfully" }),
+        exec: jest.fn().mockResolvedValueOnce(true),
       }) as any,
     );
     jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
@@ -105,8 +105,6 @@ describe("CourtSpecService", () => {
         exec: jest.fn().mockResolvedValueOnce(updatedCourt),
       }) as any,
     );
-    expect(await service.removeCourtSpecById(Object("62ad9efe1bc0ca4561d9ca45"))).toEqual({
-      message: "Court deleted successfully",
-    });
+    expect(await service.removeCourtSpecById(Object("62ad9efe1bc0ca4561d9ca45"))).toEqual(true);
   });
 });
