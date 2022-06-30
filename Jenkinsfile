@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Push to ECR') {
             when {
-                branch 'main'
+                branch 'feature/ccd-0039-add-container-to-cloudwatch'
             }
             steps {
                 echo 'Logging into ECR...'
@@ -56,7 +56,7 @@ pipeline {
 
         stage('Deploy to UAT Environment') {
             when {
-                branch 'main'
+                branch 'feature/ccd-0039-add-container-to-cloudwatch'
             }
             steps {
                 // AWS CLI must be installed in the Jenkins server first.
