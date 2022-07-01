@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString, IsPositive, Length } from "class-validator";
+import { IsNumber, IsOptional, IsString, IsPositive, Length, Min } from "class-validator";
 export class CreateCourtSpecDto {
   @Length(5, 50, {
     message: "the court name need to be longer than 5 characters or shorter than 50 characters",
@@ -18,7 +18,7 @@ export class CreateCourtSpecDto {
 
   @IsNumber()
   @IsOptional()
-  @IsPositive()
+  @Min(0)
   readonly centreCircleRadius: number;
 
   @IsNumber()
@@ -48,7 +48,7 @@ export class CreateCourtSpecDto {
 
   @IsNumber()
   @IsOptional()
-  @IsPositive()
+  @Min(0)
   readonly sideBorderWidth: number;
 
   @IsNumber()
