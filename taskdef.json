@@ -12,6 +12,15 @@
                     "protocol": "tcp"
                 }
             ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "awslogs-cc-server",
+                    "awslogs-region": "ap-southeast-2",
+                    "awslogs-stream-prefix": "awslogs-courtcanva"
+                }
+            },
             "environmentFiles": [
                 {
                     "value": "arn:aws:s3:::cc-server-environment-variables/ccs/ccsuat.env",

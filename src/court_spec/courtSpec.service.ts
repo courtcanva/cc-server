@@ -44,16 +44,17 @@ export class CourtSpecService {
     return updatedCourtSpec;
   }
 
-  async removeCourtSpecById(courtId: ObjectId): Promise<{ message: string }> {
+  async removeCourtSpecById(courtId: ObjectId): Promise<boolean> {
     const court = await this.courtSpecModel.findById(courtId).exec();
     if (!court || court.isDeleted) {
       throw new NotFoundException("court not found");
     }
+
     const DeletedCount = await this.courtSpecModel.findByIdAndUpdate(courtId, {
       isDeleted: true,
       updatedAt: new Date(),
     });
 
-    return { message: `Court deleted successfully` };
+    return true;
   }
 }

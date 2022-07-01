@@ -48,9 +48,7 @@ export class CourtSpecController {
   }
 
   @Delete(":courtId")
-  async remove(
-    @Param("courtId", ParseObjectIdPipe) courtId: ObjectId,
-  ): Promise<{ message: string }> {
+  async remove(@Param("courtId", ParseObjectIdPipe) courtId: ObjectId): Promise<boolean> {
     return await this.courtSpecService.removeCourtSpecById(courtId);
   }
 }
