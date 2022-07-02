@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
-import { CreateUserDto } from "../user/dto/createUser.dto";
-import { UpdateUserDto } from "../user/dto/updateUser.dto";
-import { User } from "../user/schemas/user.schema";
+import { CreateUserDto } from "../users/dto/createUser.dto";
+import { UpdateUserDto } from "../users/dto/updateUser.dto";
+import { User } from "../users/schemas/user.schema";
 import { OAuth2Client } from "google-auth-library";
 import { ReturnUserInfo } from "./ReturnUserInfo";
 
