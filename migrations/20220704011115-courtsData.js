@@ -41,7 +41,7 @@ module.exports = {
         restrictedAreaWidth: 4800,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
-        description: "Pro Full Court",
+        description: "Pro Half Court",
       },
       {
         name: "Half Court",
@@ -130,7 +130,7 @@ module.exports = {
         restrictedAreaWidth: 4800,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
-        description: "Pro Full Court",
+        description: "Pro Half Court",
       },
       {
         name: "Half Court",
