@@ -13,7 +13,7 @@ module.exports = {
         restrictedAreaWidth: 4900,
         sideBorderWidth: 1200,
         lineBorderWidth: 200,
-        description: "This is the default PRO Full Court",
+        description: "PRO Full Court",
       },
       {
         name: "Full Court",
@@ -27,7 +27,7 @@ module.exports = {
         restrictedAreaWidth: 4900,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
-        description: "This is the default Full Court",
+        description: "Full Court",
       },
       {
         name: "Pro Half Court",
@@ -41,7 +41,7 @@ module.exports = {
         restrictedAreaWidth: 4800,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
-        description: "This is the default Pro Full Court",
+        description: "Pro Full Court",
       },
       {
         name: "Half Court",
@@ -55,7 +55,7 @@ module.exports = {
         restrictedAreaWidth: 4800,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
-        description: "This is the default Half Court",
+        description: "Half Court",
       },
       {
         name: "Medium Court",
@@ -69,7 +69,7 @@ module.exports = {
         restrictedAreaWidth: 4800,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
-        description: "This is the default Medium Court",
+        description: "Medium Court",
       },
       {
         name: "Small Court",
@@ -83,6 +83,7 @@ module.exports = {
         restrictedAreaWidth: 4800,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
+        description: "Small Court",
       },
     ]);
   },
@@ -101,7 +102,7 @@ module.exports = {
         restrictedAreaWidth: 4900,
         sideBorderWidth: 1200,
         lineBorderWidth: 200,
-        description: "This is the default PRO Full Court",
+        description: "PRO Full Court",
       },
       {
         name: "Full Court",
@@ -115,7 +116,7 @@ module.exports = {
         restrictedAreaWidth: 4900,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
-        description: "This is the default Full Court",
+        description: "Full Court",
       },
       {
         name: "Pro Half Court",
@@ -129,7 +130,7 @@ module.exports = {
         restrictedAreaWidth: 4800,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
-        description: "This is the default Pro Full Court",
+        description: "Pro Full Court",
       },
       {
         name: "Half Court",
@@ -143,7 +144,7 @@ module.exports = {
         restrictedAreaWidth: 4800,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
-        description: "This is the default Half Court",
+        description: "Half Court",
       },
       {
         name: "Medium Court",
@@ -157,7 +158,7 @@ module.exports = {
         restrictedAreaWidth: 4800,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
-        description: "This is the default Medium Court",
+        description: "Medium Court",
       },
       {
         name: "Small Court",
@@ -171,6 +172,7 @@ module.exports = {
         restrictedAreaWidth: 4800,
         sideBorderWidth: 0,
         lineBorderWidth: 200,
+        description: "Small Court",
       },
     ]);
   },
