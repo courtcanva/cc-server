@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsOptional, IsString } from "class-validator";
 export class CreateUserDto {
   @IsString()
   readonly googleId: string;
@@ -16,8 +16,11 @@ export class CreateUserDto {
   @IsString()
   readonly lastName: string;
 
-  @IsString()
+  @IsBoolean()
   readonly isDeleted: boolean;
+
+  @IsBoolean()
+  readonly isActivated: boolean;
 
   readonly createdAt: Date;
 

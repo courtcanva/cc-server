@@ -41,6 +41,7 @@ export class AuthService {
         email: email,
         firstName: given_name,
         lastName: family_name,
+        isActivated: true,
       };
       await this.userModel.create(newUser);
       const newUserInfo = {
