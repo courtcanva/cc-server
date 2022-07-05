@@ -21,4 +21,4 @@ EXPOSE 8080
 
 # Start the server using the production build
 CMD ["node", "dist/src/main"]
-CMD ["npm","run", "migrate-up"]
+
