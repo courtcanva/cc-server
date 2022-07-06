@@ -15,7 +15,7 @@ COPY . .
 
 # Creates a "dist" folder with the production build
 RUN npm run build
-
+RUN npm run migrate-up
 # The server listens at PORT 8080
 EXPOSE 8080
 
