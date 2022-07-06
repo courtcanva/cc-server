@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Push to ECR') {
             when {
-                branch 'feature/cc-0085-update-migration'
+                branch 'main'
             }
             steps {
                 echo 'Logging into ECR...'
@@ -56,7 +56,7 @@ pipeline {
 
         stage('Deploy to UAT Environment') {
             when {
-                branch 'feature/cc-0085-update-migration'
+                branch 'main'
             }
             steps {
                 // AWS CLI must be installed in the Jenkins server first.
