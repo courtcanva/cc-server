@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Push to ECR') {
             when {
-                branch 'main'
+                branch 'ccd-0040-search-ecs-task-logs-in-grafana'
             }
             steps {
                 echo 'Logging into ECR...'
@@ -56,7 +56,7 @@ pipeline {
 
         stage('Deploy to UAT Environment') {
             when {
-                branch 'main'
+                branch 'ccd-0040-search-ecs-task-logs-in-grafana'
             }
             steps {
                 // AWS CLI must be installed in the Jenkins server first.
