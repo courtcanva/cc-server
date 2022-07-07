@@ -8,7 +8,7 @@ export class UpdateTileDto {
   @IsOptional()
   @IsArray()
   @IsNotEmpty()
-  readonly colors: [{ name: string; value: string }];
+  readonly colors: { name: string; value: string }[];
 
   @IsOptional()
   @IsNumber()

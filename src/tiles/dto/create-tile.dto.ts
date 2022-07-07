@@ -5,7 +5,7 @@ export class CreateTileDto {
   readonly name: string;
 
   @IsArray()
-  readonly colors: [{ name: string; value: string }];
+  readonly colors: { name: string; value: string }[];
 
   @IsNumber()
   @IsPositive()
