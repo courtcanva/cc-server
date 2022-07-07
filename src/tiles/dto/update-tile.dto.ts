@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsPositive, IsString } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
 export class UpdateTileDto {
   @IsOptional()
   @IsString()
@@ -6,9 +6,9 @@ export class UpdateTileDto {
   name: string;
 
   @IsOptional()
-  @IsObject()
+  @IsArray()
   @IsNotEmpty()
-  colors: object;
+  readonly colors: [{ name: string; value: string }];
 
   @IsOptional()
   @IsNumber()

@@ -7,8 +7,8 @@ export class Tile extends Document {
   @Prop({ type: String, required: true })
   name: string;
 
-  @Prop({ type: Object, required: true })
-  colors: { type: string };
+  @Prop({ type: Array, required: true })
+  colors: [{ name: string; value: string }];
 
   @Prop({ type: Number, required: true })
   length: number;

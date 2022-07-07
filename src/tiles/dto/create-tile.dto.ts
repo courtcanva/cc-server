@@ -1,11 +1,11 @@
-import { IsNumber, IsObject, IsPositive, IsString, IsNotEmpty } from "class-validator";
+import { IsNumber, IsPositive, IsString, IsNotEmpty, IsArray } from "class-validator";
 export class CreateTileDto {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
 
-  @IsObject()
-  readonly colors: object;
+  @IsArray()
+  readonly colors: [{ name: string; value: string }];
 
   @IsNumber()
   @IsPositive()
