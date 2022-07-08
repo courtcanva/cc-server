@@ -10,6 +10,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, "jwt") {
     super({
       //Get tokens from headers
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // TODO: put secret into environment variable
       secretOrKey: "at-secret",
     });
   }

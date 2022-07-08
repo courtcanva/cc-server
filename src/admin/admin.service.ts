@@ -75,6 +75,7 @@ export class AdminService {
           email,
         },
         {
+          // TODO: put secret into environment variable
           secret: "at-secret",
           expiresIn: 60 * 15, //15 mins expiration
         },
@@ -85,6 +86,7 @@ export class AdminService {
           email,
         },
         {
+          // TODO: put secret into environment variable
           secret: "rt-secret",
           expiresIn: 60 * 60 * 24 * 7, //one week expiration
         },
