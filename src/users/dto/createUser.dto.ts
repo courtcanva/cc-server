@@ -17,9 +17,6 @@ export class CreateUserDto {
   readonly lastName: string;
 
   @IsBoolean()
-  readonly isDeleted: boolean;
-
-  @IsBoolean()
   readonly isActivated: boolean;
 
   readonly createdAt: Date;
