@@ -15,9 +15,9 @@ COPY . .
 
 # Creates a "dist" folder with the production build
 RUN npm run build
-
 # The server listens at PORT 8080
 EXPOSE 8080
 
 # Start the server using the production build
 CMD ["node", "dist/src/main"]
+
