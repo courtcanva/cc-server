@@ -5,7 +5,7 @@ import { CreatePriceDto } from "./dto/create-price.dto";
 import { UpdatePriceDto } from "./dto/update-price.dto";
 import { ObjectId } from "mongoose";
 
-@Controller("prices")
+@Controller("price")
 export class PriceController {
   constructor(private readonly priceService: PriceService) {}
   @Get()
