@@ -65,9 +65,9 @@ pipeline {
                 // Below is used to upgrade/replace the existing service, which may be created manually or through terraform.
                 echo "=========== Update ECS cluster's service ================="
                 // Override image field in taskdef file
-                sh "sed -i 's|{{image}}|${REPOSITORY_URI}:${IMAGE_TAG}|' taskdef.json"
+                sh "sed -i 's|{{image}}|${REPOSITORY_URI}:${IMAGE_TAG}|' taskdef-uat.json"
                 // Create a new task definition revision
-                sh "aws ecs register-task-definition --execution-role-arn ${exec_role_arn} --cli-input-json file://taskdef.json --region ${AWS_DEFAULT_REGION}"
+                sh "aws ecs register-task-definition --execution-role-arn ${exec_role_arn} --cli-input-json file://taskdef-uat.json --region ${AWS_DEFAULT_REGION}"
                 // Update service on Fargate
                 sh "aws ecs update-service --cluster ${AWS_ECS_CLUSTER} --service ${AWS_ECS_SERVICE} --task-definition ${task_def_arn} --region ${AWS_DEFAULT_REGION}"
             }
@@ -82,7 +82,7 @@ pipeline {
             }
         }
          stage('Approval') {
-              agent {
+            agent {
                label "agent1"
             }
             when {
@@ -90,7 +90,7 @@ pipeline {
             }
             
           steps {
-              script {
+            script {
                  mail to: "${Recepient}",
                  subject: "Courtcanva-Back-End-Prod-Deployment",
                  body: "Do you want to deploy artificat ${IMAGE_REPO_NAME}:${IMAGE_TAG} to prod?"
@@ -108,19 +108,19 @@ pipeline {
      }
      
         stage('Deploy to PROD Environment') {
-           when {
-                  expression {
-                  env.PROCEED_TO_DEPLOY == '1'
-              }
-           }
+            when {
+                    expression {
+                    env.PROCEED_TO_DEPLOY == '1'
+                }
+            }
             steps {
                 // AWS CLI must be installed in the Jenkins server first.
                 // Below is used to upgrade/replace the existing service, which may be created manually or through terraform.
                 //echo "=========== Update ECS cluster's service ================="
                 //Override image field in taskdef file
-                sh "sed -i 's|{{image}}|${REPOSITORY_URI}:${IMAGE_TAG}|' taskdefprod.json"
+                sh "sed -i 's|{{image}}|${REPOSITORY_URI}:${IMAGE_TAG}|' taskdef-prod.json"
                 // Create a new task definition revision
-                sh "aws ecs register-task-definition --execution-role-arn ${exec_role_arn} --cli-input-json file://taskdefprod.json --region ${AWS_DEFAULT_REGION}"
+                sh "aws ecs register-task-definition --execution-role-arn ${exec_role_arn} --cli-input-json file://taskdef-prod.json --region ${AWS_DEFAULT_REGION}"
                 // Update service on Fargate
                 sh "aws ecs update-service --cluster ${AWS_ECS_CLUSTER_PROD} --service ${AWS_ECS_SERVICE_PROD} --task-definition ${task_def_arn_prod} --region ${AWS_DEFAULT_REGION}"
             }
