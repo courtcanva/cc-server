@@ -45,7 +45,7 @@
                 },
                 "secretOptions": [{
                     "name": "loki-token",
-                    "valueFrom": "arn:aws:secretsmanager:ap-southeast-2:497551902879:secret:loki/secret-83Nckd"
+                    "valueFrom": "arn:aws:secretsmanager:ap-southeast-2:497551902879:secret:grafana/loki/secret-RvdS8C"
                 }]
             },
             "environmentFiles": [
