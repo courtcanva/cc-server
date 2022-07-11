@@ -57,7 +57,7 @@ pipeline {
         }
         stage('Migrate UAT DB') {
             when {
-                branch 'feature/ccd-0043-add-db-migration-in-jenkins-pipeline'
+                branch 'main'
             }
             steps {
                 echo 'Migrate UAT DB...'
@@ -117,14 +117,12 @@ pipeline {
         }
 
         stage('Migrate PROD DB') {
-            // when {
-            //         expression {
-            //             env.PROCEED_TO_DEPLOY == '1'
-            //         }
-            // }
             when {
-                branch 'feature/ccd-0043-add-db-migration-in-jenkins-pipeline'
+                    expression {
+                        env.PROCEED_TO_DEPLOY == '1'
+                    }
             }
+
             steps {
                 echo 'Migrate PROD DB...'
                 sh '. /var/jenkins_home/prod-db-migration.env;npm run migrate-up'
