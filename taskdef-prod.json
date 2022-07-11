@@ -3,6 +3,27 @@
     "networkMode": "awsvpc",
     "containerDefinitions": [
         {
+            "essential": true,
+            "image": "grafana/fluent-bit-plugin-loki:main",
+            "name": "log_router",
+            "firelensConfiguration": {
+                "type": "fluentbit",
+                "options": {
+                    "enable-ecs-log-metadata": "true"
+                }
+            },
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "firelens-container-prod",
+                    "awslogs-region": "ap-southeast-2",
+                    "awslogs-create-group": "true",
+                    "awslogs-stream-prefix": "firelens"
+                }
+            },
+            "memoryReservation": 50
+        },
+        {
             "name": "CCS-F-PROD-container",
             "image": "{{image}}",
             "portMappings": [
@@ -12,13 +33,15 @@
                     "protocol": "tcp"
                 }
             ],
-        "logConfiguration": {
-                "logDriver": "awslogs",
+            "logConfiguration": {
+                "logDriver": "awsfirelens",
                 "options": {
-                    "awslogs-create-group": "true",
-                    "awslogs-group": "awslogs-cc-server-prod",
-                    "awslogs-region": "ap-southeast-2",
-                    "awslogs-stream-prefix": "awslogs-courtcanva"
+                    "Name": "grafana-loki",
+                    "Url": "https://244736:eyJrIjoiZGJhMzgyMTFmZDYzZDY3NDFiNTM0ODY2ODFkOGQzNDk0NTgyMDk2NiIsIm4iOiJ0ZXN0IiwiaWQiOjY3NDkwNn0=@logs-prod-004.grafana.net/loki/api/v1/push",
+                    "Labels": "{job=\"prod-logs\"}",
+                    "RemoveKeys": "container_id,ecs_task_arn",
+                    "LabelKeys": "container_name,ecs_task_definition,source,ecs_cluster",
+                    "LineFormat": "key_value"
                 }
             },
             "environmentFiles": [

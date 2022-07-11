@@ -15,7 +15,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "firelens-container",
+                    "awslogs-group": "firelens-container-uat",
                     "awslogs-region": "ap-southeast-2",
                     "awslogs-create-group": "true",
                     "awslogs-stream-prefix": "firelens"
@@ -37,16 +37,12 @@
                 "logDriver": "awsfirelens",
                 "options": {
                     "Name": "grafana-loki",
-                    "Url": "https://logs-prod-004.grafana.net/loki/api/v1/push",
-                    "Labels": "{job=\"firelens\"}",
+                    "Url": "https://244736:eyJrIjoiZGJhMzgyMTFmZDYzZDY3NDFiNTM0ODY2ODFkOGQzNDk0NTgyMDk2NiIsIm4iOiJ0ZXN0IiwiaWQiOjY3NDkwNn0=@logs-prod-004.grafana.net/loki/api/v1/push",
+                    "Labels": "{job=\"uat-logs\"}",
                     "RemoveKeys": "container_id,ecs_task_arn",
                     "LabelKeys": "container_name,ecs_task_definition,source,ecs_cluster",
                     "LineFormat": "key_value"
-                },
-                "secretOptions": [{
-                    "name": "loki-token",
-                    "valueFrom": "arn:aws:secretsmanager:ap-southeast-2:497551902879:secret:grafana/loki/secret-RvdS8C"
-                }]
+                }
             },
             "environmentFiles": [
                 {
