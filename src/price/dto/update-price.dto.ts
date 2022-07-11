@@ -6,14 +6,14 @@ export class UpdatePriceDto {
   readonly tiles: {
     tile_id: string;
     deliveryPrice: number;
-    tilePrice: { colorName: string; price: number }[];
+    tilePrice: { color: string; price: number }[];
   };
 
   @IsArray()
   @IsOptional()
   @IsNotEmpty()
   readonly court_spec: {
-    court_id: string;
+    court: string;
     installationPrice: number;
   }[];
 }

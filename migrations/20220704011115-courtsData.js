@@ -2,7 +2,7 @@ module.exports = {
   async up(db) {
     await db.collection("courtspecs").insertMany([
       {
-        name: "PRO Full Court",
+        name: "Pro Full Court",
         length: 28000,
         width: 15000,
         centreCircleRadius: 1800,

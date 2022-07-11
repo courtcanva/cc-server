@@ -7,11 +7,11 @@ export class Price extends Document {
   tiles: {
     tile_id: string;
     deliveryPrice: number;
-    tilePrice: { colorName: string; price: number }[];
+    tilePrice: { color: string; price: number }[];
   };
 
   @Prop({ type: Array, required: true })
-  court_spec: [{ court_id: string; installationPrice: number }];
+  court_spec: [{ court: string; installationPrice: number }];
 
   @Prop({ type: Date, default: new Date() })
   createdAt: Date;

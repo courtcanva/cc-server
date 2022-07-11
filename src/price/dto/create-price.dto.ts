@@ -4,12 +4,12 @@ export class CreatePriceDto {
   readonly tiles: {
     tile_id: string;
     deliveryPrice: number;
-    tilePrice: { colorName: string; price: number }[];
+    tilePrice: { color: string; price: number }[];
   };
 
   @IsArray()
   readonly court_spec: {
-    court_id: string;
+    court: string;
     installationPrice: number;
   }[];
 
