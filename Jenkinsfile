@@ -61,7 +61,7 @@ pipeline {
             }
             steps {
                 echo 'Migrate UAT DB...'
-                sh '. /var/jenkins_home/uat-db-migration.env; npm run migrate-up'
+                sh '. /var/jenkins_home/uat-db-migration.env; npm i; npm run migrate-up'
             }
         }
         stage('Deploy to UAT Environment') {
@@ -89,7 +89,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Approval') {
             agent {
                label "agent1"
@@ -127,7 +127,7 @@ pipeline {
             }
             steps {
                 echo 'Migrate PROD DB...'
-                sh '. /var/jenkins_home/prod-db-migration.env; npm run migrate-up'
+                sh '. /var/jenkins_home/prod-db-migration.env;npm run migrate-up'
             }
         }
      
