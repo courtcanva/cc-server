@@ -1,4 +1,4 @@
-import { IsArray, IsString, IsNotEmpty, IsObject } from "class-validator";
+import { IsArray, IsObject } from "class-validator";
 export class CreatePriceDto {
   @IsObject()
   readonly tiles: {
