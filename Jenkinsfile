@@ -86,7 +86,7 @@ pipeline {
                label "agent1"
             }
             when {
-                 branch 'main'
+                 branch 'ccd-0040-search-ecs-task-logs-in-grafana'
             }
             
           steps {
