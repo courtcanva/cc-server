@@ -89,8 +89,7 @@ pipeline {
                 }
             }
         }
-
-        stage('Approval') {
+         stage('Approval') {
             agent {
                label "agent1"
             }
@@ -98,35 +97,34 @@ pipeline {
                  branch 'main'
             }
             
-            steps {
-                script {
-                    mail to: "${Recepient}",
-                    subject: "Courtcanva-Back-End-Prod-Deployment",
-                    body: "Do you want to deploy artificat ${IMAGE_REPO_NAME}:${IMAGE_TAG} to prod?"
-                    env.PROCEED_TO_DEPLOY = 1
-                    try {
-                        timeout(time: 6, unit: 'HOURS') {
-                            input(message: 'Deploy this build to Prod?')
-                        }
-                    } 
-                    catch (err) {
-                        env.PROCEED_TO_DEPLOY = 0
-                    }
-                }
-            }
-        }
+          steps {
+            script {
+                 mail to: "${Recepient}",
+                 subject: "Courtcanva-Back-End-Prod-Deployment",
+                 body: "Do you want to deploy artificat ${IMAGE_REPO_NAME}:${IMAGE_TAG} to prod?"
+                 env.PROCEED_TO_DEPLOY = 1
+                 try {
+                     timeout(time: 6, unit: 'HOURS') {
+                         input(message: 'Deploy this build to Prod?')
+                     }
+                 } 
+                 catch (err) {
+                    env.PROCEED_TO_DEPLOY = 0
+                 }
+             }
+         }
+     }
      
         stage('Deploy to PROD Environment') {
             when {
                     expression {
-                        env.PROCEED_TO_DEPLOY == '1'
-                    }
+                    env.PROCEED_TO_DEPLOY == '1'
+                }
             }
             steps {
                 echo 'Migrate PROD DB...'
                 sh '. /var/jenkins_home/prod-db-migration.env; npm run migrate-up'
             }
-
             steps {
                 // AWS CLI must be installed in the Jenkins server first.
                 // Below is used to upgrade/replace the existing service, which may be created manually or through terraform.
