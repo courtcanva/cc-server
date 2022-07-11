@@ -22,7 +22,9 @@
     "test:inte": "yarn prisma:migrate && jest --config ./jest-integration.json --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "husky install",
-    "pre-commit": "npm run format && npm run lint && npm test"
+    "pre-commit": "npm run format && npm run lint && npm test",
+    "migrate-up": "migrate-mongo up",
+    "migrate-down": "migrate-mongo down"
   },
   "dependencies": {
     "@nestjs/axios": "^0.0.8",
@@ -69,6 +71,7 @@
     "husky": "^8.0.1",
     "jest": "28.0.3",
     "lint-staged": "^13.0.1",
+    "migrate-mongo": "^9.0.0",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",
     "supertest": "^6.1.3",
