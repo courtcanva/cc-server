@@ -11,28 +11,30 @@ import { GetCurrentAdmin, GetCurrentAdminId } from "src/common/decorators";
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
+  //Register new admin
   @Post("register")
   @HttpCode(HttpStatus.CREATED)
   adminRegister(@Body() dto: AdminDto): Promise<Tokens> {
     return this.adminService.adminRegister(dto);
   }
 
+  //Login
   @Post("login")
   @HttpCode(HttpStatus.OK)
   adminSignIn(@Body() dto: AdminDto): Promise<Tokens> {
     return this.adminService.adminLogin(dto);
   }
 
-  // @UseGuards(AccessTokenGuard)
-  @UseGuards(AuthGuard("jwt"))
+  //Logout
+  @UseGuards(AccessTokenGuard)
   @Post("logout")
   @HttpCode(HttpStatus.OK)
   adminLogout(@GetCurrentAdminId() adminId: ObjectId) {
     return this.adminService.adminLogout(adminId);
   }
 
-  // @UseGuards(RefreshTokenGuard)
-  @UseGuards(AuthGuard("jwt-refresh"))
+  //Use refresh token to exchange new token pair
+  @UseGuards(RefreshTokenGuard)
   @Post("refresh")
   @HttpCode(HttpStatus.OK)
   refreshTokens(

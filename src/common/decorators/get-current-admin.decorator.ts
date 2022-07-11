@@ -1,5 +1,7 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-
+/**
+ * Get user info from request
+ */
 export const GetCurrentAdmin = createParamDecorator(
   (data: any | undefined, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();

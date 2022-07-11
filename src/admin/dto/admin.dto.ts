@@ -10,7 +10,6 @@ export class AdminDto {
   @IsString()
   readonly password: string;
 
-  @Optional()
   readonly hashedRefreshToken: string;
 
   readonly createdAt: Date;
