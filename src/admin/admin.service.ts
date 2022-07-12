@@ -14,11 +14,6 @@ export class AdminService {
     private jwtService: JwtService,
   ) {}
 
-  /**
-   * Register an admin
-   * @param adminDto Admin information including email and password
-   * @returns {Tokens} including accessToken and refreshToken
-   */
   async adminRegister(adminDto: AdminDto): Promise<Tokens> {
     const hashedPassword = await argon.hash(adminDto.password);
 
@@ -36,45 +31,38 @@ export class AdminService {
     return tokens;
   }
 
-  /**
-   *Login with an admin account
-   * @param adminDto Admin information including email and password
-   * @returns
-   */
   async adminLogin(adminDto: AdminDto): Promise<Tokens> {
     const admin = await this.adminModel.findOne({ email: adminDto.email }).exec();
-    if (!admin) throw new ForbiddenException("Access Denied");
+    if (!admin) {
+      throw new ForbiddenException("Access Denied");
+    }
 
     const passwordMatches = await argon.verify(admin.password, adminDto.password);
-    if (!passwordMatches) throw new ForbiddenException("Access Denied");
+    if (!passwordMatches) {
+      throw new ForbiddenException("Access Denied");
+    }
 
     const tokens = await this.getTokens(admin._id, admin.email);
     await this.updateRtHash(admin._id, tokens.refreshToken);
     return tokens;
   }
 
-  /**
-   * Log out user and make his refresh token as null in the database
-   * @param adminId admin id
-   */
   async adminLogout(adminId: ObjectId) {
     const admin = await this.adminModel.findById(adminId);
     admin.hashedRefreshToken &&
       (await this.adminModel.findByIdAndUpdate(adminId, { hashedRefreshToken: null }));
   }
 
-  /**
-   * Return new token pairs
-   * @param adminId admin id
-   * @param rt refresh token in the request
-   * @returns {Tokens}
-   */
   async refreshTokens(adminId: ObjectId, rt: string) {
     const admin = await this.adminModel.findById(adminId);
-    if (!admin || !admin.hashedRefreshToken) throw new ForbiddenException("Access Denied");
+    if (!admin || !admin.hashedRefreshToken) {
+      throw new ForbiddenException("Access Denied");
+    }
 
     const rtMatches = await argon.verify(admin.hashedRefreshToken, rt);
-    if (!rtMatches) throw new ForbiddenException("Access Denied");
+    if (!rtMatches) {
+      throw new ForbiddenException("Access Denied");
+    }
 
     const tokens = await this.getTokens(admin._id, admin.email);
     await this.updateRtHash(admin._id, tokens.refreshToken);
@@ -82,35 +70,24 @@ export class AdminService {
     return tokens;
   }
 
-  /**
-   *  Generate access token and refresh token
-   * @param adminId admin id
-   * @param email admin email
-   * @returns {Tokens}
-   */
   async getTokens(adminId: ObjectId, email: string) {
+    const payload = {
+      sub: adminId,
+      email,
+    };
+    const atExp = {
+      secret: process.env.ACCESS_TOKEN_SECRET,
+      expiresIn: 60 * 15, //15 mins expiration
+    };
+
+    const rtExp = {
+      secret: process.env.REFRESH_TOKEN_SECRET,
+      expiresIn: 60 * 60 * 24 * 7, //one week expiration
+    };
+
     const [at, rt] = await Promise.all([
-      this.jwtService.signAsync(
-        {
-          sub: adminId,
-          email,
-        },
-        {
-          // TODO: put secret into environment variable
-          secret: process.env.ACCESS_TOKEN_SECRET,
-          expiresIn: 60 * 15, //15 mins expiration
-        },
-      ),
-      this.jwtService.signAsync(
-        {
-          sub: adminId,
-          email,
-        },
-        {
-          secret: process.env.REFRESH_TOKEN_SECRET,
-          expiresIn: 60 * 60 * 24 * 7, //one week expiration
-        },
-      ),
+      this.jwtService.signAsync(payload, atExp),
+      this.jwtService.signAsync(payload, rtExp),
     ]);
 
     return {
@@ -119,11 +96,6 @@ export class AdminService {
     };
   }
 
-  /**
-   * Update admin account's refresh token
-   * @param adminId admin id
-   * @param rt refresh token
-   */
   async updateRtHash(adminId: ObjectId, rt: string) {
     const hashedRefreshToken = await argon.hash(rt);
     const updateAdminDto = {

@@ -11,21 +11,18 @@ import { GetCurrentAdmin, GetCurrentAdminId } from "src/common/decorators";
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
-  //Register new admin
   @Post("register")
   @HttpCode(HttpStatus.CREATED)
   adminRegister(@Body() dto: AdminDto): Promise<Tokens> {
     return this.adminService.adminRegister(dto);
   }
 
-  //Login
   @Post("login")
   @HttpCode(HttpStatus.OK)
   adminSignIn(@Body() dto: AdminDto): Promise<Tokens> {
     return this.adminService.adminLogin(dto);
   }
 
-  //Logout
   @UseGuards(AccessTokenGuard)
   @Post("logout")
   @HttpCode(HttpStatus.OK)
@@ -33,7 +30,6 @@ export class AdminController {
     return this.adminService.adminLogout(adminId);
   }
 
-  //Use refresh token to exchange new token pair
   @UseGuards(RefreshTokenGuard)
   @Post("refresh")
   @HttpCode(HttpStatus.OK)
