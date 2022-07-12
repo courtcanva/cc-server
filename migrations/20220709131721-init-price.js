@@ -1,0 +1,46 @@
+module.exports = {
+  async up(db) {
+    await db.collection("prices").insertOne({
+      tiles: {
+        tile_id: "123457",
+        deliveryPrice: 1234,
+        tilePrice: [
+          { color: "#305236", price: 1234 },
+          { color: "#314B33", price: 5678 },
+          { color: "#43554A", price: 4537 },
+          { color: "#B49F7A", price: 7537 },
+          { color: "#5C5046", price: 4265 },
+          { color: "#332828", price: 1299 },
+          { color: "#633132", price: 1399 },
+          { color: "#411A20", price: 1499 },
+          { color: "#1A1F51", price: 1599 },
+          { color: "#5B5D61", price: 1699 },
+          { color: "#162F4E", price: 1799 },
+          { color: "#2B5178", price: 1899 },
+          { color: "#8E9196", price: 1999 },
+          { color: "#F1CB87", price: 1599 },
+          { color: "#C66B54", price: 4699 },
+          { color: "#AA3A34", price: 1799 },
+          { color: "#000000", price: 2088 },
+          { color: "#2C4E8A", price: 3999 },
+          { color: "#72818B", price: 4699 },
+          { color: "#195955", price: 1799 },
+          { color: "#B61313", price: 2088 },
+          { color: "#80C4E5", price: 3999 },
+          { color: "#606F14", price: 3999 },
+        ],
+      },
+      court_spec: [
+        { court: "Pro Full Court", installationPrice: 25799 },
+        { court: "Full Court", installationPrice: 23799 },
+        { court: "Pro Half Court", installationPrice: 15799 },
+        { court: "Half Court", installationPrice: 13799 },
+        { court: "Medium Court", installationPrice: 9799 },
+        { court: "Small Court", installationPrice: 5799 },
+      ],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isDeleted: false,
+    });
+  },
+};
