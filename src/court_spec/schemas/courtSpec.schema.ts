@@ -40,13 +40,13 @@ export class CourtSpec extends Document {
   @Prop({ default: "" })
   description: string;
 
-  @Prop({ timestamp: true })
+  @Prop({ type: Date, default: new Date() })
   createdAt: Date;
 
-  @Prop({ timestamp: true })
+  @Prop({ type: Date, default: new Date() })
   updatedAt: Date;
 
-  @Prop({ default: false })
+  @Prop({ type: Boolean, default: false })
   isDeleted: boolean;
 }
 

@@ -14,6 +14,9 @@ module.exports = {
         sideBorderWidth: 1200,
         lineBorderWidth: 200,
         description: "PRO Full Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
       {
         name: "Full Court",
@@ -28,6 +31,9 @@ module.exports = {
         sideBorderWidth: 0,
         lineBorderWidth: 200,
         description: "Full Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
       {
         name: "Pro Half Court",
@@ -42,6 +48,9 @@ module.exports = {
         sideBorderWidth: 0,
         lineBorderWidth: 200,
         description: "Pro Half Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
       {
         name: "Half Court",
@@ -56,6 +65,9 @@ module.exports = {
         sideBorderWidth: 0,
         lineBorderWidth: 200,
         description: "Half Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
       {
         name: "Medium Court",
@@ -70,6 +82,9 @@ module.exports = {
         sideBorderWidth: 0,
         lineBorderWidth: 200,
         description: "Medium Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
       {
         name: "Small Court",
@@ -84,6 +99,9 @@ module.exports = {
         sideBorderWidth: 0,
         lineBorderWidth: 200,
         description: "Small Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
     ]);
   },
@@ -103,6 +121,9 @@ module.exports = {
         sideBorderWidth: 1200,
         lineBorderWidth: 200,
         description: "PRO Full Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
       {
         name: "Full Court",
@@ -117,6 +138,9 @@ module.exports = {
         sideBorderWidth: 0,
         lineBorderWidth: 200,
         description: "Full Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
       {
         name: "Pro Half Court",
@@ -131,6 +155,9 @@ module.exports = {
         sideBorderWidth: 0,
         lineBorderWidth: 200,
         description: "Pro Half Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
       {
         name: "Half Court",
@@ -145,6 +172,9 @@ module.exports = {
         sideBorderWidth: 0,
         lineBorderWidth: 200,
         description: "Half Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
       {
         name: "Medium Court",
@@ -159,6 +189,9 @@ module.exports = {
         sideBorderWidth: 0,
         lineBorderWidth: 200,
         description: "Medium Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
       {
         name: "Small Court",
@@ -173,6 +206,9 @@ module.exports = {
         sideBorderWidth: 0,
         lineBorderWidth: 200,
         description: "Small Court",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isDeleted: false,
       },
     ]);
   },
