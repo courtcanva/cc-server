@@ -6,6 +6,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { TilesModule } from "./tiles/tiles.module";
 import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./users/user.module";
+import { AdminModule } from "./admin/admin.module";
 import { PriceModule } from "./price/price.module";
 
 @Module({
@@ -17,6 +18,7 @@ import { PriceModule } from "./price/price.module";
     TilesModule,
     AuthModule,
     UserModule,
+    AdminModule,
     PriceModule,
   ],
 })
