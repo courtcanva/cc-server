@@ -40,10 +40,10 @@ export class CourtSpec extends Document {
   @Prop({ default: "" })
   description: string;
 
-  @Prop({ timestamp: true })
+  @Prop({ default: new Date() })
   createdAt: Date;
 
-  @Prop({ timestamp: true })
+  @Prop({ default: new Date() })
   updatedAt: Date;
 
   @Prop({ default: false })
