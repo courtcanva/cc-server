@@ -3,14 +3,11 @@ import { Document } from "mongoose";
 
 @Schema()
 export class Price extends Document {
-  @Prop({ required: true })
-  tile_id: string;
+  @Prop({ type: Array, required: true })
+  tilePrice: [{ tile_id: string; price: number }];
 
   @Prop({ required: true })
   deliveryPrice: number;
-
-  @Prop({ required: true })
-  tilePrice: number;
 
   @Prop({ type: Date, default: new Date() })
   createdAt: Date;

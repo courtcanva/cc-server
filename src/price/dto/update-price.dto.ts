@@ -1,15 +1,11 @@
-import { IsOptional, IsString, IsNumber, IsPositive } from "class-validator";
+import { IsOptional, IsNumber, IsPositive, IsArray } from "class-validator";
 export class UpdatePriceDto {
-  @IsString()
-  readonly tile_id: string;
+  @IsArray()
+  @IsOptional()
+  readonly tilePrice: { tile_id: string; price: number }[];
 
   @IsNumber()
   @IsOptional()
   @IsPositive()
   readonly deliveryPrice: number;
-
-  @IsNumber()
-  @IsOptional()
-  @IsPositive()
-  readonly tilePrice: number;
 }
