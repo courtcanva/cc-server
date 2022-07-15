@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Model, ObjectId } from "mongoose";
+import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { Price } from "./schemas/price.schema";
 import { CreatePriceDto } from "./dto/create-price.dto";
@@ -32,7 +32,7 @@ export class PriceService {
     try {
       const existingPrice = await this.priceModel
         .findOneAndUpdate(
-          { _id: id },
+          { tile_id: id },
           { $set: updatePriceDto, $currentDate: { updatedAt: true } },
           { new: true },
         )

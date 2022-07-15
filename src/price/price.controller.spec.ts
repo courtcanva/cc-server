@@ -25,7 +25,7 @@ describe("PriceController", () => {
             update: jest
               .fn()
               .mockImplementation((id: string, updatePriceDto: UpdatePriceDto) =>
-                Promise.resolve({ _id: "1", ...updatePriceDto }),
+                Promise.resolve({ tile_id: "tile001", ...updatePriceDto }),
               ),
             remove: jest.fn().mockResolvedValue({ isDeleted: true }),
           },
@@ -48,7 +48,7 @@ describe("PriceController", () => {
 
   describe("findOne", () => {
     it("should get a price", () => {
-      expect(controller.findOne(Object("1"))).resolves.toEqual(mockPrice);
+      expect(controller.findOne("1")).resolves.toEqual(mockPrice);
     });
   });
 
@@ -66,8 +66,8 @@ describe("PriceController", () => {
   describe("updatePrice", () => {
     it("should update a new Price", () => {
       const updatePriceDto: UpdatePriceDto = mockPrice;
-      expect(controller.update(Object("1"), updatePriceDto)).resolves.toEqual({
-        _id: "1",
+      expect(controller.update("tile001", updatePriceDto)).resolves.toEqual({
+        tile_id: "tile001",
         ...updatePriceDto,
       });
     });
@@ -76,7 +76,7 @@ describe("PriceController", () => {
   describe("deletePrice", () => {
     it("should return Price deleted successfully", () => {
       const updatePriceDto: UpdatePriceDto = mockPrice;
-      expect(controller.remove(Object("1"), updatePriceDto)).resolves.toEqual({ isDeleted: true });
+      expect(controller.remove("tile001", updatePriceDto)).resolves.toEqual({ isDeleted: true });
     });
   });
 });
