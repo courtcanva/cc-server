@@ -14,8 +14,8 @@ export class PriceController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: ObjectId): Promise<Price> {
-    return await this.priceService.findOne(id);
+  async findOne(@Param("tile_id") tile_id: string): Promise<Price> {
+    return await this.priceService.findOne(tile_id);
   }
 
   @Post()
@@ -24,12 +24,18 @@ export class PriceController {
   }
 
   @Put(":id")
-  async update(@Param("id") id: ObjectId, @Body() updatePriceTo: UpdatePriceDto): Promise<Price> {
-    return await this.priceService.update(id, updatePriceTo);
+  async update(
+    @Param("tile_id") tile_id: string,
+    @Body() updatePriceTo: UpdatePriceDto,
+  ): Promise<Price> {
+    return await this.priceService.update(tile_id, updatePriceTo);
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: ObjectId, @Body() updatePriceTo: UpdatePriceDto): Promise<boolean> {
-    return await this.priceService.remove(id, updatePriceTo);
+  async remove(
+    @Param("tile_id") tile_id: string,
+    @Body() updatePriceTo: UpdatePriceDto,
+  ): Promise<boolean> {
+    return await this.priceService.remove(tile_id, updatePriceTo);
   }
 }

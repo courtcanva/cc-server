@@ -1,17 +1,16 @@
-import { IsArray, IsObject } from "class-validator";
+import { IsNotEmpty, IsNumber, IsPositive, IsString } from "class-validator";
 export class CreatePriceDto {
-  @IsObject()
-  readonly tiles: {
-    tile_id: string;
-    deliveryPrice: number;
-    tilePrice: { color: string; price: number }[];
-  };
+  @IsString()
+  @IsNotEmpty()
+  readonly tile_id: string;
 
-  @IsArray()
-  readonly court_spec: {
-    court: string;
-    installationPrice: number;
-  }[];
+  @IsNumber()
+  @IsPositive()
+  readonly deliveryPrice: number;
+
+  @IsNumber()
+  @IsPositive()
+  readonly tilePrice: number;
 
   readonly createdAt: Date;
   readonly updatedAt: Date;

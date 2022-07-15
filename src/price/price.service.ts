@@ -12,9 +12,9 @@ export class PriceService {
     return (await this.priceModel.find().exec()).filter((price) => price.isDeleted !== true);
   }
 
-  async findOne(id: ObjectId): Promise<Price> {
+  async findOne(id: string): Promise<Price> {
     try {
-      const price = await this.priceModel.findOne({ _id: id }).exec();
+      const price = await this.priceModel.findOne({ tile_id: id }).exec();
       return price;
     } catch {
       throw new NotFoundException({
@@ -28,7 +28,7 @@ export class PriceService {
     return tile;
   }
 
-  async update(id: ObjectId, updatePriceDto: UpdatePriceDto): Promise<Price> {
+  async update(id: string, updatePriceDto: UpdatePriceDto): Promise<Price> {
     try {
       const existingPrice = await this.priceModel
         .findOneAndUpdate(
@@ -45,10 +45,10 @@ export class PriceService {
     }
   }
 
-  async remove(id: ObjectId, updatePriceDto: UpdatePriceDto): Promise<boolean> {
+  async remove(id: string, updatePriceDto: UpdatePriceDto): Promise<boolean> {
     try {
       await this.priceModel.findOneAndUpdate(
-        { _id: id },
+        { tile_id: id },
         { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
       );
       return true;

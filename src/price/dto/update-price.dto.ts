@@ -1,19 +1,15 @@
-import { IsNotEmpty, IsArray, IsOptional, IsObject } from "class-validator";
+import { IsOptional, IsString, IsNumber, IsPositive } from "class-validator";
 export class UpdatePriceDto {
-  @IsObject()
-  @IsOptional()
-  @IsNotEmpty()
-  readonly tiles: {
-    tile_id: string;
-    deliveryPrice: number;
-    tilePrice: { color: string; price: number }[];
-  };
+  @IsString()
+  readonly tile_id: string;
 
-  @IsArray()
+  @IsNumber()
   @IsOptional()
-  @IsNotEmpty()
-  readonly court_spec: {
-    court: string;
-    installationPrice: number;
-  }[];
+  @IsPositive()
+  readonly deliveryPrice: number;
+
+  @IsNumber()
+  @IsOptional()
+  @IsPositive()
+  readonly tilePrice: number;
 }
