@@ -38,10 +38,14 @@ describe("CourtSpecService", () => {
   });
 
   it("should return all courts", async () => {
-    jest.spyOn(model, "find").mockReturnValueOnce({
-      exec: jest.fn().mockResolvedValueOnce(courtArray),
+    jest.spyOn(model, "find").mockReturnValue({
+      skip: jest.fn().mockReturnValue({
+        limit: jest.fn().mockReturnValue({ exec: jest.fn().mockResolvedValueOnce(courtArray) }),
+      }),
     } as any);
-    const courts = await service.getAllCourtSizes();
+
+    const paginationQuery = { limit: 10, offset: 0 };
+    const courts = await service.getAllCourtSizes(paginationQuery);
     expect(courts).toEqual(courtArray);
   });
 

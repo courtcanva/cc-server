@@ -5,6 +5,7 @@ import { CreateCourtSpecDto } from "./dto/create-courtSpec.dto";
 import { UpdateCourtSpecDto } from "./dto/update-courtSpec.dto";
 import { CourtSpec } from "./schemas/courtSpec.schema";
 import { ObjectId } from "mongoose";
+import { PaginationQueryDto } from "src/common/dto/pagination-query.dto";
 
 @Injectable()
 export class CourtSpecService {
@@ -16,8 +17,9 @@ export class CourtSpecService {
     return court_spec;
   }
 
-  async getAllCourtSizes(): Promise<CourtSpec[]> {
-    const courts = await this.courtSpecModel.find().exec();
+  async getAllCourtSizes(paginationQuery: PaginationQueryDto): Promise<CourtSpec[]> {
+    const { limit, offset } = paginationQuery;
+    const courts = await this.courtSpecModel.find().skip(offset).limit(limit).exec();
     return courts.filter((item) => !item.isDeleted);
   }
 

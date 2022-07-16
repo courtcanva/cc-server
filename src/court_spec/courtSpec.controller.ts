@@ -8,6 +8,7 @@ import {
   Delete,
   UsePipes,
   ValidationPipe,
+  Query,
 } from "@nestjs/common";
 import { CourtSpecService } from "./courtSpec.service";
 import { CreateCourtSpecDto } from "./dto/create-courtSpec.dto";
@@ -15,14 +16,16 @@ import { UpdateCourtSpecDto } from "./dto/update-courtSpec.dto";
 import { CourtSpec } from "./schemas/courtSpec.schema";
 import { ParseObjectIdPipe } from "../utils/ParseObjectIdPipe";
 import { ObjectId } from "mongoose";
+import { PaginationQueryDto } from "../common/dto/pagination-query.dto";
 
 @Controller("courts")
 export class CourtSpecController {
   constructor(private readonly courtSpecService: CourtSpecService) {}
 
   @Get()
-  async getAllCourtSizes(): Promise<CourtSpec[]> {
-    return await this.courtSpecService.getAllCourtSizes();
+  async getAllCourtSizes(@Query() paginationQuery: PaginationQueryDto): Promise<CourtSpec[]> {
+    const { limit, offset } = paginationQuery;
+    return await this.courtSpecService.getAllCourtSizes(paginationQuery);
   }
 
   @Get(":courtId")
