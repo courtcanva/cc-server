@@ -42,7 +42,8 @@ describe("PriceController", () => {
 
   describe("findAll()", () => {
     it("should get all of price", () => {
-      expect(controller.findAll()).resolves.toEqual([mockPrice]);
+      const paginationQuery = { limit: 10, offset: 0 };
+      expect(controller.findAll(paginationQuery)).resolves.toEqual([mockPrice]);
     });
   });
 

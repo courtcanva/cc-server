@@ -4,8 +4,6 @@ import { CreateCourtSpecDto } from "./dto/create-courtSpec.dto";
 import { CourtSpecController } from "./courtSpec.controller";
 import { CourtSpecService } from "./courtSpec.service";
 import { court, updatedCourt } from "./courtSpec.testData";
-import { PaginationQueryDto } from "src/common/dto/pagination-query.dto";
-import { JwtSecretRequestType } from "@nestjs/jwt";
 
 describe("CourtSpecController", () => {
   let controller: CourtSpecController;

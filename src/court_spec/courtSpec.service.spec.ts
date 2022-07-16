@@ -3,8 +3,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { CourtSpecService } from "./courtSpec.service";
 import { CourtSpec } from "./schemas/courtSpec.schema";
 import { createMock } from "@golevelup/ts-jest";
-import { model, Model, Query } from "mongoose";
-import { CreateCourtSpecDto } from "./dto/create-courtSpec.dto";
+import { Model, Query } from "mongoose";
 import { NotFoundException } from "@nestjs/common";
 import { court, updatedCourt, courtArray } from "./courtSpec.testData";
 
@@ -43,7 +42,6 @@ describe("CourtSpecService", () => {
         limit: jest.fn().mockReturnValue({ exec: jest.fn().mockResolvedValueOnce(courtArray) }),
       }),
     } as any);
-
     const paginationQuery = { limit: 10, offset: 0 };
     const courts = await service.getAllCourtSizes(paginationQuery);
     expect(courts).toEqual(courtArray);

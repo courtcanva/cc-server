@@ -40,10 +40,13 @@ describe("PriceService", () => {
   });
 
   it("should return all Price", async () => {
-    jest.spyOn(model, "find").mockReturnValueOnce({
-      exec: jest.fn().mockResolvedValueOnce([mockPrice]),
+    jest.spyOn(model, "find").mockReturnValue({
+      skip: jest.fn().mockReturnValue({
+        limit: jest.fn().mockReturnValue({ exec: jest.fn().mockResolvedValueOnce([mockPrice]) }),
+      }),
     } as any);
-    const price = await service.findAll();
+    const paginationQuery = { limit: 10, offset: 0 };
+    const price = await service.findAll(paginationQuery);
     expect(price).toEqual([mockPrice]);
   });
 

@@ -4,6 +4,7 @@ import { Model, ObjectId } from "mongoose";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
 import { User } from "./schemas/user.schema";
+import { PaginationQueryDto } from "src/common/dto/pagination-query.dto";
 
 @Injectable()
 export class UserService {
@@ -12,8 +13,9 @@ export class UserService {
    * Get all users from database
    * @returns {[]:User}
    */
-  async getAllUsers(): Promise<User[]> {
-    const users = await this.userModel.find().exec();
+  async getAllUsers(paginationQuery: PaginationQueryDto): Promise<User[]> {
+    const { limit, offset } = paginationQuery;
+    const users = await this.userModel.find().skip(offset).limit(limit).exec();
     return users.filter((item) => !item.isDeleted);
   }
 
