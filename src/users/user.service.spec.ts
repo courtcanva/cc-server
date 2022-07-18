@@ -109,4 +109,14 @@ describe("UserService", () => {
       message: "User deleted successfully",
     });
   });
+
+  it("should check user by email", async () => {
+    jest.spyOn(model, "find").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(userArray[0]),
+      }) as any,
+    );
+    const status = await service.checkEmail({ email: "test@gmail.com" });
+    expect(status).toEqual(204);
+  });
 });

@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
+import { CheckEmailDto } from "./dto/checkEmail.dto";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
 import { User } from "./schemas/user.schema";
@@ -79,5 +80,14 @@ export class UserService {
     });
     //return the user who has been deleted
     return { message: `User deleted successfully` };
+  }
+
+  /**
+   * Check user existence by email
+   * @param {CheckEmailDto}
+   */
+  async checkEmail(emailDto: CheckEmailDto): Promise<HttpStatus> {
+    const foundUser = await this.userModel.find({ email: emailDto.email }).exec();
+    return foundUser.length > 0 ? HttpStatus.CONFLICT : HttpStatus.NO_CONTENT;
   }
 }
