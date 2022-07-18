@@ -1,6 +1,6 @@
 export const mockPrice = {
-  tilePrice: [{ tile_id: "tile001", price: 12000 }],
-  deliveryPrice: 1900,
+  deliveryPrice: [{ tile_id: "tile001", price: 1900 }],
+  tilePrice: 12000,
   createdAt: new Date(),
   updatedAt: new Date(),
 };

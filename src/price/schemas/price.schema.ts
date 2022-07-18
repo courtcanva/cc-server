@@ -4,10 +4,10 @@ import { Document } from "mongoose";
 @Schema()
 export class Price extends Document {
   @Prop({ type: Array, required: true })
-  tilePrice: [{ tile_id: string; price: number }];
+  deliveryPrice: [{ tile_id: string; price: number }];
 
   @Prop({ required: true })
-  deliveryPrice: number;
+  tilePrice: number;
 
   @Prop({ type: Date, default: new Date() })
   createdAt: Date;
