@@ -12,7 +12,13 @@ module.exports = {
         ],
       },
       [
-        { $set: { deliveryPrice: [{ tile_id: "tile001", price: 1900 }], tilePrice: 12000 } },
+        {
+          $set: {
+            deliveryPrice: [{ tile_id: "tile001", price: 1900 }],
+            tilePrice: 12000,
+            updatedAt: new Date(),
+          },
+        },
         { $unset: ["tiles", "court_spec"] },
       ],
     );
