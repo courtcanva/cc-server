@@ -86,8 +86,8 @@ export class UserService {
    * Check user existence by email
    * @param {CheckEmailDto}
    */
-  async checkEmail(emailDto: CheckEmailDto): Promise<HttpStatus> {
+  async checkEmail(emailDto: CheckEmailDto): Promise<boolean> {
     const foundUser = await this.userModel.find({ email: emailDto.email }).exec();
-    return foundUser.length > 0 ? HttpStatus.CONFLICT : HttpStatus.NO_CONTENT;
+    return foundUser.length > 0 ? true : false;
   }
 }

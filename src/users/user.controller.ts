@@ -8,7 +8,7 @@ import { UserService } from "./user.service";
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post()
-  async checkEmail(@Body() emailDto: CheckEmailDto): Promise<HttpStatus> {
+  async checkEmail(@Body() emailDto: CheckEmailDto): Promise<boolean> {
     return await this.userService.checkEmail(emailDto);
   }
 
