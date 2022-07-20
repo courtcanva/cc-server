@@ -10,7 +10,8 @@ import * as argon from "argon2";
 @Injectable()
 export class AdminService {
   constructor(
-    @InjectModel(Admin.name) private readonly adminModel: Model<Admin>,
+    @InjectModel(Admin.name)
+    private readonly adminModel: Model<Admin>,
     private jwtService: JwtService,
   ) {}
 
