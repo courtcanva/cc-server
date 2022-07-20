@@ -1,6 +1,6 @@
 module.exports = {
   async up(db) {
-    await db.collection("tiles").insertOne({
+    await db.collection("tiles").updateOne({
       name: "Elite X II",
       colors: [
         { name: "Light green", value: "#305236" },
