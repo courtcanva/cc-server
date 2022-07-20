@@ -64,12 +64,17 @@ describe("PriceService", () => {
   });
 
   it("should update a price successfully", async () => {
+    const updatePrice = {
+      ...mockPrice,
+      deliveryPrice: mockPrice.deliveryPrice,
+      tilePrice: mockPrice.tilePrice,
+    };
     jest.spyOn(model, "findOneAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockPrice),
       }) as any,
     );
-    const updatedPrice = await service.update("tile001", mockPrice);
+    const updatedPrice = await service.update("tile001", updatePrice);
     expect(updatedPrice).toEqual(mockPrice);
   });
 
@@ -79,7 +84,7 @@ describe("PriceService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockPrice),
       }) as any,
     );
-    const deletePrice = await service.remove("tile001", mockPrice);
+    const deletePrice = await service.remove("tile001");
     expect(deletePrice).toEqual(true);
   });
 });

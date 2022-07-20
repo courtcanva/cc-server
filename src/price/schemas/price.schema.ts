@@ -3,8 +3,11 @@ import { Document } from "mongoose";
 
 @Schema()
 export class Price extends Document {
-  @Prop({ type: Array, required: true })
-  deliveryPrice: [{ tile_id: string; price: number }];
+  @Prop({ required: true })
+  tile_id: string;
+
+  @Prop({ required: true })
+  deliveryPrice: number;
 
   @Prop({ required: true })
   tilePrice: number;
