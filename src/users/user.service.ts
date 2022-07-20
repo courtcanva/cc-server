@@ -4,7 +4,7 @@ import { Model, ObjectId } from "mongoose";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
 import { User } from "./schemas/user.schema";
-import { PaginationQueryDto } from "src/common/dto/pagination-query.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Injectable()
 export class UserService {

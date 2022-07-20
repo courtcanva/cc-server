@@ -16,7 +16,7 @@ import { UpdateCourtSpecDto } from "./dto/update-courtSpec.dto";
 import { CourtSpec } from "./schemas/courtSpec.schema";
 import { ParseObjectIdPipe } from "../utils/ParseObjectIdPipe";
 import { ObjectId } from "mongoose";
-import { PaginationQueryDto } from "../common/dto/pagination-query.dto";
+import { PaginationQueryDto } from "../utils/PaginationDto/pagination-query.dto";
 
 @Controller("courts")
 export class CourtSpecController {

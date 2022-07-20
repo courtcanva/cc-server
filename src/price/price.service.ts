@@ -4,7 +4,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Price } from "./schemas/price.schema";
 import { CreatePriceDto } from "./dto/create-price.dto";
 import { UpdatePriceDto } from "./dto/update-price.dto";
-import { PaginationQueryDto } from "src/common/dto/pagination-query.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 @Injectable()
 export class PriceService {
   constructor(@InjectModel(Price.name) private readonly priceModel: Model<Price>) {}

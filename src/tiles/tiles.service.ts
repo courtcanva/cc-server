@@ -4,7 +4,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Tile } from "./schemas/tile.schema";
 import { CreateTileDto } from "./dto/create-tile.dto";
 import { UpdateTileDto } from "./dto/update-tile.dto";
-import { PaginationQueryDto } from "src/common/dto/pagination-query.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Injectable()
 export class TilesService {

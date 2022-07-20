@@ -5,7 +5,7 @@ import { CreateCourtSpecDto } from "./dto/create-courtSpec.dto";
 import { UpdateCourtSpecDto } from "./dto/update-courtSpec.dto";
 import { CourtSpec } from "./schemas/courtSpec.schema";
 import { ObjectId } from "mongoose";
-import { PaginationQueryDto } from "src/common/dto/pagination-query.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Injectable()
 export class CourtSpecService {

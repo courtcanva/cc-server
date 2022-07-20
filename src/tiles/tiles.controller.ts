@@ -4,7 +4,7 @@ import { Tile } from "./schemas/tile.schema";
 import { CreateTileDto } from "./dto/create-tile.dto";
 import { UpdateTileDto } from "./dto/update-tile.dto";
 import { ObjectId } from "mongoose";
-import { PaginationQueryDto } from "../common/dto/pagination-query.dto";
+import { PaginationQueryDto } from "../utils/PaginationDto/pagination-query.dto";
 @Controller("tiles")
 export class TilesController {
   constructor(private readonly tilesService: TilesService) {}

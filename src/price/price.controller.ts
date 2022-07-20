@@ -4,7 +4,7 @@ import { Price } from "./schemas/price.schema";
 import { CreatePriceDto } from "./dto/create-price.dto";
 import { UpdatePriceDto } from "./dto/update-price.dto";
 import { ObjectId } from "mongoose";
-import { PaginationQueryDto } from "../common/dto/pagination-query.dto";
+import { PaginationQueryDto } from "../utils/PaginationDto/pagination-query.dto";
 
 @Controller("price")
 export class PriceController {
