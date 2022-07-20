@@ -5,7 +5,7 @@ module.exports = {
         name: "Elite X II",
       },
       {
-        $unset: {
+        $set: {
           colors: [
             { name: "Light green", value: "#305236" },
             { name: "Forest green", value: "#314B33" },
