@@ -2,20 +2,20 @@ import { getModelToken } from "@nestjs/mongoose";
 import { Model, Query } from "mongoose";
 import { Test, TestingModule } from "@nestjs/testing";
 import { createMock } from "@golevelup/ts-jest";
-import { UserDesign } from "./schemas/userDesign.schema";
-import { mockDesign } from "./userDesign.testData";
-import { UserDesignService } from "./userDesign.service";
+import { Design } from "./schemas/design.schema";
+import { mockDesign, mockDesignArray } from "./design.testData";
+import { DesignService } from "./design.service";
 
-describe("UserDesignService", () => {
-  let service: UserDesignService;
-  let model: Model<UserDesign>;
+describe("DesignService", () => {
+  let service: DesignService;
+  let model: Model<Design>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UserDesignService,
+        DesignService,
         {
-          provide: getModelToken(UserDesign.name),
+          provide: getModelToken(Design.name),
           useValue: {
             new: jest.fn().mockResolvedValue(mockDesign),
             constructor: jest.fn().mockResolvedValue(mockDesign),
@@ -31,8 +31,8 @@ describe("UserDesignService", () => {
       ],
     }).compile();
 
-    service = module.get(UserDesignService);
-    model = module.get<Model<UserDesign>>(getModelToken(UserDesign.name));
+    service = module.get(DesignService);
+    model = module.get<Model<Design>>(getModelToken(Design.name));
   });
 
   it("should be defined", () => {
@@ -40,43 +40,35 @@ describe("UserDesignService", () => {
   });
 
   it("should return all design for one user", async () => {
-    jest.spyOn(model, "find").mockReturnValueOnce({
-      exec: jest.fn().mockResolvedValueOnce([mockDesign]),
-    } as any);
-    const userDesign = await service.findAll("user123");
-    expect(userDesign).toEqual([mockDesign]);
-  });
-
-  it("should get one user design by design id", async () => {
-    jest.spyOn(model, "findOne").mockReturnValueOnce(
+    jest.spyOn(model, "find").mockReturnValueOnce(
       createMock<Query<any, any>>({
-        exec: jest.fn().mockResolvedValueOnce(mockDesign),
+        exec: jest.fn().mockResolvedValueOnce(mockDesignArray),
       }) as any,
     );
-    const userDesign = await service.findOne(Object("1"));
-    expect(userDesign).toEqual(mockDesign);
+    const design = await service.find("user123");
+    expect(design).toEqual(mockDesignArray);
   });
 
   it("should insert a new user design", async () => {
     jest.spyOn(model, "create").mockImplementationOnce(() => Promise.resolve(mockDesign));
-    const newUserDesign = await service.create(mockDesign);
-    expect(newUserDesign).toEqual(mockDesign);
+    const newDesign = await service.create(mockDesign);
+    expect(newDesign).toEqual(mockDesign);
   });
 
   it("should update a user design successfully", async () => {
-    jest.spyOn(model, "findOneAndUpdate").mockReturnValueOnce(
-      createMock<Query<any, any>>({
-        exec: jest.fn().mockResolvedValueOnce(mockDesign),
-      }) as any,
-    );
-    const updateUserDesign = {
+    const updateDesign = {
       ...mockDesign,
       designName: mockDesign.designName,
       tileColor: mockDesign.tileColor,
       courtSize: mockDesign.courtSize,
     };
-    const updatedUserDesign = await service.update(Object("1"), updateUserDesign);
-    expect(updatedUserDesign).toEqual(mockDesign);
+    jest.spyOn(model, "findOneAndUpdate").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockDesign),
+      }) as any,
+    );
+    const updatedDesign = await service.update(Object("1"), updateDesign);
+    expect(updatedDesign).toEqual(mockDesign);
   });
 
   it("should delete a user design successfully", async () => {
@@ -85,7 +77,7 @@ describe("UserDesignService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockDesign),
       }) as any,
     );
-    const deleteUserDesign = await service.remove(Object("1"));
-    expect(deleteUserDesign).toEqual(true);
+    const deleteDesign = await service.remove(Object("1"));
+    expect(deleteDesign).toEqual(true);
   });
 });

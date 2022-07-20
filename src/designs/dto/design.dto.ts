@@ -1,5 +1,5 @@
 import { IsArray, IsNotEmpty, IsObject, IsString } from "class-validator";
-export class UserDesignDto {
+export class DesignDto {
   @IsString()
   @IsNotEmpty()
   readonly user_id: string;
@@ -27,7 +27,4 @@ export class UserDesignDto {
     sideBorderWidth: number;
     lineBorderWidth: number;
   };
-
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
 }

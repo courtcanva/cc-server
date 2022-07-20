@@ -8,7 +8,7 @@ import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./users/user.module";
 import { AdminModule } from "./admin/admin.module";
 import { PriceModule } from "./price/price.module";
-import { UserDesignModule } from "./UserDesign/userDesign.module";
+import { DesignModule } from "./designs/design.module";
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { UserDesignModule } from "./UserDesign/userDesign.module";
     UserModule,
     AdminModule,
     PriceModule,
-    UserDesignModule,
+    DesignModule,
   ],
 })
 export class AppModule {}

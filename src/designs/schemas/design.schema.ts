@@ -2,17 +2,17 @@ import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
 @Schema()
-export class UserDesign extends Document {
+export class Design extends Document {
   @Prop({ required: true })
   user_id: string;
 
   @Prop({ required: true })
   designName: string;
 
-  @Prop({ type: Object, required: true, unique: true })
+  @Prop({ type: Array, required: true })
   tileColor: { location: string; color: string }[];
 
-  @Prop({ type: Object, required: true, unique: true })
+  @Prop({ type: Object, required: true })
   courtSize: {
     name: string;
     length: number;
@@ -37,4 +37,4 @@ export class UserDesign extends Document {
   isDeleted: boolean;
 }
 
-export const UserDesignSchema = SchemaFactory.createForClass(UserDesign);
+export const DesignSchema = SchemaFactory.createForClass(Design);
