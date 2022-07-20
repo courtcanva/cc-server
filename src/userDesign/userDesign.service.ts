@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Model } from "mongoose";
+import { Model, ObjectId } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { UserDesign } from "./schemas/userDesign.schema";
 import { UserDesignDto } from "./dto/userDesign.dto";
@@ -13,9 +13,9 @@ export class UserDesignService {
     );
   }
 
-  async findOne(design_id: { user_id: string; design_name: string }): Promise<UserDesign> {
+  async findOne(id: ObjectId): Promise<UserDesign> {
     try {
-      const userDesign = await this.userDesignModel.findOne({ design_id: design_id }).exec();
+      const userDesign = await this.userDesignModel.findOne({ _id: id }).exec();
       return userDesign;
     } catch {
       throw new NotFoundException({
@@ -29,20 +29,17 @@ export class UserDesignService {
     return userDesign;
   }
 
-  async update(
-    design_id: { user_id: string; design_name: string },
-    UserDesignDto: UserDesignDto,
-  ): Promise<UserDesign> {
+  async update(id: ObjectId, UserDesignDto: UserDesignDto): Promise<UserDesign> {
     const updateUserDesign = {
       ...UserDesignDto,
-      design_id: UserDesignDto.design_id,
+      designName: UserDesignDto.designName,
       tileColor: UserDesignDto.tileColor,
       courtSize: UserDesignDto.courtSize,
     };
     try {
       const existingDesign = await this.userDesignModel
         .findOneAndUpdate(
-          { design_id: design_id },
+          { _id: id },
           { $set: updateUserDesign, $currentDate: { updatedAt: true } },
           { new: true },
         )
@@ -55,10 +52,10 @@ export class UserDesignService {
     }
   }
 
-  async remove(design_id: { user_id: string; design_name: string }): Promise<boolean> {
+  async remove(id: ObjectId): Promise<boolean> {
     try {
       await this.userDesignModel.findOneAndUpdate(
-        { design_id: design_id },
+        { _id: id },
         { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
       );
       return true;

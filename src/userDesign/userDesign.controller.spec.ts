@@ -22,7 +22,14 @@ describe("UserDesignController", () => {
                 ...createUserDesignDto,
               }),
             ),
-            update: jest.fn().mockImplementation(() => Promise.resolve(mockDesign)),
+            update: jest
+              .fn()
+              .mockImplementation((_id: string, updateUserDesignDto: UserDesignDto) =>
+                Promise.resolve({
+                  _id: "1",
+                  ...updateUserDesignDto,
+                }),
+              ),
             remove: jest.fn().mockResolvedValue({ isDeleted: true }),
           },
         },
@@ -44,9 +51,7 @@ describe("UserDesignController", () => {
 
   describe("findOne", () => {
     it("should get a userDesign", () => {
-      expect(
-        controller.findOne({ user_id: "user123", design_name: "CourtCanvas1" }),
-      ).resolves.toEqual(mockDesign);
+      expect(controller.findOne(Object("1"))).resolves.toEqual(mockDesign);
     });
   });
 
@@ -66,23 +71,20 @@ describe("UserDesignController", () => {
       const UserDesignDto: UserDesignDto = mockDesign;
       const updateUserDesign = {
         ...UserDesignDto,
-        design_id: UserDesignDto.design_id,
+        designName: UserDesignDto.designName,
         tileColor: UserDesignDto.tileColor,
         courtSize: UserDesignDto.courtSize,
       };
-      expect(
-        controller.update({ user_id: "user123", design_name: "CourtCanvas1" }, updateUserDesign),
-      ).resolves.toEqual({
-        ...updateUserDesign,
+      expect(controller.update(Object("1"), updateUserDesign)).resolves.toEqual({
+        _id: "1",
+        ...UserDesignDto,
       });
     });
   });
 
   describe("deleteUserDesign", () => {
     it("should return UserDesign deleted successfully", () => {
-      expect(
-        controller.remove({ user_id: "user123", design_name: "CourtCanvas1" }),
-      ).resolves.toEqual({ isDeleted: true });
+      expect(controller.remove(Object("1"))).resolves.toEqual({ isDeleted: true });
     });
   });
 });

@@ -1,8 +1,12 @@
-import { IsArray, IsNotEmpty, IsObject } from "class-validator";
+import { IsArray, IsNotEmpty, IsObject, IsString } from "class-validator";
 export class UserDesignDto {
-  @IsObject()
+  @IsString()
   @IsNotEmpty()
-  readonly design_id: { user_id: string; design_name: string };
+  readonly user_id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly designName: string;
 
   @IsArray()
   @IsNotEmpty()

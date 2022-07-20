@@ -53,7 +53,7 @@ describe("UserDesignService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockDesign),
       }) as any,
     );
-    const userDesign = await service.findOne({ user_id: "user123", design_name: "CourtCanvas1" });
+    const userDesign = await service.findOne(Object("1"));
     expect(userDesign).toEqual(mockDesign);
   });
 
@@ -71,14 +71,11 @@ describe("UserDesignService", () => {
     );
     const updateUserDesign = {
       ...mockDesign,
-      design_id: mockDesign.design_id,
+      designName: mockDesign.designName,
       tileColor: mockDesign.tileColor,
       courtSize: mockDesign.courtSize,
     };
-    const updatedUserDesign = await service.update(
-      { user_id: "user123", design_name: "CourtCanvas1" },
-      updateUserDesign,
-    );
+    const updatedUserDesign = await service.update(Object("1"), updateUserDesign);
     expect(updatedUserDesign).toEqual(mockDesign);
   });
 
@@ -88,10 +85,7 @@ describe("UserDesignService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockDesign),
       }) as any,
     );
-    const deleteUserDesign = await service.remove({
-      user_id: "user123",
-      design_name: "CourtCanvas1",
-    });
+    const deleteUserDesign = await service.remove(Object("1"));
     expect(deleteUserDesign).toEqual(true);
   });
 });

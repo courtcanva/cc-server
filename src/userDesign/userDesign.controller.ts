@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, Put, Delete } from "@nestjs/common"
 import { UserDesignService } from "./userDesign.service";
 import { UserDesign } from "./schemas/userDesign.schema";
 import { UserDesignDto } from "./dto/userDesign.dto";
+import { ObjectId } from "mongoose";
 
 @Controller("userDesign")
 export class UserDesignController {
@@ -11,11 +12,9 @@ export class UserDesignController {
     return await this.userDesignService.findAll(user_id);
   }
 
-  @Get(":design_id")
-  async findOne(
-    @Param("design_id") design_id: { user_id: string; design_name: string },
-  ): Promise<UserDesign> {
-    return await this.userDesignService.findOne(design_id);
+  @Get(":id")
+  async findOne(@Param("id") id: ObjectId): Promise<UserDesign> {
+    return await this.userDesignService.findOne(id);
   }
 
   @Post()
@@ -23,24 +22,22 @@ export class UserDesignController {
     return await this.userDesignService.create(createUserDesignDto);
   }
 
-  @Put(":design_id")
+  @Put(":id")
   async update(
-    @Param("design_id") design_id: { user_id: string; design_name: string },
+    @Param("id") id: ObjectId,
     @Body() UserDesignDto: UserDesignDto,
   ): Promise<UserDesign> {
     const updateUserDesign = {
       ...UserDesignDto,
-      design_id: UserDesignDto.design_id,
+      designName: UserDesignDto.designName,
       tileColor: UserDesignDto.tileColor,
       courtSize: UserDesignDto.courtSize,
     };
-    return await this.userDesignService.update(design_id, updateUserDesign);
+    return await this.userDesignService.update(id, updateUserDesign);
   }
 
-  @Delete(":design_id")
-  async remove(
-    @Param("design_id") design_id: { user_id: string; design_name: string },
-  ): Promise<boolean> {
-    return await this.userDesignService.remove(design_id);
+  @Delete(":id")
+  async remove(@Param("id") id: ObjectId): Promise<boolean> {
+    return await this.userDesignService.remove(id);
   }
 }

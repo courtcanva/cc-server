@@ -1,17 +1,18 @@
 export const mockDesign = {
-  design_id: { user_id: "user123", design_name: "CourtCanvas1" },
+  user_id: "user123",
+  designName: "CourtCanvas1",
   tileColor: [
     {
       location: "threePoint",
-      color: "#FBBC05",
+      color: "#72818B",
     },
     {
       location: "courtArea",
-      color: "#344C5C",
+      color: "#B61313",
     },
     {
       location: "topKeyArea",
-      color: "#EB4335",
+      color: "#B61313",
     },
     {
       location: "border",
@@ -19,11 +20,11 @@ export const mockDesign = {
     },
     {
       location: "keyArea",
-      color: "#B59F7A",
+      color: "#2C4E8A",
     },
     {
       location: "circleArea",
-      color: "#EBD935",
+      color: "#606F14",
     },
   ],
   courtSize: {
