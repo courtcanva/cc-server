@@ -4,12 +4,16 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Tile } from "./schemas/tile.schema";
 import { CreateTileDto } from "./dto/create-tile.dto";
 import { UpdateTileDto } from "./dto/update-tile.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Injectable()
 export class TilesService {
   constructor(@InjectModel(Tile.name) private readonly tileModel: Model<Tile>) {}
-  async findAll(): Promise<Tile[]> {
-    return (await this.tileModel.find().exec()).filter((tile) => tile.isDeleted !== true);
+  async findAll(paginationQuery: PaginationQueryDto): Promise<Tile[]> {
+    const { limit, offset } = paginationQuery;
+    return (await this.tileModel.find().skip(offset).limit(limit).exec()).filter(
+      (tile) => tile.isDeleted !== true,
+    );
   }
 
   async findOne(id: ObjectId): Promise<Tile> {

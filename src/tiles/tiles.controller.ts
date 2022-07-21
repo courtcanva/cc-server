@@ -1,16 +1,17 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param, Put, Delete, Query } from "@nestjs/common";
 import { TilesService } from "./tiles.service";
 import { Tile } from "./schemas/tile.schema";
 import { CreateTileDto } from "./dto/create-tile.dto";
 import { UpdateTileDto } from "./dto/update-tile.dto";
 import { ObjectId } from "mongoose";
-
+import { PaginationQueryDto } from "../utils/PaginationDto/pagination-query.dto";
 @Controller("tiles")
 export class TilesController {
   constructor(private readonly tilesService: TilesService) {}
   @Get()
-  async findAll(): Promise<Tile[]> {
-    return await this.tilesService.findAll();
+  async findAll(@Query() paginationQuery: PaginationQueryDto): Promise<Tile[]> {
+    const { limit, offset } = paginationQuery;
+    return await this.tilesService.findAll(paginationQuery);
   }
 
   @Get(":id")

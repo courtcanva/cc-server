@@ -47,7 +47,8 @@ describe("CourtSpecController", () => {
 
   describe("CourtSpecController", () => {
     it("should get an array of courts", () => {
-      expect(controller.getAllCourtSizes()).resolves.toEqual([court]);
+      const paginationQuery = { limit: 10, offset: 0 };
+      expect(controller.getAllCourtSizes(paginationQuery)).resolves.toEqual([court]);
     });
 
     it("should get a court by id", () => {
