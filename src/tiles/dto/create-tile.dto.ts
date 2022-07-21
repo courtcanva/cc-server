@@ -2,6 +2,10 @@ import { IsNumber, IsPositive, IsString, IsNotEmpty, IsArray } from "class-valid
 export class CreateTileDto {
   @IsString()
   @IsNotEmpty()
+  readonly tile_id: string;
+
+  @IsString()
+  @IsNotEmpty()
   readonly name: string;
 
   @IsArray()
