@@ -117,6 +117,6 @@ describe("UserService", () => {
       }) as any,
     );
     const status = await service.checkEmail({ email: "test@gmail.com" });
-    expect(status).toEqual(204);
+    expect(status).toEqual(false);
   });
 });

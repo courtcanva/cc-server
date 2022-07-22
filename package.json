@@ -27,6 +27,7 @@
     "migrate-down": "migrate-mongo down"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/axios": "^0.0.8",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.1.0",
@@ -36,6 +37,7 @@
     "@nestjs/passport": "^8.2.2",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/terminus": "^8.0.6",
+    "@types/nodemailer": "^6.4.4",
     "argon2": "^0.28.7",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
@@ -44,6 +46,7 @@
     "google-auth-library": "^8.0.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.8",
+    "nodemailer": "^6.7.7",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",

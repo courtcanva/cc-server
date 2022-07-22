@@ -1,6 +1,7 @@
 import { IsBoolean, IsOptional, IsString } from "class-validator";
 export class CreateUserDto {
   @IsString()
+  @IsOptional()
   readonly googleId: string;
 
   @IsString()
@@ -22,4 +23,11 @@ export class CreateUserDto {
   readonly createdAt: Date;
 
   readonly updatedAt: Date;
+
+  @IsString()
+  readonly otp: string;
+
+  readonly otpCreatedAt: Date;
+
+  readonly otpExpiresAt: Date;
 }
