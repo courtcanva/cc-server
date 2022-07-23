@@ -33,6 +33,9 @@ export class User extends Document {
   isActivated: boolean;
 
   @Prop()
+  hashedRefreshToken: string;
+
+  @Prop()
   otp: string;
 
   @Prop()

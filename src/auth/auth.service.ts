@@ -1,17 +1,21 @@
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, ObjectId } from "mongoose";
 import { User } from "../users/schemas/user.schema";
 import { OAuth2Client } from "google-auth-library";
 import { ReturnUserInfo } from "./ReturnUserInfo";
 import * as argon from "argon2";
 import { MailerService } from "@nestjs-modules/mailer";
+import { JwtService } from "@nestjs/jwt";
+import { CreateUserDto } from "src/users/dto/createUser.dto";
+import { Tokens } from "./types";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private mailerService: MailerService,
+    private jwtService: JwtService,
   ) {}
 
   /**
@@ -78,6 +82,10 @@ export class AuthService {
     };
 
     const newUser = await this.userModel.create(newUserInfo);
+
+    const tokens = await this.getTokens(newUser._id, newUser.email);
+    await this.updateRtHash(newUser._id, tokens.refreshToken);
+
     const { _id, email } = newUser;
     this.sendOTPVerificationEmail(email, otp);
     const response = {
@@ -87,8 +95,31 @@ export class AuthService {
         userId: _id,
         email,
       },
+      tokens,
     };
     return response;
+  }
+
+  async userLogin(userDto: CreateUserDto): Promise<Tokens> {
+    const user = await this.userModel.findOne({ email: userDto.email }).exec();
+    if (!user) {
+      throw new ForbiddenException("Access Denied");
+    }
+
+    const passwordMatches = await argon.verify(user.password, userDto.password);
+    if (!passwordMatches) {
+      throw new ForbiddenException("Access Denied");
+    }
+
+    const tokens = await this.getTokens(user._id, user.email);
+    await this.updateRtHash(user._id, tokens.refreshToken);
+    return tokens;
+  }
+
+  async userLogout(userId: ObjectId) {
+    const user = await this.userModel.findById(userId);
+    user.hashedRefreshToken &&
+      (await this.userModel.findByIdAndUpdate(userId, { hashedRefreshToken: null }));
   }
 
   async generateOTP() {
@@ -148,5 +179,43 @@ export class AuthService {
       };
       return response;
     }
+  }
+
+  async getTokens(adminId: ObjectId, email: string) {
+    const payload = {
+      sub: adminId,
+      email,
+    };
+    const atExp = {
+      secret: process.env.ACCESS_TOKEN_SECRET,
+      expiresIn: 60 * 15, //15 mins expiration
+    };
+
+    const rtExp = {
+      secret: process.env.REFRESH_TOKEN_SECRET,
+      expiresIn: 60 * 60 * 24 * 7, //one week expiration
+    };
+
+    const [at, rt] = await Promise.all([
+      this.jwtService.signAsync(payload, atExp),
+      this.jwtService.signAsync(payload, rtExp),
+    ]);
+
+    return {
+      accessToken: at,
+      refreshToken: rt,
+    };
+  }
+
+  async updateRtHash(userId: ObjectId, rt: string) {
+    const hashedRefreshToken = await argon.hash(rt);
+    const updateUserDto = {
+      ...CreateUserDto,
+      hashedRefreshToken: hashedRefreshToken,
+      updatedAt: new Date(),
+    };
+    await this.userModel
+      .findByIdAndUpdate({ _id: userId }, { $set: updateUserDto }, { new: true })
+      .exec();
   }
 }

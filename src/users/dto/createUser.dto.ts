@@ -17,6 +17,8 @@ export class CreateUserDto {
   @IsString()
   readonly lastName: string;
 
+  readonly hashedRefreshToken: string;
+
   @IsBoolean()
   readonly isActivated: boolean;
 
