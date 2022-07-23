@@ -72,7 +72,7 @@ module.exports = {
           },
           {
             location: "circleArea",
-            color: "#606F14",
+            color: "#EBD935",
           },
         ],
         courtSize: {
