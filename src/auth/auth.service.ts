@@ -122,6 +122,7 @@ export class AuthService {
       (await this.userModel.findByIdAndUpdate(userId, { hashedRefreshToken: null }));
   }
 
+  //Email
   async generateOTP() {
     const otp = `${Math.floor(100000 + Math.random() * 900000)}`;
     // hash the otp
@@ -179,6 +180,24 @@ export class AuthService {
       };
       return response;
     }
+  }
+
+  //Jwt
+  async refreshTokens(userId: ObjectId, rt: string) {
+    const user = await this.userModel.findById(userId);
+    if (!user || !user.hashedRefreshToken) {
+      throw new ForbiddenException("Access Denied");
+    }
+
+    const rtMatches = await argon.verify(user.hashedRefreshToken, rt);
+    if (!rtMatches) {
+      throw new ForbiddenException("Access Denied");
+    }
+
+    const tokens = await this.getTokens(user._id, user.email);
+    await this.updateRtHash(user._id, tokens.refreshToken);
+
+    return tokens;
   }
 
   async getTokens(adminId: ObjectId, email: string) {
