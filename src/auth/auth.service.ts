@@ -82,7 +82,7 @@ export class AuthService {
     return response;
   }
 
-  async userLogin(userDto: CreateUserDto): Promise<Tokens> {
+  async userLogin(userDto: CreateUserDto): Promise<any> {
     const user = await this.userModel.findOne({ email: userDto.email }).exec();
     if (!user) {
       throw new ForbiddenException("Access Denied");
@@ -95,7 +95,16 @@ export class AuthService {
 
     const tokens = await this.getTokens(user._id, user.email);
     await this.updateRtHash(user._id, tokens.refreshToken);
-    return tokens;
+    const { _id, email, firstName, lastName } = user;
+    const respond = {
+      userId: _id,
+      email,
+      firstName,
+      lastName,
+      tokens,
+    };
+
+    return respond;
   }
 
   async userLogout(userId: ObjectId) {
