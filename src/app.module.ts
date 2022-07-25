@@ -8,27 +8,9 @@ import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./users/user.module";
 import { AdminModule } from "./admin/admin.module";
 import { PriceModule } from "./price/price.module";
-import { MailerModule } from "@nestjs-modules/mailer";
 
 @Module({
   imports: [
-    MailerModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (config: ConfigService) => ({
-        transport: {
-          host: config.get("EMAIL_HOST"),
-          secure: false,
-          auth: {
-            user: config.get("EMAIL_USER"),
-            pass: config.get("EMAIL_PASSWORD"),
-          },
-        },
-        defaults: {
-          from: process.env.EMAIL_USER,
-        },
-      }),
-      inject: [ConfigService],
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

@@ -18,7 +18,7 @@ export class AuthController {
 
   @Post("register")
   async clientRegister(@Body() body): Promise<any> {
-    return this.authService.clientRegister(body);
+    return this.authService.userRegister(body);
   }
 
   @Post("login")
@@ -47,5 +47,10 @@ export class AuthController {
   @Post("verifyOTP")
   async verifyOTP(@Body() body): Promise<any> {
     return this.authService.verifyOTP(body);
+  }
+
+  @Post("resendOTP")
+  async resendOTP(@Body() body): Promise<any> {
+    return this.authService.resendOTP(body);
   }
 }

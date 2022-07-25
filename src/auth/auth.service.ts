@@ -5,16 +5,15 @@ import { User } from "../users/schemas/user.schema";
 import { OAuth2Client } from "google-auth-library";
 import { ReturnUserInfo } from "./ReturnUserInfo";
 import * as argon from "argon2";
-import { MailerService } from "@nestjs-modules/mailer";
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserDto } from "src/users/dto/createUser.dto";
 import { Tokens } from "./types";
+import { sendEmail } from "./emailHelpers";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
-    private mailerService: MailerService,
     private jwtService: JwtService,
   ) {}
 
@@ -70,33 +69,16 @@ export class AuthService {
     return userInfo;
   }
 
-  async clientRegister(body): Promise<any> {
+  async userRegister(body): Promise<any> {
     const hashedPassword = await argon.hash(body.password);
-    const { otp, hashedOTP, otpCreatedAt, otpExpiresAt } = await this.generateOTP();
+    // generate user without otp info
     const newUserInfo = {
       ...body,
       password: hashedPassword,
-      otp: hashedOTP,
-      otpCreatedAt,
-      otpExpiresAt,
     };
-
     const newUser = await this.userModel.create(newUserInfo);
-
-    const tokens = await this.getTokens(newUser._id, newUser.email);
-    await this.updateRtHash(newUser._id, tokens.refreshToken);
-
     const { _id, email } = newUser;
-    this.sendOTPVerificationEmail(email, otp);
-    const response = {
-      status: "PENDING",
-      message: "Verification code sent to user email.",
-      data: {
-        userId: _id,
-        email,
-      },
-      tokens,
-    };
+    const response = await this.sendOTPVerificationEmail(_id, email);
     return response;
   }
 
@@ -122,7 +104,7 @@ export class AuthService {
       (await this.userModel.findByIdAndUpdate(userId, { hashedRefreshToken: null }));
   }
 
-  //Email
+  //OTP Generator
   async generateOTP() {
     const otp = `${Math.floor(100000 + Math.random() * 900000)}`;
     // hash the otp
@@ -133,17 +115,36 @@ export class AuthService {
     return { otp, hashedOTP, otpCreatedAt, otpExpiresAt };
   }
 
-  async sendOTPVerificationEmail(email: string, otp: string) {
-    //email options
-    const mailOptions = {
-      to: email,
-      subject: "Verify your email",
-      html: `<p>Enter <b>${otp}</b> in the website to verify your email address and complete the sign up.</p><p>This code <b>expires in 15 min</b>.</p>`,
-    };
-    // sendMail(mailOptions);
-    await this.mailerService.sendMail(mailOptions);
+  async sendOTPVerificationEmail(_id: string, email: string) {
+    try {
+      // generate otp and related info
+      const { otp, hashedOTP, otpCreatedAt, otpExpiresAt } = await this.generateOTP();
+      // send email using AWS SES
+      const { status } = await sendEmail(email, otp);
+      if (status === "Success") {
+        await this.userModel.updateOne({ _id }, { otp: hashedOTP, otpCreatedAt, otpExpiresAt });
+        const response = {
+          status: "PENDING",
+          message: "Verification code sent to user email.",
+          data: {
+            userId: _id,
+            email,
+          },
+        };
+        return response;
+      } else {
+        throw new Error("Failed to send email.");
+      }
+    } catch (err) {
+      const response = {
+        status: "FAILED",
+        message: err.message,
+      };
+      return response;
+    }
   }
 
+  // verify user input otp
   async verifyOTP(body): Promise<any> {
     try {
       const { userId, otp } = body;
@@ -152,7 +153,7 @@ export class AuthService {
       if (otpExpiresAt.getTime() < Date.now()) {
         await this.userModel.updateOne(
           { _id: userId },
-          { otp: "", otpCreatedAt: "", otpExpiresAt: "" },
+          { otp: "", otpCreatedAt: null, otpExpiresAt: null },
         );
         throw new Error("Verification code expired.");
       } else {
@@ -164,7 +165,7 @@ export class AuthService {
           // successful
           await this.userModel.updateOne(
             { _id: userId },
-            { isActivated: true, otp: "", otpCreatedAt: "", otpExpiresAt: "" },
+            { isActivated: true, otp: "", otpCreatedAt: null, otpExpiresAt: null },
           );
           const response = {
             status: "VERIFIED",
@@ -175,7 +176,31 @@ export class AuthService {
       }
     } catch (error) {
       const response = {
-        status: "FAILD",
+        status: "FAILED",
+        message: error.message,
+      };
+      return response;
+    }
+  }
+
+  // Resend OTP
+  async resendOTP(body): Promise<any> {
+    try {
+      const { userId, email } = body;
+      if (!userId || !email) {
+        throw Error("Empty user details are not allowed.");
+      } else {
+        // delete old otp
+        await this.userModel.updateOne(
+          { _id: userId },
+          { otp: "", otpCreatedAt: null, otpExpiresAt: null },
+        );
+        const response = await this.sendOTPVerificationEmail(userId, email);
+        return response;
+      }
+    } catch (error) {
+      const response = {
+        status: "FAILED",
         message: error.message,
       };
       return response;
