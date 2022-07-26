@@ -113,7 +113,7 @@ export class AuthService {
       (await this.userModel.findByIdAndUpdate(userId, { hashedRefreshToken: null }));
   }
 
-  //OTP Generator
+  // one-time-password(OTP) Generator
   async generateOTP() {
     const otp = `${Math.floor(100000 + Math.random() * 900000)}`;
     // hash the otp
@@ -158,10 +158,10 @@ export class AuthService {
     try {
       const { userId, otp } = body;
       const user = await this.userModel.findById(userId);
-      const { otp: userOTPRecord, otpExpiresAt } = user;
+      const { otp: userOTPRecord, otpExpiresAt, _id, email, firstName, lastName } = user;
       if (otpExpiresAt.getTime() < Date.now()) {
         await this.userModel.updateOne(
-          { _id: userId },
+          { _id },
           { otp: "", otpCreatedAt: null, otpExpiresAt: null },
         );
         throw new Error("Verification code expired.");
@@ -171,15 +171,22 @@ export class AuthService {
           // wrong otp input
           throw new Error("Verification code is invalid.");
         } else {
-          // successful
+          // successful, clear otp
           await this.userModel.updateOne(
-            { _id: userId },
+            { _id },
             { isActivated: true, otp: "", otpCreatedAt: null, otpExpiresAt: null },
           );
+          // return tokens after verified, equals auto-login
+          const tokens = await this.getTokens(_id, email);
+          await this.updateRtHash(_id, tokens.refreshToken);
           const response = {
-            status: "VERIFIED",
-            message: "User email verified successfully.",
+            userId: _id,
+            email,
+            firstName,
+            lastName,
+            tokens,
           };
+
           return response;
         }
       }
