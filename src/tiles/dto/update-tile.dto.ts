@@ -3,11 +3,6 @@ export class UpdateTileDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  tile_id: string;
-
-  @IsOptional()
-  @IsString()
-  @IsNotEmpty()
   name: string;
 
   @IsOptional()

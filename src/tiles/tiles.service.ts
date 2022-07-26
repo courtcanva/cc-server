@@ -9,12 +9,14 @@ import { UpdateTileDto } from "./dto/update-tile.dto";
 export class TilesService {
   constructor(@InjectModel(Tile.name) private readonly tileModel: Model<Tile>) {}
   async findAll(): Promise<Tile[]> {
-    return (await this.tileModel.find().exec()).filter((tile) => tile.isDeleted !== true);
+    return (await this.tileModel.find().populate("price").exec()).filter(
+      (tile) => tile.isDeleted !== true,
+    );
   }
 
   async findOne(id: ObjectId): Promise<Tile> {
     try {
-      const tile = await this.tileModel.findOne({ _id: id }).exec();
+      const tile = await this.tileModel.findOne({ _id: id }).populate("price").exec();
       return tile;
     } catch {
       throw new NotFoundException({
