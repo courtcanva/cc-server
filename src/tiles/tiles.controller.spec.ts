@@ -42,7 +42,8 @@ describe("TilesController", () => {
 
   describe("findAll()", () => {
     it("should get all of tiles", () => {
-      expect(controller.findAll()).resolves.toEqual([mockTile]);
+      const paginationQuery = { limit: 10, offset: 0 };
+      expect(controller.findAll(paginationQuery)).resolves.toEqual([mockTile]);
     });
   });
 
