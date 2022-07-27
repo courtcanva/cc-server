@@ -2,12 +2,16 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { Price } from "./schemas/price.schema";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 import { PriceDto } from "./dto/price.dto";
 @Injectable()
 export class PriceService {
   constructor(@InjectModel(Price.name) private readonly priceModel: Model<Price>) {}
-  async findAll(): Promise<Price[]> {
-    return (await this.priceModel.find().exec()).filter((price) => price.isDeleted !== true);
+  async findAll(paginationQuery: PaginationQueryDto): Promise<Price[]> {
+    const { limit, offset } = paginationQuery;
+    return (await this.priceModel.find().skip(offset).limit(limit).exec()).filter(
+      (price) => price.isDeleted !== true,
+    );
   }
 
   async findOne(id: string): Promise<Price> {
