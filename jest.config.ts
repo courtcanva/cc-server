@@ -18,6 +18,7 @@ const config: Config.InitialOptions = {
     "!<rootDir>/node_modules/",
     "!<rootDir>/**/__tests__/**",
     "!<rootDir>/**/*.d.ts",
+    "!tiles/*.ts",
   ],
   coverageDirectory: "../coverage",
   collectCoverage: true,

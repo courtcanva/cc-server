@@ -24,4 +24,9 @@ export class UpdateTileDto {
   @IsNumber()
   @IsPositive()
   height: number;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  price: string;
 }

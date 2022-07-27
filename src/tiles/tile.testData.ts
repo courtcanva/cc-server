@@ -4,6 +4,6 @@ export const mockTile = {
   length: 300,
   width: 300,
   height: 15,
-  price: "1",
+  price: "1234567890",
   _id: "1",
 };
