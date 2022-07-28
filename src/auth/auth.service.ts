@@ -7,7 +7,6 @@ import { ReturnUserInfo } from "./ReturnUserInfo";
 import * as argon from "argon2";
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserDto } from "src/users/dto/createUser.dto";
-import { Tokens } from "./types";
 import { sendEmail } from "./emailHelpers";
 
 @Injectable()
