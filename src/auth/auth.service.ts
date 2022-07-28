@@ -95,13 +95,14 @@ export class AuthService {
 
     const tokens = await this.getTokens(user._id, user.email);
     await this.updateRtHash(user._id, tokens.refreshToken);
-    const { _id, email, firstName, lastName } = user;
+    const { _id, email, firstName, lastName, isActivated } = user;
     const respond = {
       userId: _id,
       email,
       firstName,
       lastName,
       tokens,
+      isActivated,
     };
 
     return respond;
@@ -185,6 +186,7 @@ export class AuthService {
             firstName,
             lastName,
             tokens,
+            isActivated: true,
           };
 
           return response;
