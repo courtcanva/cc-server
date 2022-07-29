@@ -1,4 +1,5 @@
-import { Body, Controller, Get, HttpStatus, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Post, Query } from "@nestjs/common";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 import { CheckEmailDto } from "./dto/checkEmail.dto";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { User } from "./schemas/user.schema";
@@ -18,7 +19,8 @@ export class UserController {
   }
 
   @Get()
-  async getAllUsers(): Promise<User[]> {
-    return await this.userService.getAllUsers();
+  async getAllUsers(@Query() paginationQuery: PaginationQueryDto): Promise<User[]> {
+    const { limit, offset } = paginationQuery;
+    return await this.userService.getAllUsers(paginationQuery);
   }
 }
