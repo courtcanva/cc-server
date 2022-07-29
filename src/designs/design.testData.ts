@@ -1,7 +1,32 @@
 export const mockDesign = {
   user_id: "user123",
   designName: "CourtCanvas1",
-  tileColor: [{ location: "circleArea", color: "#606F14" }],
+  tileColor: [
+    {
+      location: "threePoint",
+      color: "#72818B",
+    },
+    {
+      location: "courtArea",
+      color: "#B61313",
+    },
+    {
+      location: "topKeyArea",
+      color: "#B61313",
+    },
+    {
+      location: "border",
+      color: "#195955",
+    },
+    {
+      location: "keyArea",
+      color: "#2C4E8A",
+    },
+    {
+      location: "circleArea",
+      color: "#606F14",
+    },
+  ],
   courtSize: {
     name: "Pro Full Court",
     length: 28000,
@@ -23,7 +48,32 @@ export const mockDesignArray = [
   {
     user_id: "user123",
     designName: "CourtCanvas1",
-    tileColor: [{ location: "circleArea", color: "#606F14" }],
+    tileColor: [
+      {
+        location: "threePoint",
+        color: "#72818B",
+      },
+      {
+        location: "courtArea",
+        color: "#B61313",
+      },
+      {
+        location: "topKeyArea",
+        color: "#B61313",
+      },
+      {
+        location: "border",
+        color: "#195955",
+      },
+      {
+        location: "keyArea",
+        color: "#2C4E8A",
+      },
+      {
+        location: "circleArea",
+        color: "#606F14",
+      },
+    ],
     courtSize: {
       name: "Pro Full Court",
       length: 28000,
@@ -43,7 +93,32 @@ export const mockDesignArray = [
   {
     user_id: "user123",
     designName: "CourtCanvas2",
-    tileColor: [{ location: "circleArea", color: "#606F14" }],
+    tileColor: [
+      {
+        location: "threePoint",
+        color: "#72818B",
+      },
+      {
+        location: "courtArea",
+        color: "#B61313",
+      },
+      {
+        location: "topKeyArea",
+        color: "#B61313",
+      },
+      {
+        location: "border",
+        color: "#195955",
+      },
+      {
+        location: "keyArea",
+        color: "#2C4E8A",
+      },
+      {
+        location: "circleArea",
+        color: "#606F14",
+      },
+    ],
     courtSize: {
       name: "Pro Full Court",
       length: 28000,
