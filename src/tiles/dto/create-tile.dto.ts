@@ -1,11 +1,30 @@
-import { IsNumber, IsPositive, IsString, IsNotEmpty, IsArray } from "class-validator";
+import { Type } from "class-transformer";
+import {
+  IsNumber,
+  IsPositive,
+  IsString,
+  IsNotEmpty,
+  IsArray,
+  ValidateNested,
+} from "class-validator";
+
+export class Color {
+  name: string;
+  value: string;
+}
+
 export class CreateTileDto {
+  @IsString()
+  @IsNotEmpty()
+  readonly tile_id: string;
+
   @IsString()
   @IsNotEmpty()
   readonly name: string;
 
   @IsArray()
-  readonly colors: { name: string; value: string }[];
+  @Type(() => Color)
+  readonly colors: Color[];
 
   @IsNumber()
   @IsPositive()

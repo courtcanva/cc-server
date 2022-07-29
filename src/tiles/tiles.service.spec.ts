@@ -40,10 +40,13 @@ describe("TileService", () => {
   });
 
   it("should return all Tile", async () => {
-    jest.spyOn(model, "find").mockReturnValueOnce({
-      exec: jest.fn().mockResolvedValueOnce([mockTile]),
+    jest.spyOn(model, "find").mockReturnValue({
+      skip: jest.fn().mockReturnValue({
+        limit: jest.fn().mockReturnValue({ exec: jest.fn().mockResolvedValueOnce([mockTile]) }),
+      }),
     } as any);
-    const tiles = await service.findAll();
+    const paginationQuery = { limit: 10, offset: 0 };
+    const tiles = await service.findAll(paginationQuery);
     expect(tiles).toEqual([mockTile]);
   });
 

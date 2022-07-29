@@ -1,20 +1,22 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Model, ObjectId } from "mongoose";
+import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { Price } from "./schemas/price.schema";
-import { CreatePriceDto } from "./dto/create-price.dto";
-import { UpdatePriceDto } from "./dto/update-price.dto";
-
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { PriceDto } from "./dto/price.dto";
 @Injectable()
 export class PriceService {
   constructor(@InjectModel(Price.name) private readonly priceModel: Model<Price>) {}
-  async findAll(): Promise<Price[]> {
-    return (await this.priceModel.find().exec()).filter((price) => price.isDeleted !== true);
+  async findAll(paginationQuery: PaginationQueryDto): Promise<Price[]> {
+    const { limit, offset } = paginationQuery;
+    return (await this.priceModel.find().skip(offset).limit(limit).exec()).filter(
+      (price) => price.isDeleted !== true,
+    );
   }
 
-  async findOne(id: ObjectId): Promise<Price> {
+  async findOne(id: string): Promise<Price> {
     try {
-      const price = await this.priceModel.findOne({ _id: id }).exec();
+      const price = await this.priceModel.findOne({ tile_id: id }).exec();
       return price;
     } catch {
       throw new NotFoundException({
@@ -23,16 +25,21 @@ export class PriceService {
     }
   }
 
-  async create(createPriceDto: CreatePriceDto): Promise<Price> {
-    const tile = await this.priceModel.create(createPriceDto);
-    return tile;
+  async create(createPriceDto: PriceDto): Promise<Price> {
+    const price = await this.priceModel.create(createPriceDto);
+    return price;
   }
 
-  async update(id: ObjectId, updatePriceDto: UpdatePriceDto): Promise<Price> {
+  async update(id: string, priceDto: PriceDto): Promise<Price> {
     try {
+      const updatePriceDto = {
+        ...priceDto,
+        deliveryPrice: priceDto.deliveryPrice,
+        tilePrice: priceDto.tilePrice,
+      };
       const existingPrice = await this.priceModel
         .findOneAndUpdate(
-          { _id: id },
+          { tile_id: id },
           { $set: updatePriceDto, $currentDate: { updatedAt: true } },
           { new: true },
         )
@@ -45,10 +52,10 @@ export class PriceService {
     }
   }
 
-  async remove(id: ObjectId, updatePriceDto: UpdatePriceDto): Promise<boolean> {
+  async remove(id: string): Promise<boolean> {
     try {
       await this.priceModel.findOneAndUpdate(
-        { _id: id },
+        { tile_id: id },
         { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
       );
       return true;

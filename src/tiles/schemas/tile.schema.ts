@@ -5,6 +5,9 @@ import { Document } from "mongoose";
 @Schema()
 export class Tile extends Document {
   @Prop({ type: String, required: true })
+  tile_id: string;
+
+  @Prop({ type: String, required: true })
   name: string;
 
   @Prop({ type: Array, required: true })

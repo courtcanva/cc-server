@@ -2,7 +2,7 @@ import { createMock } from "@golevelup/ts-jest";
 import { NotFoundException } from "@nestjs/common";
 import { getModelToken } from "@nestjs/mongoose";
 import { Test, TestingModule } from "@nestjs/testing";
-import { Model, model, Query } from "mongoose";
+import { Model, Query } from "mongoose";
 import { updatedUser, user, userArray } from "./user.testData";
 import { User } from "./schemas/user.schema";
 import { UserService } from "./user.service";
@@ -38,10 +38,13 @@ describe("UserService", () => {
   });
 
   it("should return all users", async () => {
-    jest.spyOn(model, "find").mockReturnValueOnce({
-      exec: jest.fn().mockResolvedValueOnce(userArray),
+    jest.spyOn(model, "find").mockReturnValue({
+      skip: jest.fn().mockReturnValue({
+        limit: jest.fn().mockReturnValue({ exec: jest.fn().mockResolvedValueOnce(userArray) }),
+      }),
     } as any);
-    const users = await service.getAllUsers();
+    const paginationQuery = { limit: 10, offset: 0 };
+    const users = await service.getAllUsers(paginationQuery);
     expect(users).toEqual(userArray);
   });
 
