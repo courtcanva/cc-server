@@ -9,6 +9,9 @@ export const user = {
   password: "password",
   createdAt: new Date(),
   updatedAt: new Date(),
+  otp: "",
+  otpCreatedAt: null,
+  otpExpiresAt: null,
 };
 
 export const userInfo = {
@@ -30,6 +33,9 @@ export const updatedUser = {
   password: "updatedPassword",
   createdAt: new Date("2022-06-18T09:44:29.044+00:00"),
   updatedAt: new Date(),
+  otp: "",
+  otpCreatedAt: null,
+  otpExpiresAt: null,
 };
 
 export const userArray = [
@@ -43,6 +49,9 @@ export const userArray = [
     isActivated: false,
     createdAt: new Date(),
     updatedAt: new Date(),
+    otp: "",
+    otpCreatedAt: null,
+    otpExpiresAt: null,
   },
   {
     id: Object("62b83c2e89301b1aecf6af79"),
@@ -54,5 +63,8 @@ export const userArray = [
     isActivated: false,
     createdAt: new Date(),
     updatedAt: new Date(),
+    otp: "",
+    otpCreatedAt: null,
+    otpExpiresAt: null,
   },
 ];

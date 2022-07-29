@@ -31,6 +31,18 @@ export class User extends Document {
 
   @Prop({ default: false })
   isActivated: boolean;
+
+  @Prop()
+  hashedRefreshToken: string;
+
+  @Prop()
+  otp: string;
+
+  @Prop()
+  otpCreatedAt: Date;
+
+  @Prop()
+  otpExpiresAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
