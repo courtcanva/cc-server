@@ -2,10 +2,10 @@ import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 // Create SES service object.
 const sesClient = new SESClient({
   region: process.env.REGION,
-  //   credentials: {
-  //     accessKeyId: process.env.accessKeyId,
-  //     secretAccessKey: process.env.secretAccessKey,
-  //   },
+  credentials: {
+    accessKeyId: process.env.accessKeyId,
+    secretAccessKey: process.env.secretAccessKey,
+  },
 });
 
 export const sendEmail = async (email, otp) => {
