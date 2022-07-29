@@ -1,4 +1,10 @@
+import { Type } from "class-transformer";
 import { IsArray, IsNotEmpty, IsObject, IsString } from "class-validator";
+
+export class Color {
+  location: string;
+  color: string;
+}
 export class DesignDto {
   @IsString()
   @IsNotEmpty()
@@ -10,7 +16,8 @@ export class DesignDto {
 
   @IsArray()
   @IsNotEmpty()
-  readonly tileColor: { location: string; color: string }[];
+  @Type(() => Color)
+  readonly tileColor: Color[];
 
   @IsObject()
   @IsNotEmpty()

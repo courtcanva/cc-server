@@ -10,7 +10,7 @@ export class Design extends Document {
   designName: string;
 
   @Prop({ type: Array, required: true })
-  tileColor: { location: string; color: string }[];
+  tileColor: [{ location: string; color: string }];
 
   @Prop({ type: Object, required: true })
   courtSize: {
