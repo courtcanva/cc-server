@@ -45,7 +45,7 @@ pipeline {
         }
         stage('Push to ECR') {
             when {
-                branch 'fix/cc-0036-add-credential-arguments-to-aws-ses-emailHelpers'
+                branch 'main'
             }
             steps {
                 echo 'Logging into ECR...'
@@ -57,7 +57,7 @@ pipeline {
         }
         stage('Migrate UAT DB') {
             when {
-                branch 'fix/cc-0036-add-credential-arguments-to-aws-ses-emailHelpers'
+                branch 'main'
             }
             steps {
                 echo 'Migrate UAT DB...'
@@ -66,7 +66,7 @@ pipeline {
         }
         stage('Deploy to UAT Environment') {
             when {
-                branch 'fix/cc-0036-add-credential-arguments-to-aws-ses-emailHelpers'
+                branch 'main'
             }
             steps {
                 // AWS CLI must be installed in the Jenkins server first.
