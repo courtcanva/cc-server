@@ -49,7 +49,7 @@ pipeline {
             }
             steps {
                 echo 'Logging into ECR...'
-                sh 'aws ecr-public get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin public.ecr.aws/e5b2k3w2'
+                sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/e5b2k3w2'
                 echo 'Pushing docker image to ECR...'
                 sh 'docker tag cc-server:latest public.ecr.aws/e5b2k3w2/cc-server:latest'
                 sh 'docker push public.ecr.aws/e5b2k3w2/cc-server:latest'
