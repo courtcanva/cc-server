@@ -40,19 +40,19 @@ pipeline {
         stage('Build Image') {
             steps {
                 echo 'Building docker image...'
-                sh 'docker build -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} .'
+                sh 'docker build -t cc-server .'
             }
         }
         stage('Push to ECR') {
             when {
-                branch 'main'
+                branch 'feature/ccd-055-ecr'
             }
             steps {
                 echo 'Logging into ECR...'
-                sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com'
+                sh 'aws ecr-public get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin public.ecr.aws/e5b2k3w2'
                 echo 'Pushing docker image to ECR...'
-                sh 'docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}'
-                sh 'docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}'
+                sh 'docker tag cc-server:latest public.ecr.aws/e5b2k3w2/cc-server:latest'
+                sh 'docker push public.ecr.aws/e5b2k3w2/cc-server:latest'
             }
         }
         stage('Migrate UAT DB') {
