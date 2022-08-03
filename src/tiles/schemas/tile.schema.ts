@@ -1,12 +1,9 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Document, Schema as MongooseSchema } from "mongoose";
+import { Price } from "../../price/schemas/price.schema";
 
-/* maps our cat class to our mongoDB collection of the same name */
 @Schema()
 export class Tile extends Document {
-  @Prop({ type: String, required: true })
-  tile_id: string;
-
   @Prop({ type: String, required: true })
   name: string;
 
@@ -21,6 +18,9 @@ export class Tile extends Document {
 
   @Prop({ type: Number, required: true })
   height: number;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Price" })
+  price: Price;
 
   @Prop({ type: Date, default: new Date() })
   createdAt: Date;

@@ -18,7 +18,7 @@ export class TilesService {
 
   async findOne(id: ObjectId): Promise<Tile> {
     try {
-      const tile = await this.tileModel.findOne({ _id: id }).exec();
+      const tile = await this.tileModel.findOne({ _id: id }).populate("price").exec();
       return tile;
     } catch {
       throw new NotFoundException({

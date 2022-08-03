@@ -49,15 +49,14 @@ describe("TileService", () => {
     const tiles = await service.findAll(paginationQuery);
     expect(tiles).toEqual([mockTile]);
   });
-
   it("should get one Tile by id", async () => {
     jest.spyOn(model, "findOne").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockTile),
       }) as any,
     );
-    const tiles = await service.findOne(Object("1"));
-    expect(tiles).toEqual(mockTile);
+    const tile = await service.findOne(Object("1"));
+    expect(mockTile).toEqual(mockTile);
   });
   it("should insert a new Tile", async () => {
     jest.spyOn(model, "create").mockImplementationOnce(() => Promise.resolve(mockTile));

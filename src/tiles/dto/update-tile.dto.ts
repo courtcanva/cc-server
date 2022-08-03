@@ -3,11 +3,6 @@ export class UpdateTileDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  tile_id: string;
-
-  @IsOptional()
-  @IsString()
-  @IsNotEmpty()
   name: string;
 
   @IsOptional()
@@ -29,4 +24,9 @@ export class UpdateTileDto {
   @IsNumber()
   @IsPositive()
   height: number;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  price: string;
 }

@@ -1,12 +1,5 @@
 import { Type } from "class-transformer";
-import {
-  IsNumber,
-  IsPositive,
-  IsString,
-  IsNotEmpty,
-  IsArray,
-  ValidateNested,
-} from "class-validator";
+import { IsNumber, IsPositive, IsString, IsNotEmpty, IsArray, IsOptional } from "class-validator";
 
 export class Color {
   name: string;
@@ -14,10 +7,6 @@ export class Color {
 }
 
 export class CreateTileDto {
-  @IsString()
-  @IsNotEmpty()
-  readonly tile_id: string;
-
   @IsString()
   @IsNotEmpty()
   readonly name: string;
@@ -37,4 +26,8 @@ export class CreateTileDto {
   @IsNumber()
   @IsPositive()
   readonly height: number;
+
+  @IsString()
+  @IsOptional()
+  readonly price: string;
 }
