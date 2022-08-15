@@ -8,6 +8,7 @@ import * as argon from "argon2";
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserDto } from "src/users/dto/createUser.dto";
 import { sendEmail } from "./emailHelpers";
+import { SendEmailCommand } from "@aws-sdk/client-ses";
 
 @Injectable()
 export class AuthService {
@@ -38,7 +39,7 @@ export class AuthService {
     });
     // Get user info from the payload
     const { sub, email, given_name, family_name } = ticket.getPayload();
-    const user = await this.userModel.findOne({ googleId: sub }).exec();
+    const user = await this.userModel.findOne({ email: email }).exec();
     if (!user) {
       //Create new user in the database
       const newUser = {
