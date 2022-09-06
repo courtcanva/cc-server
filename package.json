@@ -73,7 +73,7 @@
     "jest": "28.0.3",
     "lint-staged": "^13.0.1",
     "migrate-mongo": "^9.0.0",
-    "prettier": "^2.3.2",
+    "prettier": "2.7.1",
     "source-map-support": "^0.5.20",
     "supertest": "^6.1.3",
     "ts-jest": "28.0.1",
