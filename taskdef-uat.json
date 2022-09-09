@@ -4,14 +4,14 @@
     "containerDefinitions": [
         {
             "essential": true,
-            #"image": "grafana/fluent-bit-plugin-loki:main",
-           # "name": "log_router",
-           # "firelensConfiguration": {
-           #     "type": "fluentbit",
-           #     "options": {
-           #         "enable-ecs-log-metadata": "true"
-           #     }
-         #   },
+            "image": "grafana/fluent-bit-plugin-loki:main",
+            "name": "log_router",
+            "firelensConfiguration": {
+                "type": "fluentbit",
+                "options": {
+                    "enable-ecs-log-metadata": "true"
+                }
+            },
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
@@ -58,5 +58,5 @@
     ],
     "cpu": "1vCPU",
     "memory": "2GB",
-    "executionRoleArn": "arn:aws:iam::497551902879:role/ecsTaskExecutionRole"
+    "executionRoleArn": "arn:aws:iam::245866473499:role/myEcsTaskExecutionRole"
 }
