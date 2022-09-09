@@ -3,7 +3,6 @@
     "networkMode": "awsvpc",
     "containerDefinitions": [
             "memoryReservation": 50
-        },
         {
             "name": "CCS-F-UAT-container",
             "image": "{{image}}",
