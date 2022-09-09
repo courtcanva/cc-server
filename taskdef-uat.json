@@ -5,7 +5,7 @@
             "memoryReservation": 50
         {
             "name": "CCS-F-UAT-container",
-            "image": "245866473499.dkr.ecr.ap-southeast-2.amazonaws.com/cc-backend-dockerimage-repo:{{image}",
+            "image": "245866473499.dkr.ecr.ap-southeast-2.amazonaws.com/cc-backend-dockerimage-repo:image",
             "portMappings": [
                 {
                     "containerPort": 8080,
