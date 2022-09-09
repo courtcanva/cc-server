@@ -2,25 +2,6 @@
     "family": "CCS-F-UAT-task",
     "networkMode": "awsvpc",
     "containerDefinitions": [
-        {
-            "essential": true,
-            "image": "grafana/fluent-bit-plugin-loki:main",
-            "name": "log_router",
-            "firelensConfiguration": {
-                "type": "fluentbit",
-                "options": {
-                    "enable-ecs-log-metadata": "true"
-                }
-            },
-            "logConfiguration": {
-                "logDriver": "awslogs",
-                "options": {
-                    "awslogs-group": "firelens-container-uat",
-                    "awslogs-region": "ap-southeast-2",
-                    "awslogs-create-group": "true",
-                    "awslogs-stream-prefix": "firelens"
-                }
-            },
             "memoryReservation": 50
         },
         {
