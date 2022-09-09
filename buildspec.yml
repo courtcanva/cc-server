@@ -38,7 +38,7 @@ phases:
       - echo Pushing the Docker image...
       - docker push ${REPOSITORY_URI}:${IMAGE_TAG}
       - echo Writing image definitions file...
-      - sed -i "s|{{image}}|${REPOSITORY_URI}:${IMAGE_TAG}|" taskdef-uat.json
+      - sed -i "s|{{image}}|${ECR_URI_PREFIX}:${IMAGE_TAG}|" taskdef-uat.json
       # $AW_CONTAINER defined in Build Environment 
       - cat taskdef-uat.json
       - aws ecs register-task-definition --execution-role-arn ${exec_role_arn} --cli-input-json file://taskdef-uat.json --region ${AWS_DEFAULT_REGION}
