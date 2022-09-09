@@ -41,7 +41,7 @@ phases:
       - sed -i 's|{{image}}|${REPOSITORY_URI}:${IMAGE_TAG}|' taskdef-uat.json
       # $AW_CONTAINER defined in Build Environment 
       - cat taskdef-uat.json
-      - aws ecs register-task-definition --execution-role-arn ${exec_role_arn} --cli-input-json file://taskdef-uat.json --region ${AWS_DEFAULT_REGION}
+      - aws ecs register-task-definition --execution-role-arn ${exec_role_arn} --cli-input-json taskdef-uat.json --region ${AWS_DEFAULT_REGION}
       - aws ecs update-service --cluster ${AWS_ECS_CLUSTER} --service ${AWS_ECS_SERVICE} --task-definition ${task_def_arn} --region ${AWS_DEFAULT_REGION}
 artifacts:
   files: taskdef-uat.json
