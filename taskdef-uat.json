@@ -4,14 +4,14 @@
     "containerDefinitions": [
         {
             "essential": true,
-            "image": "grafana/fluent-bit-plugin-loki:main",
-            "name": "log_router",
-            "firelensConfiguration": {
-                "type": "fluentbit",
-                "options": {
-                    "enable-ecs-log-metadata": "true"
-                }
-            },
+            #"image": "grafana/fluent-bit-plugin-loki:main",
+           # "name": "log_router",
+           # "firelensConfiguration": {
+           #     "type": "fluentbit",
+           #     "options": {
+           #         "enable-ecs-log-metadata": "true"
+           #     }
+         #   },
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
@@ -33,20 +33,20 @@
                     "protocol": "tcp"
                 }
             ],
-            "logConfiguration": {
-                "logDriver": "awsfirelens",
-                "options": {
-                    "Name": "grafana-loki",
-                    "Url": "https://254699:eyJrIjoiNDA4OGJjYmJiNGE2MzliODlkNTdjMDVhYWQ5MzZhOWVmNjRjZTZhMCIsIm4iOiJ0ZXN0IiwiaWQiOjY4MzIzNH0=@logs-prod-004.grafana.net/loki/api/v1/push",
-                    "Labels": "{job=\"uat-logs\"}",
-                    "RemoveKeys": "container_id,ecs_task_arn",
-                    "LabelKeys": "container_name,ecs_task_definition,source,ecs_cluster",
-                    "LineFormat": "key_value"
-                }
-            },
+            #"logConfiguration": {
+            #    "logDriver": "awsfirelens",
+            #    "options": {
+            #        "Name": "grafana-loki",
+            #        "Url": "https://254699:eyJrIjoiNDA4OGJjYmJiNGE2MzliODlkNTdjMDVhYWQ5MzZhOWVmNjRjZTZhMCIsIm4iOiJ0ZXN0IiwiaWQiOjY4MzIzNH0=@logs-prod-004.grafana.net/loki/api/v1/push",
+            #        "Labels": "{job=\"uat-logs\"}",
+            #        "RemoveKeys": "container_id,ecs_task_arn",
+            #        "LabelKeys": "container_name,ecs_task_definition,source,ecs_cluster",
+            #        "LineFormat": "key_value"
+             #   }
+           # },
             "environmentFiles": [
                 {
-                    "value": "arn:aws:s3:::cc-server-environment-variables/ccs/ccsuat.env",
+                    "value": "arn:aws:s3:::cc-environment-variables/ccs/ccsuat.env",
                     "type": "s3"
                 }
             ],
