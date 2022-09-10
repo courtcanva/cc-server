@@ -43,4 +43,4 @@ phases:
       # $AW_CONTAINER defined in Build Environment 
       #- cat imagedefinitions.json
 artifacts:
-  files: taskdef-uat.json
+  files: ../taskdef-uat.json
