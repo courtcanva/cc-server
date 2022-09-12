@@ -42,6 +42,5 @@ phases:
       - printf '[{"name":"%s","imageUri":"%s"}]' ${CC_CONTAINER} ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
       # $AW_CONTAINER defined in Build Environment 
       - cat imagedefinitions.json
-      - npm run migrate-up
 artifacts:
   files: imagedefinitions.json
