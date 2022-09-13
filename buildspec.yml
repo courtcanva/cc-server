@@ -6,6 +6,7 @@ env:
     DOCKERHUB_PW: 'AW_DOCKERHUB_PW'
     ECR_URI_PREFIX: 'CC_ECR_URI_PREFIX'
     DATA_MIGRATION_URL: 'DATA_MIGRATION_URL_DEV'
+    DATA_MIGRATION_URL_PROD: 'DATA_MIGRATION_URL_PROD'
 phases:
   pre_build:
     commands:
@@ -48,5 +49,9 @@ phases:
       - npm run migrate-up
       - aws ecs register-task-definition --execution-role-arn arn:aws:iam::245866473499:role/myEcsTaskExecutionRole --cli-input-json file://taskdef-uat.json --region ap-southeast-2
       - aws ecs update-service --cluster ${AWS_ECS_CLUSTER} --service ${AWS_ECS_SERVICE} --task-definition ${task_def_arn} --region ap-southeast-2
+      - export DATA_MIGRATION_URL=${DATA_MIGRATION_URL_PROD}
+      - export DATABASE=PROD
+      - export PORT=8080
+      - npm run migrate-up
 artifacts:
   files: imagedefinitions.json
