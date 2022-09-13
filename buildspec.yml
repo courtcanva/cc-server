@@ -43,6 +43,8 @@ phases:
       # $AW_CONTAINER defined in Build Environment 
       - npm i
       - export DATA_MIGRATION_URL=${DATA_MIGRATION_URL}
+      - export DATABASE=DEV
+      - export PORT=8080
       - npm run migrate-up
       - aws ecs register-task-definition --execution-role-arn arn:aws:iam::245866473499:role/myEcsTaskExecutionRole --cli-input-json file://taskdef-uat.json --region ap-southeast-2
       - aws ecs update-service --cluster ${AWS_ECS_CLUSTER} --service ${AWS_ECS_SERVICE} --task-definition ${task_def_arn} --region ap-southeast-2
