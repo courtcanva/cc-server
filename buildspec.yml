@@ -5,7 +5,7 @@ env:
     DOCKERHUB_USER: 'AW_DOCKERHUB_USERNAME'
     DOCKERHUB_PW: 'AW_DOCKERHUB_PW'
     ECR_URI_PREFIX: 'CC_ECR_URI_PREFIX'
-
+    DATA_MIGRATION_URL: 'DATA_MIGRATION_URL_DEV'
 phases:
   pre_build:
     commands:
@@ -39,8 +39,10 @@ phases:
       - docker push ${REPOSITORY_URI}:${IMAGE_TAG}
       - echo Writing image definitions file...
       - sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-uat.json
-      # printf '[{"name":"%s","imageUri":"%s"}]' ${CC_CONTAINER} ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
+      - printf '[{"name":"%s","imageUri":"%s"}]' ${CC_CONTAINER} ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
       # $AW_CONTAINER defined in Build Environment 
-      - cat taskdef-uat.json
+      - npm i
+      - export DATA_MIGRATION_URL=${DATA_MIGRATION_URL}
+      - npm run migrate-up
 artifacts:
-  files: taskdef-uat.json
+  files: imagedefinitions.json
