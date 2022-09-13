@@ -1,9 +1,9 @@
 {
-    "family": "CCS-F-UAT-task",
+    "family": "CC-Server-UAT",
     "networkMode": "awsvpc",
     "containerDefinitions": [
         {
-            "name": "CCS-F-UAT-container",
+            "name": "CC-UAT-container",
             "image": "245866473499.dkr.ecr.ap-southeast-2.amazonaws.com/cc-backend-dockerimage-repo:{{imageID}}",
             "portMappings": [
                 {
