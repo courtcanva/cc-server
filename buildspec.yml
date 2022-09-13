@@ -39,10 +39,12 @@ phases:
       - docker push ${REPOSITORY_URI}:${IMAGE_TAG}
       - echo Writing image definitions file...
       - sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-uat.json
-      - printf '[{"name":"%s","imageUri":"%s"}]' ${CC_CONTAINER} ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
+      # printf '[{"name":"%s","imageUri":"%s"}]' ${CC_CONTAINER} ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
       # $AW_CONTAINER defined in Build Environment 
       - npm i
       - export DATA_MIGRATION_URL=${DATA_MIGRATION_URL}
       - npm run migrate-up
+      - aws ecs register-task-definition --execution-role-arn arn:aws:iam::245866473499:role/myEcsTaskExecutionRole --cli-input-json file://taskdef-uat.json --region ap-southeast-2
+      - aws ecs update-service --cluster ${AWS_ECS_CLUSTER} --service ${AWS_ECS_SERVICE} --task-definition ${task_def_arn} --region ap-southeast-2
 artifacts:
-  files: imagedefinitions.json
+  files: taskdef-uat.json
