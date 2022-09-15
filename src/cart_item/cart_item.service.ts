@@ -35,13 +35,6 @@ export class CartItemService {
     return cartItem;
   }
 
-  /*
-  async create(createCartItemDto: CreateCartItemDto): Promise<CartItem> {
-    const cartItem = new this.cartItemModel(createCartItemDto);
-    return cartItem.save();
-  }
-  */
-
   async create(createCartItemDto: CreateCartItemDto): Promise<CartItem> {
     /*
     const { user_id } = createCartItemDto;
