@@ -43,6 +43,7 @@ export class CartItemService {
   */
 
   async create(createCartItemDto: CreateCartItemDto): Promise<CartItem> {
+    /*
     const { user_id } = createCartItemDto;
     try {
       await this.userModel.find({ isDeleted: false, _id: user_id });
@@ -51,6 +52,7 @@ export class CartItemService {
         `Cannot add item to shopping cart, because user #${user_id} not found.`,
       );
     }
+    */
     const cartItem = await this.cartItemModel.create({
       ...createCartItemDto,
       createdAt: new Date(),
