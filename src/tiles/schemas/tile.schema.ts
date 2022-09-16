@@ -19,9 +19,6 @@ export class Tile extends Document {
   @Prop({ type: Number, required: true })
   height: number;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Price" })
-  price: Price;
-
   @Prop({ type: Date, default: new Date() })
   createdAt: Date;
 

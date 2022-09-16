@@ -50,44 +50,18 @@ describe("PriceService", () => {
     expect(price).toEqual([mockPrice]);
   });
 
-  it("should get one Price by tile_id", async () => {
-    jest.spyOn(model, "findOne").mockReturnValueOnce(
-      createMock<Query<any, any>>({
-        exec: jest.fn().mockResolvedValueOnce(mockPrice),
-      }) as any,
-    );
-    const price = await service.findOne("tile001");
-    expect(price).toEqual(mockPrice);
-  });
-
-  it("should insert a new Price", async () => {
-    jest.spyOn(model, "create").mockImplementationOnce(() => Promise.resolve(mockPrice));
-    const newPrice = await service.create(mockPrice);
-    expect(newPrice).toEqual(mockPrice);
-  });
-
   it("should update a price successfully", async () => {
     const updatePrice = {
       ...mockPrice,
-      deliveryPrice: mockPrice.deliveryPrice,
-      tilePrice: mockPrice.tilePrice,
+      cementFloorPrice: mockPrice.cementFloorPrice,
+      tilesPrice: mockPrice.tilesPrice,
     };
     jest.spyOn(model, "findOneAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockPrice),
       }) as any,
     );
-    const updatedPrice = await service.update("tile001", updatePrice);
+    const updatedPrice = await service.update(Object("1"), updatePrice);
     expect(updatedPrice).toEqual(mockPrice);
-  });
-
-  it("should delete a price successfully", async () => {
-    jest.spyOn(model, "remove").mockResolvedValueOnce(
-      createMock<Query<any, any>>({
-        exec: jest.fn().mockResolvedValueOnce(mockPrice),
-      }) as any,
-    );
-    const deletePrice = await service.remove("tile001");
-    expect(deletePrice).toEqual(true);
   });
 });

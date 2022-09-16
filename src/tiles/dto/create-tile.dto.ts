@@ -26,8 +26,4 @@ export class CreateTileDto {
   @IsNumber()
   @IsPositive()
   readonly height: number;
-
-  @IsString()
-  @IsOptional()
-  readonly price: string;
 }
