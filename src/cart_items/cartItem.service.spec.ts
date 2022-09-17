@@ -1,15 +1,15 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { Connection, Model, Query } from "mongoose";
-import { CartItemService } from "./cart_item.service";
+import { CartItemService } from "./cartItem.service";
 import { createMock } from "@golevelup/ts-jest";
-import { CartItem } from "./schemas/cart_item.schema";
+import { CartItem } from "./schemas/cartItem.schema";
 import { getModelToken } from "@nestjs/mongoose";
 import {
   mockCartItem,
   mockCartItemArray,
   mockNewCartItem,
   mockCartItemInDatabase,
-} from "./cart_item.testData";
+} from "./cartItem.testData";
 import { User } from "src/users/schemas/user.schema";
 
 describe("CartItemService", () => {
@@ -67,7 +67,7 @@ describe("CartItemService", () => {
         }),
       }),
     } as any);
-    const user_Id = "107705953378907352660";
+    const user_Id = "user123";
     expect(await service.findAll({ userId: user_Id, limit: 3, offset: 1 })).toEqual(
       mockCartItemArray,
     );
@@ -79,7 +79,7 @@ describe("CartItemService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockCartItem),
       }) as any,
     );
-    const id = "6321e2b4d65d0ab88eaefb13";
+    const id = Object("6321e2b4d65d0ab88eaefb13");
     const expectedCartItem = mockCartItem;
 
     const cartItem = await service.findOne(id);
@@ -101,7 +101,10 @@ describe("CartItemService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockCartItem),
       }) as any,
     );
-    const updatedCartItem = await service.update("632336d9529f634ce9bd0833", updateCartItem);
+    const updatedCartItem = await service.update(
+      Object("632336d9529f634ce9bd0833"),
+      updateCartItem,
+    );
     expect(updatedCartItem).toEqual(updatedCartItem);
   });
 
@@ -111,6 +114,6 @@ describe("CartItemService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockCartItemInDatabase),
       }) as any,
     );
-    expect(await service.remove("6320bd57f3dee2ee6deeecf2")).toEqual(true);
+    expect(await service.remove(Object("6320bd57f3dee2ee6deeecf2"))).toEqual(true);
   });
 });

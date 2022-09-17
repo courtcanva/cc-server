@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { CartItem } from "./schemas/cart_item.schema";
-import { CreateCartItemDto } from "./dto/create-cart_item.dto";
-import { UpdateCartItemDto } from "./dto/update-cart_item.dto";
-import { FindAllCartItemDto } from "./dto/findAll-cart_item.dto";
+import { CartItem } from "./schemas/cartItem.schema";
+import { CreateCartItemDto } from "./dto/create-cartItem.dto";
+import { UpdateCartItemDto } from "./dto/update-cartItem.dto";
+import { FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
 import { User } from "../users/schemas/user.schema";
+import { ObjectId } from "mongoose";
 
 @Injectable()
 export class CartItemService {
@@ -27,7 +28,7 @@ export class CartItemService {
       .exec();
   }
 
-  async findOne(id: string): Promise<CartItem> {
+  async findOne(id: ObjectId): Promise<CartItem> {
     const cartItem = await this.cartItemModel.findOne({ _id: id }).exec();
     if (!cartItem) {
       throw new NotFoundException(`Cart Item #${id} not found`);
@@ -36,6 +37,15 @@ export class CartItemService {
   }
 
   async create(createCartItemDto: CreateCartItemDto): Promise<CartItem> {
+    /* To dos
+    It's to validate to verify if user exists in the database. It is logical, but 
+    this limitation make it difficult to test related cards later (ie. 
+    dev must register before adding items).
+
+    Also, I tested this function and found that my user_id is not created in the database 
+    after I register in front-end, which prevents me from adding the item to the shopping cart 
+    (due to this restriction codes). So I temporarily disabled this restriction until this bug is fixed.
+    */
     /*
     const { user_id } = createCartItemDto;
     try {
@@ -54,7 +64,7 @@ export class CartItemService {
     return cartItem;
   }
 
-  async update(id: string, updateCartItemDto: UpdateCartItemDto): Promise<CartItem> {
+  async update(id: ObjectId, updateCartItemDto: UpdateCartItemDto): Promise<CartItem> {
     const cartItem = await this.cartItemModel
       .findByIdAndUpdate(
         { _id: id },
@@ -68,7 +78,7 @@ export class CartItemService {
     return cartItem;
   }
 
-  async remove(id: string): Promise<boolean> {
+  async remove(id: ObjectId): Promise<boolean> {
     try {
       await this.cartItemModel.findOneAndUpdate(
         { _id: id },

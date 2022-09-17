@@ -1,22 +1,9 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-@Schema()
-export class CartItem extends Document {
-  @Prop({ type: String, required: true })
-  quotation: string;
-
+export class Design extends Document {
   @Prop({ type: String })
-  image: string;
-
-  @Prop({ type: Array, required: true })
-  quotationDetails: [{ color: string; quantity: number }];
-
-  @Prop({ type: Boolean, default: false })
-  isExpired: boolean;
-
-  @Prop({ required: true })
-  user_id: string;
+  designer: string;
 
   @Prop({ required: true })
   designName: string;
@@ -38,6 +25,27 @@ export class CartItem extends Document {
     sideBorderWidth: number;
     lineBorderWidth: number;
   };
+}
+
+@Schema()
+export class CartItem extends Document {
+  @Prop({ type: String, required: true })
+  quotation: string;
+
+  @Prop({ type: String })
+  image: string;
+
+  @Prop({ type: Array, required: true })
+  quotationDetails: [{ color: string; quantity: number }];
+
+  @Prop({ type: Boolean, default: false })
+  isExpired: boolean;
+
+  @Prop({ required: true })
+  user_id: string;
+
+  @Prop({ type: Design, required: true })
+  design: Design;
 
   @Prop({ type: Date, default: new Date() })
   createdAt: Date;

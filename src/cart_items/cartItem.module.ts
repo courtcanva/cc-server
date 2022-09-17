@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { User, UserSchema } from "../users/schemas/user.schema";
-import { CartItemController } from "./cart_item.controller";
-import { CartItemService } from "./cart_item.service";
-import { CartItem, CartItemSchema } from "./schemas/cart_item.schema";
+import { CartItemController } from "./cartItem.controller";
+import { CartItemService } from "./cartItem.service";
+import { CartItem, CartItemSchema } from "./schemas/cartItem.schema";
 
 @Module({
   imports: [

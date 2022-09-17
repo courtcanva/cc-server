@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
-import { CartItemService } from "./cart_item.service";
-import { CreateCartItemDto } from "./dto/create-cart_item.dto";
-import { FindAllCartItemDto } from "./dto/findAll-cart_item.dto";
-import { UpdateCartItemDto } from "./dto/update-cart_item.dto";
-import { CartItem } from "./schemas/cart_item.schema";
+import { CartItemService } from "./cartItem.service";
+import { CreateCartItemDto } from "./dto/create-cartItem.dto";
+import { FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
+import { UpdateCartItemDto } from "./dto/update-cartItem.dto";
+import { CartItem } from "./schemas/cartItem.schema";
+import { ObjectId } from "mongoose";
 
 @Controller("shopping-cart")
 export class CartItemController {
@@ -14,7 +15,7 @@ export class CartItemController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string): Promise<CartItem> {
+  async findOne(@Param("id") id: ObjectId): Promise<CartItem> {
     return await this.cartItemService.findOne(id);
   }
 
@@ -25,14 +26,14 @@ export class CartItemController {
 
   @Put(":id")
   async update(
-    @Param("id") id: string,
+    @Param("id") id: ObjectId,
     @Body() updateCartItemDto: UpdateCartItemDto,
   ): Promise<CartItem> {
     return await this.cartItemService.update(id, updateCartItemDto);
   }
 
   @Delete(":id")
-  async remove(@Param("id") id: string): Promise<boolean> {
+  async remove(@Param("id") id: ObjectId): Promise<boolean> {
     return await this.cartItemService.remove(id);
   }
 }

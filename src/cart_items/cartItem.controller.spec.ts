@@ -1,10 +1,10 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { CartItemController } from "./cart_item.controller";
-import { CartItemService } from "./cart_item.service";
-import { mockCartItem } from "./cart_item.testData";
-import { CreateCartItemDto } from "./dto/create-cart_item.dto";
-import { UpdateCartItemDto } from "./dto/update-cart_item.dto";
-import { FindAllCartItemDto } from "./dto/findAll-cart_item.dto";
+import { CartItemController } from "./cartItem.controller";
+import { CartItemService } from "./cartItem.service";
+import { mockCartItem } from "./cartItem.testData";
+import { CreateCartItemDto } from "./dto/create-cartItem.dto";
+import { UpdateCartItemDto } from "./dto/update-cartItem.dto";
+import { FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
 
 describe("ShoppingCartController", () => {
   let controller: CartItemController;
@@ -43,7 +43,7 @@ describe("ShoppingCartController", () => {
 
   describe("findAll", () => {
     it("should get all cart items in a given user id with pagination", () => {
-      const user_Id = "107705953378907352660";
+      const user_Id = "user123";
       const findAllCartItemDto: FindAllCartItemDto = { userId: user_Id, limit: 3, offset: 1 };
       expect(controller.findAll(findAllCartItemDto)).resolves.toEqual([mockCartItem]);
     });
@@ -74,9 +74,8 @@ describe("ShoppingCartController", () => {
       const updateCartItemDto: UpdateCartItemDto = mockCartItem;
       const updateDesign = {
         ...updateCartItemDto,
-        designName: mockCartItem.designName,
-        tileColor: mockCartItem.tileColor,
-        courtSize: mockCartItem.courtSize,
+        quotation: mockCartItem.quotation,
+        quotationDetails: mockCartItem.quotationDetails,
       };
       expect(controller.update(Object("1"), updateDesign)).resolves.toEqual({
         _id: "1",
