@@ -1,6 +1,7 @@
 # Court Canva
 
 ## Getting Started ✨ :sparkles:
+
 ## Installation
 
 ```bash
@@ -8,11 +9,18 @@ $ npm i
 ```
 
 ## Docker MongoDB
+
 Please make sure you have installed Docker in your local environment.
 [You can download Docker from here](https://docs.docker.com/get-docker/)
 
 ```bash
 $ docker compose up
+```
+
+## Data Migration
+
+```bash
+$npm run migrate-up
 ```
 
 ## Running the app
@@ -40,6 +48,7 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
 ## Project Tech Stack
 
 <table align="center" border=0>
@@ -67,10 +76,10 @@ $ npm run test:cov
 Add a file named `.env` at the root directory. Copy the .env code from Backend ENV ticket on notion(Get notion access permission from the development group) and paste it in .env. You can refer to the `.env.example` file in the directory and repo.
 
 ## Notion Board
+
 We put our ticket board and other important information in the notion board. Please advise our BA to get access to it.
 
 ## Code of Conduct :clipboard:
-
 
 <table align="center" border=0>
    <tr>
@@ -80,17 +89,18 @@ We put our ticket board and other important information in the notion board. Ple
       <td>
 
 - Warning:heavy_exclamation_mark::cop:: <b>No one</b> was allowed to manipulate `main` branch <b>directly</b> in any way and for any reason. When you get a new ticket and plan to start your work, please <b>create a new branch</b> then start coding.
-   You can create a pull request to make your work able to be reviewed and tested by team and get your code merged after getting enough approvals.<br>
+  You can create a pull request to make your work able to be reviewed and tested by team and get your code merged after getting enough approvals.<br>
 - Branch Name Example: "feature/cc-0027-a-user-can-view-pro-full-court"
 - Tutorial about branch management: [Link](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/making-changes-in-a-branch/managing-branches)
 - It is better to delete your branch after your pull request is approved and your branch have been merged into `main` branch.
-      </td>
+  </td>
    </tr>
    <tr>
       <td width="500"><b>2. Commit Message</b></td>
    </tr>
    <tr>
       <td>
+
 # Semantic Commit Messages
 
 See how a minor change to your commit message style can make you a better programmer.
@@ -125,16 +135,16 @@ References:
 - https://www.conventionalcommits.org/
 - https://seesparkbox.com/foundry/semantic_commit_messages
 - http://karma-runner.github.io/1.0/dev/git-commit-msg.html
-      </td>
+  </td>
    </tr>
    <tr>
       <td width="500"><b>3. Pull Request</b></td>
    </tr>
    <tr>
       <td>
-- Pull Request Title Example: "Feature/cc 0042 a user can log in     sign up for my account"
+- Pull Request Title Example: "Feature/cc 0042 a user can log in sign up for my account"
 - Tutorial About How To Create A Pull Request: [Link](www.google.com)
-      </td>   
+  </td>
    </tr>
       <tr>
       <td width="500"><b>4. Specific Code Convention</b></td>
@@ -142,9 +152,8 @@ References:
    <tr>
       <td>
 - Basically we will use double double quotes `""`instead of single quotes`''` in the front end project.
-- In terms of indentation, our indentation in the project is two spaces.<br> [How To Change Indentation in your VS code](https://www.kindacode.com/article/vs-code-how-to-change-indentation-2-spaces-4-spaces/) 
+- In terms of indentation, our indentation in the project is two spaces.<br> [How To Change Indentation in your VS code](https://www.kindacode.com/article/vs-code-how-to-change-indentation-2-spaces-4-spaces/)
 - Please format your code before submitting your work.
-      </td>   
+</td>
    </tr>
 </table>
-
