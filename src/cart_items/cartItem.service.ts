@@ -16,12 +16,12 @@ export class CartItemService {
   ) {}
 
   async findAll(findAllCartItem: FindAllCartItemDto): Promise<CartItem[]> {
-    const { userId, limit = 0, offset = 0 } = findAllCartItem;
-    if (userId === "") {
+    const { user_id, limit = 0, offset = 0 } = findAllCartItem;
+    if (user_id === "") {
       throw new NotFoundException("userId cannot be empty string");
     }
     const optionalQuery: { [key: string]: any } = {};
-    if (userId) optionalQuery.user_id = userId;
+    if (user_id) optionalQuery.user_id = user_id;
 
     return await this.cartItemModel
       .find({ isDeleted: false, ...optionalQuery })

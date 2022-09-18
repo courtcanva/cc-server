@@ -44,7 +44,7 @@ describe("ShoppingCartController", () => {
   describe("findAll", () => {
     it("should get all cart items in a given user id with pagination", () => {
       const user_Id = "user123";
-      const findAllCartItemDto: FindAllCartItemDto = { userId: user_Id, limit: 3, offset: 1 };
+      const findAllCartItemDto: FindAllCartItemDto = { user_id: user_Id, limit: 3, offset: 1 };
       expect(controller.findAll(findAllCartItemDto)).resolves.toEqual([mockCartItem]);
     });
   });

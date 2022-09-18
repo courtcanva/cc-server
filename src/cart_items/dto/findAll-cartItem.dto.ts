@@ -4,5 +4,5 @@ import { PaginationQueryDto } from "../../utils/PaginationDto/pagination-query.d
 export class FindAllCartItemDto extends PaginationQueryDto {
   @IsString()
   @IsOptional()
-  userId: string;
+  user_id: string;
 }

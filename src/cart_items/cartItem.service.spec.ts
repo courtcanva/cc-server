@@ -68,7 +68,7 @@ describe("CartItemService", () => {
       }),
     } as any);
     const user_Id = "user123";
-    expect(await service.findAll({ userId: user_Id, limit: 3, offset: 1 })).toEqual(
+    expect(await service.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual(
       mockCartItemArray,
     );
   });
