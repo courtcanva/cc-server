@@ -23,5 +23,8 @@ const config: Config.InitialOptions = {
   ],
   coverageDirectory: "../coverage",
   testEnvironment: "node",
+  moduleNameMapper: {
+    "^src/(.*)$": "<rootDir>/$1",
+  },
 };
 export default config;
