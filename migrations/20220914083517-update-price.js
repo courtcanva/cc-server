@@ -10,7 +10,7 @@ module.exports = {
             cementFloorPrice: 1500,
             tilesPrice: [
               {
-                tile_id: "1234564789",
+                tile_id: "",
                 tileName: "Elite X II",
                 deliveryPrice: 1900,
                 tilePrice: 12000,

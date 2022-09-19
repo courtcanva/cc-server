@@ -1,6 +1,5 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Document, ObjectId } from "mongoose";
-import { Tile } from "src/tiles/schemas/tile.schema";
+import { Document } from "mongoose";
 
 @Schema()
 export class Price extends Document {
@@ -11,7 +10,7 @@ export class Price extends Document {
   tilesPrice: [
     {
       tile_id: string;
-      tileName: Tile;
+      tileName: string;
       deliveryPrice: number;
       tilePrice: number;
       isDeleted: boolean;
