@@ -46,7 +46,7 @@ describe("PriceController", () => {
       const updatePriceDto = {
         ...priceDto,
         cementFloorPrice: mockPrice.cementFloorPrice,
-        tilesPrice: mockPrice.tilesPrice,
+        tilePrices: mockPrice.tilePrices,
       };
       expect(controller.update(Object("1"), updatePriceDto)).resolves.toEqual({
         _id: Object("1"),

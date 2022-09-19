@@ -54,7 +54,7 @@ describe("PriceService", () => {
     const updatePrice = {
       ...mockPrice,
       cementFloorPrice: mockPrice.cementFloorPrice,
-      tilesPrice: mockPrice.tilesPrice,
+      tilePrices: mockPrice.tilePrices,
     };
     jest.spyOn(model, "findOneAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({

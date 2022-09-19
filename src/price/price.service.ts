@@ -18,7 +18,7 @@ export class PriceService {
     try {
       const updatePriceDto = {
         ...priceDto,
-        tilesPrice: priceDto.tilesPrice,
+        tilePrices: priceDto.tilePrices,
         cementFloorPrice: priceDto.cementFloorPrice,
       };
       const existingPrice = await this.priceModel

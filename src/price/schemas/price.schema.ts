@@ -7,12 +7,12 @@ export class Price extends Document {
   cementFloorPrice: number;
 
   @Prop({ type: Array, ref: "tiles", required: true })
-  tilesPrice: [
+  tilePrices: [
     {
       tile_id: string;
       tileName: string;
       deliveryPrice: number;
-      tilePrice: number;
+      price: number;
       isDeleted: boolean;
     },
   ];

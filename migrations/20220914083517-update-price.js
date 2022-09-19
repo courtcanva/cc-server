@@ -7,13 +7,13 @@ module.exports = {
       [
         {
           $set: {
-            cementFloorPrice: 1500,
-            tilesPrice: [
+            cementFloorPrice: 15000,
+            tilePrices: [
               {
                 tile_id: "",
                 tileName: "Elite X II",
                 deliveryPrice: 1900,
-                tilePrice: 12000,
+                price: 12000,
                 isDeleted: false,
               },
             ],
