@@ -14,28 +14,8 @@ export class PriceController {
     return await this.priceService.findAll(paginationQuery);
   }
 
-  @Get(":tile_id")
-  async findOne(@Param("tile_id") tile_id: string): Promise<Price> {
-    return await this.priceService.findOne(tile_id);
-  }
-
-  @Post()
-  async create(@Body() createPriceDto: PriceDto): Promise<Price> {
-    return await this.priceService.create(createPriceDto);
-  }
-
-  @Put(":tile_id")
-  async update(@Param("tile_id") tile_id: string, @Body() priceDto: PriceDto): Promise<Price> {
-    const updatePriceDto = {
-      ...priceDto,
-      deliveryPrice: priceDto.deliveryPrice,
-      tilePrice: priceDto.tilePrice,
-    };
-    return await this.priceService.update(tile_id, updatePriceDto);
-  }
-
-  @Delete(":tile_id")
-  async remove(@Param("tile_id") tile_id: string): Promise<boolean> {
-    return await this.priceService.remove(tile_id);
+  @Put(":_id")
+  async update(@Param("_id") _id: ObjectId, @Body() priceDto: PriceDto): Promise<Price> {
+    return await this.priceService.update(_id, priceDto);
   }
 }
