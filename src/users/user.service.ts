@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { CheckEmailDto } from "./dto/checkEmail.dto";
@@ -10,6 +10,7 @@ import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
+
   /**
    * Get all users from database
    * @returns {[]:User}
@@ -57,10 +58,28 @@ export class UserService {
     }
     // Add new update date
     updateUserDto = { ...updateUserDto, updatedAt: new Date() };
-    const updatedUser = await await this.userModel
+    const updatedUser = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true })
       .exec();
     // return the user info which has been updated.
+    return updatedUser;
+  }
+
+  /**
+   * connect account
+   * @param updateUserDto
+   * @returns {User}
+   */
+  async connectAccount(updateUser: UpdateUserDto): Promise<User> {
+    const existingUser = await this.userModel.findOne({ email: updateUser.email }).exec();
+    const id = existingUser._id;
+    if (!existingUser || existingUser.isDeleted) {
+      throw new NotFoundException(`User ${id} not found`);
+    }
+    updateUser = { ...updateUser, updatedAt: new Date() };
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate({ _id: id }, { $set: updateUser }, { new: true })
+      .exec();
     return updatedUser;
   }
 

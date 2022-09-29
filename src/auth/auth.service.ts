@@ -39,7 +39,6 @@ export class AuthService {
     // Get user info from the payload
     const { sub, email, given_name, family_name } = ticket.getPayload();
     const user = await this.userModel.findOne({ email: email }).exec();
-    console.log(user.firstName);
     if (!user) {
       //Create new user in the database
       const newUser = {
@@ -63,8 +62,8 @@ export class AuthService {
       const userInfo = {
         googleId: sub,
         email: email,
-        firstName: given_name,
-        lastName: family_name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         needConnection: true,
       };
       // Return the user who has already existed in the database
