@@ -68,3 +68,33 @@ export const userArray = [
     otpExpiresAt: null,
   },
 ];
+
+export const unconnectedAccount = {
+  googleId: null,
+  email: "test@example.com",
+  firstName: "testFirstName",
+  lastName: "testLastName",
+  isActivated: false,
+  password: "password",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  otp: "",
+  otpCreatedAt: null,
+  otpExpiresAt: null,
+};
+
+export const connectedAccount = {
+  id: Object("62b83c2e89301b1aecf6af78"),
+  googleId: "updatedGoogleId",
+  email: "test@example.com",
+  firstName: "testFirstName",
+  lastName: "testLastName",
+  isDeleted: false,
+  isActivated: false,
+  password: "password",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  otp: "",
+  otpCreatedAt: null,
+  otpExpiresAt: null,
+};
