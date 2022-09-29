@@ -65,6 +65,7 @@ export class AuthService {
         firstName: user.firstName,
         lastName: user.lastName,
         isActivated: user.isActivated,
+        otp: user.otp,
         needConnection: !user.googleId,
       };
       // Return the user who has already existed in the database
