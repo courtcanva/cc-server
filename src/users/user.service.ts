@@ -6,6 +6,7 @@ import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
 import { User } from "./schemas/user.schema";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { ConnectAccountDto } from "./dto/connectAccount.dto";
 
 @Injectable()
 export class UserService {
@@ -67,20 +68,20 @@ export class UserService {
 
   /**
    * connect account
-   * @param updateUser
+   * @param accountToConnect
    * @returns {User}
    */
-  async connectAccount(updateUser: UpdateUserDto): Promise<User> {
-    const existingUser = await this.userModel.findOne({ email: updateUser.email }).exec();
+  async connectAccount(accountToConnect: ConnectAccountDto): Promise<User> {
+    const existingUser = await this.userModel.findOne({ email: accountToConnect.email }).exec();
     const id = existingUser._id;
     if (!existingUser || existingUser.isDeleted) {
       throw new NotFoundException(`User ${id} not found`);
     }
-    updateUser = { ...updateUser, updatedAt: new Date() };
-    const updatedUser = await this.userModel
-      .findByIdAndUpdate({ _id: id }, { $set: updateUser }, { new: true })
+    accountToConnect = { ...accountToConnect, updatedAt: new Date() };
+    const connectedAccount = await this.userModel
+      .findByIdAndUpdate({ _id: id }, { $set: accountToConnect }, { new: true })
       .exec();
-    return updatedUser;
+    return connectedAccount;
   }
 
   /**

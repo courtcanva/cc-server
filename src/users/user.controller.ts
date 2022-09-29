@@ -4,7 +4,7 @@ import { CheckEmailDto } from "./dto/checkEmail.dto";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { User } from "./schemas/user.schema";
 import { UserService } from "./user.service";
-import { UpdateUserDto } from "./dto/updateUser.dto";
+import { ConnectAccountDto } from "./dto/connectAccount.dto";
 
 @Controller("user")
 export class UserController {
@@ -26,7 +26,7 @@ export class UserController {
   }
 
   @Put("connect")
-  async connectAccount(@Body() updateUser: UpdateUserDto): Promise<User> {
-    return await this.userService.connectAccount(updateUser);
+  async connectAccount(@Body() accountToConnect: ConnectAccountDto): Promise<User> {
+    return await this.userService.connectAccount(accountToConnect);
   }
 }
