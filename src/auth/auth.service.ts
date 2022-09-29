@@ -59,12 +59,16 @@ export class AuthService {
       // Return the user info who has been created when logging
       return newUserInfo;
     } else {
+      let needConnection = true;
+      if (user.googleId) {
+        needConnection = false;
+      }
       const userInfo = {
         googleId: sub,
         email: email,
         firstName: user.firstName,
         lastName: user.lastName,
-        needConnection: true,
+        needConnection: needConnection,
       };
       // Return the user who has already existed in the database
       return userInfo;
