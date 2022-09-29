@@ -67,7 +67,7 @@ export class UserService {
 
   /**
    * connect account
-   * @param updateUserDto
+   * @param updateUser
    * @returns {User}
    */
   async connectAccount(updateUser: UpdateUserDto): Promise<User> {
@@ -105,10 +105,10 @@ export class UserService {
 
   /**
    * Check user existence by email
-   * @param {CheckEmailDto}
+   * @param emailDto
    */
   async checkEmail(emailDto: CheckEmailDto): Promise<boolean> {
     const foundUser = await this.userModel.find({ email: emailDto.email }).exec();
-    return foundUser.length > 0 ? true : false;
+    return foundUser.length > 0;
   }
 }
