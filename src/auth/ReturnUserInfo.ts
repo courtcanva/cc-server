@@ -3,4 +3,5 @@ export type ReturnUserInfo = {
   email: string;
   firstName: string;
   lastName: string;
+  needConnection: boolean;
 };

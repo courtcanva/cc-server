@@ -49,7 +49,7 @@ export class AuthService {
         isActivated: true,
       };
       await this.userModel.create(newUser);
-      const newUserInfo = {
+      const newUserInfo: ReturnUserInfo = {
         googleId: sub,
         email: email,
         firstName: given_name,
@@ -59,7 +59,7 @@ export class AuthService {
       // Return the user info who has been created when logging
       return newUserInfo;
     } else {
-      const userInfo = {
+      const userInfo: ReturnUserInfo = {
         googleId: sub,
         email: email,
         firstName: user.firstName,
@@ -252,7 +252,7 @@ export class AuthService {
     };
     const atExp = {
       secret: process.env.ACCESS_TOKEN_SECRET,
-      expiresIn: 60 * 15, //15 mins expiration
+      expiresIn: 60 * 15, //15 min expiration
     };
 
     const rtExp = {
