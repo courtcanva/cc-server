@@ -86,7 +86,7 @@ export class UserService {
       userId: connectedAccount._id,
       googleId: connectedAccount.googleId,
       email: connectedAccount.email,
-      firstName: connectedAccount.googleId,
+      firstName: connectedAccount.firstName,
       lastName: connectedAccount.lastName,
       needConnection: false,
     };

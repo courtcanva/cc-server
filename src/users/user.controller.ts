@@ -5,6 +5,7 @@ import { CreateUserDto } from "./dto/createUser.dto";
 import { User } from "./schemas/user.schema";
 import { UserService } from "./user.service";
 import { ConnectAccountDto } from "./dto/connectAccount.dto";
+import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 
 @Controller("user")
 export class UserController {
@@ -26,7 +27,7 @@ export class UserController {
   }
 
   @Put("connect")
-  async connectAccount(@Body() accountToConnect: ConnectAccountDto): Promise<User> {
+  async connectAccount(@Body() accountToConnect: ConnectAccountDto): Promise<ReturnUserInfo> {
     return await this.userService.connectAccount(accountToConnect);
   }
 }
