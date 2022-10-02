@@ -41,16 +41,15 @@ export class AuthService {
     const user = await this.userModel.findOne({ email: email }).exec();
     if (!user) {
       //Create new user in the database
-      const newUser = {
+      const newUser = await this.userModel.create({
         googleId: sub,
         email: email,
         firstName: given_name,
         lastName: family_name,
         isActivated: true,
-      };
-      await this.userModel.create(newUser);
+      });
       const newUserInfo: ReturnUserInfo = {
-        userId: user._id,
+        userId: newUser._id,
         googleId: sub,
         email: email,
         firstName: given_name,
