@@ -50,6 +50,7 @@ export class AuthService {
       };
       await this.userModel.create(newUser);
       const newUserInfo: ReturnUserInfo = {
+        userId: user._id,
         googleId: sub,
         email: email,
         firstName: given_name,
@@ -60,6 +61,7 @@ export class AuthService {
       return newUserInfo;
     } else {
       const userInfo: ReturnUserInfo = {
+        userId: user._id,
         googleId: sub,
         email: email,
         firstName: user.firstName,

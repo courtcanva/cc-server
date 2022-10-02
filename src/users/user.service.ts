@@ -7,6 +7,7 @@ import { UpdateUserDto } from "./dto/updateUser.dto";
 import { User } from "./schemas/user.schema";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 import { ConnectAccountDto } from "./dto/connectAccount.dto";
+import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 
 @Injectable()
 export class UserService {
@@ -71,7 +72,7 @@ export class UserService {
    * @param accountToConnect
    * @returns {User}
    */
-  async connectAccount(accountToConnect: ConnectAccountDto): Promise<User> {
+  async connectAccount(accountToConnect: ConnectAccountDto): Promise<ReturnUserInfo> {
     const existingUser = await this.userModel.findOne({ email: accountToConnect.email }).exec();
     const id = existingUser._id;
     if (!existingUser || existingUser.isDeleted) {
@@ -81,7 +82,15 @@ export class UserService {
     const connectedAccount = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: accountToConnect }, { new: true })
       .exec();
-    return connectedAccount;
+    const userInfo: ReturnUserInfo = {
+      userId: connectedAccount._id,
+      googleId: connectedAccount.googleId,
+      email: connectedAccount.email,
+      firstName: connectedAccount.googleId,
+      lastName: connectedAccount.lastName,
+      needConnection: false,
+    };
+    return userInfo;
   }
 
   /**
