@@ -2,8 +2,6 @@ import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs
 import { ObjectId } from "mongoose";
 import { GetCurrentAdmin, GetCurrentAdminId } from "src/common/decorators";
 import { AccessTokenGuard, RefreshTokenGuard } from "src/common/guards";
-import { CreateUserDto } from "src/users/dto/createUser.dto";
-import { User } from "src/users/schemas/user.schema";
 import { AuthService } from "./auth.service";
 import { Tokens } from "./types";
 

@@ -8,7 +8,6 @@ import * as argon from "argon2";
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserDto } from "src/users/dto/createUser.dto";
 import { sendEmail } from "./emailHelpers";
-import { SendEmailCommand } from "@aws-sdk/client-ses";
 
 @Injectable()
 export class AuthService {
@@ -42,31 +41,35 @@ export class AuthService {
     const user = await this.userModel.findOne({ email: email }).exec();
     if (!user) {
       //Create new user in the database
-      const newUser = {
+      const newUser = await this.userModel.create({
         googleId: sub,
         email: email,
         firstName: given_name,
         lastName: family_name,
         isActivated: true,
-      };
-      await this.userModel.create(newUser);
-      const newUserInfo = {
+      });
+      const newUserInfo: ReturnUserInfo = {
+        userId: newUser._id,
         googleId: sub,
         email: email,
         firstName: given_name,
         lastName: family_name,
+        needConnection: false,
       };
       // Return the user info who has been created when logging
       return newUserInfo;
+    } else {
+      const userInfo: ReturnUserInfo = {
+        userId: user._id,
+        googleId: sub,
+        email: email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        needConnection: !user.googleId,
+      };
+      // Return the user who has already existed in the database
+      return userInfo;
     }
-    const userInfo = {
-      googleId: sub,
-      email: email,
-      firstName: given_name,
-      lastName: family_name,
-    };
-    // Return the user who has already existed in the database
-    return userInfo;
   }
 
   async userRegister(body): Promise<any> {
@@ -250,7 +253,7 @@ export class AuthService {
     };
     const atExp = {
       secret: process.env.ACCESS_TOKEN_SECRET,
-      expiresIn: 60 * 15, //15 mins expiration
+      expiresIn: 60 * 15, //15 min expiration
     };
 
     const rtExp = {

@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { CheckEmailDto } from "./dto/checkEmail.dto";
@@ -6,10 +6,13 @@ import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
 import { User } from "./schemas/user.schema";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { ConnectAccountDto } from "./dto/connectAccount.dto";
+import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
+
   /**
    * Get all users from database
    * @returns {[]:User}
@@ -57,11 +60,37 @@ export class UserService {
     }
     // Add new update date
     updateUserDto = { ...updateUserDto, updatedAt: new Date() };
-    const updatedUser = await await this.userModel
+    const updatedUser = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true })
       .exec();
     // return the user info which has been updated.
     return updatedUser;
+  }
+
+  /**
+   * connect account
+   * @param accountToConnect
+   * @returns {User}
+   */
+  async connectAccount(accountToConnect: ConnectAccountDto): Promise<ReturnUserInfo> {
+    const existingUser = await this.userModel.findOne({ email: accountToConnect.email }).exec();
+    const id = existingUser._id;
+    if (!existingUser || existingUser.isDeleted) {
+      throw new NotFoundException(`User ${id} not found`);
+    }
+    accountToConnect = { ...accountToConnect, updatedAt: new Date() };
+    const connectedAccount = await this.userModel
+      .findByIdAndUpdate({ _id: id }, { $set: accountToConnect }, { new: true })
+      .exec();
+    const userInfo: ReturnUserInfo = {
+      userId: connectedAccount._id,
+      googleId: connectedAccount.googleId,
+      email: connectedAccount.email,
+      firstName: connectedAccount.firstName,
+      lastName: connectedAccount.lastName,
+      needConnection: false,
+    };
+    return userInfo;
   }
 
   /**
@@ -86,10 +115,10 @@ export class UserService {
 
   /**
    * Check user existence by email
-   * @param {CheckEmailDto}
+   * @param emailDto
    */
   async checkEmail(emailDto: CheckEmailDto): Promise<boolean> {
     const foundUser = await this.userModel.find({ email: emailDto.email }).exec();
-    return foundUser.length > 0 ? true : false;
+    return foundUser.length > 0;
   }
 }

@@ -1,9 +1,11 @@
-import { Body, Controller, Get, HttpStatus, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Post, Put, Query } from "@nestjs/common";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 import { CheckEmailDto } from "./dto/checkEmail.dto";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { User } from "./schemas/user.schema";
 import { UserService } from "./user.service";
+import { ConnectAccountDto } from "./dto/connectAccount.dto";
+import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 
 @Controller("user")
 export class UserController {
@@ -22,5 +24,10 @@ export class UserController {
   async getAllUsers(@Query() paginationQuery: PaginationQueryDto): Promise<User[]> {
     const { limit, offset } = paginationQuery;
     return await this.userService.getAllUsers(paginationQuery);
+  }
+
+  @Put("connect")
+  async connectAccount(@Body() accountToConnect: ConnectAccountDto): Promise<ReturnUserInfo> {
+    return await this.userService.connectAccount(accountToConnect);
   }
 }

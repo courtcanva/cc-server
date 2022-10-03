@@ -68,3 +68,15 @@ export const userArray = [
     otpExpiresAt: null,
   },
 ];
+
+export const unconnectedAccount = {
+  googleId: null,
+  email: "test@example.com",
+  updatedAt: new Date(),
+};
+
+export const connectedAccount = {
+  googleId: "updatedGoogleId",
+  email: "test@example.com",
+  updatedAt: new Date(),
+};

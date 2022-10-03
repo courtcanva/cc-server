@@ -3,7 +3,7 @@ import { NotFoundException } from "@nestjs/common";
 import { getModelToken } from "@nestjs/mongoose";
 import { Test, TestingModule } from "@nestjs/testing";
 import { Model, Query } from "mongoose";
-import { updatedUser, user, userArray } from "./user.testData";
+import { connectedAccount, unconnectedAccount, updatedUser, userArray } from "./user.testData";
 import { User } from "./schemas/user.schema";
 import { UserService } from "./user.service";
 
@@ -121,5 +121,20 @@ describe("UserService", () => {
     );
     const status = await service.checkEmail({ email: "test@gmail.com" });
     expect(status).toEqual(false);
+  });
+
+  it("should update a user's google ID", async () => {
+    jest.spyOn(model, "findOne").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(unconnectedAccount),
+      }) as any,
+    );
+    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(connectedAccount),
+      }) as any,
+    );
+    const updatedUser = await service.connectAccount(unconnectedAccount);
+    expect(updatedUser.googleId).toEqual(connectedAccount.googleId);
   });
 });
