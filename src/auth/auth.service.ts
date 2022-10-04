@@ -111,10 +111,10 @@ export class AuthService {
     return respond;
   }
 
-  async userLogout(userId: ObjectId) {
-    const user = await this.userModel.findById(userId);
+  async userLogout(body) {
+    const user = await this.userModel.findById(body.userId);
     user.hashedRefreshToken &&
-      (await this.userModel.findByIdAndUpdate(userId, { hashedRefreshToken: null }));
+      (await this.userModel.findByIdAndUpdate(body.userId, { hashedRefreshToken: null }));
   }
 
   // one-time-password(OTP) Generator
@@ -229,7 +229,8 @@ export class AuthService {
   }
 
   //Jwt
-  async refreshTokens(userId: ObjectId, rt: string) {
+  async refreshTokens(body: { userId: string; rt: string }) {
+    const { userId, rt } = body;
     const user = await this.userModel.findById(userId);
     if (!user || !user.hashedRefreshToken) {
       throw new ForbiddenException("Access Denied");
@@ -246,19 +247,19 @@ export class AuthService {
     return tokens;
   }
 
-  async getTokens(adminId: ObjectId, email: string) {
+  async getTokens(userId: ObjectId, email: string) {
     const payload = {
-      sub: adminId,
+      sub: userId,
       email,
     };
     const atExp = {
       secret: process.env.ACCESS_TOKEN_SECRET,
-      expiresIn: 60 * 15, //15 min expiration
+      expiresIn: 10, //15 min expiration
     };
 
     const rtExp = {
       secret: process.env.REFRESH_TOKEN_SECRET,
-      expiresIn: 60 * 60 * 24 * 7, //one week expiration
+      expiresIn: 15, //one week expiration
     };
 
     const [at, rt] = await Promise.all([
@@ -276,7 +277,7 @@ export class AuthService {
     const hashedRefreshToken = await argon.hash(rt);
     const updateUserDto = {
       ...CreateUserDto,
-      hashedRefreshToken: hashedRefreshToken,
+      hashedRefreshToken,
       updatedAt: new Date(),
     };
     await this.userModel

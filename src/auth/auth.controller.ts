@@ -1,7 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
-import { ObjectId } from "mongoose";
-import { GetCurrentAdmin, GetCurrentAdminId } from "src/common/decorators";
-import { AccessTokenGuard, RefreshTokenGuard } from "src/common/guards";
+import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { Tokens } from "./types";
 
@@ -21,25 +18,20 @@ export class AuthController {
 
   @Post("login")
   @HttpCode(HttpStatus.OK)
-  adminSignIn(@Body() body): Promise<Tokens> {
+  clientSignIn(@Body() body): Promise<Tokens> {
     return this.authService.userLogin(body);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Post("logout")
   @HttpCode(HttpStatus.OK)
-  adminLogout(@GetCurrentAdminId() userId: ObjectId) {
-    return this.authService.userLogout(userId);
+  clientLogout(@Body() body) {
+    return this.authService.userLogout(body);
   }
 
-  @UseGuards(RefreshTokenGuard)
   @Post("refresh")
   @HttpCode(HttpStatus.OK)
-  refreshTokens(
-    @GetCurrentAdminId() userId: ObjectId,
-    @GetCurrentAdmin("refreshToken") refreshToken: string,
-  ) {
-    return this.authService.refreshTokens(userId, refreshToken);
+  refreshTokens(@Body() body) {
+    return this.authService.refreshTokens(body);
   }
 
   @Post("verifyOTP")
