@@ -229,8 +229,7 @@ export class AuthService {
   }
 
   //Jwt
-  async refreshTokens(body: { userId: string; rt: string }) {
-    const { userId, rt } = body;
+  async refreshTokens(userId: ObjectId, rt: string) {
     const user = await this.userModel.findById(userId);
     if (!user || !user.hashedRefreshToken) {
       throw new ForbiddenException("Access Denied");
@@ -254,12 +253,12 @@ export class AuthService {
     };
     const atExp = {
       secret: process.env.ACCESS_TOKEN_SECRET,
-      expiresIn: 10, //15 min expiration
+      expiresIn: 60 * 15, //15 min expiration
     };
 
     const rtExp = {
       secret: process.env.REFRESH_TOKEN_SECRET,
-      expiresIn: 15, //one week expiration
+      expiresIn: 60 * 60 * 24 * 7, //one week expiration
     };
 
     const [at, rt] = await Promise.all([
