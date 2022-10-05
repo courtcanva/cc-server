@@ -5,7 +5,6 @@ import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 export const GetCurrentClient = createParamDecorator(
   (data: any | undefined, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
-    // console.log(request);
     if (!data) {
       return request.user;
     }

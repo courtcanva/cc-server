@@ -6,7 +6,6 @@ import { JwtPayload } from "../../auth/types";
 export const GetCurrentClientId = createParamDecorator(
   (_: undefined, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
-    console.log(request);
     const client = request.user as JwtPayload;
     return client.sub;
   },
