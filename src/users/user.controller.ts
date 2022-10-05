@@ -14,6 +14,10 @@ export class UserController {
   async checkEmail(@Body() emailDto: CheckEmailDto): Promise<boolean> {
     return await this.userService.checkEmail(emailDto);
   }
+  @Post("delete")
+  async deleteUserByEmail(@Body() emailDto: CheckEmailDto): Promise<{ message?: string }> {
+    return await this.userService.deleteUserByEmail(emailDto);
+  }
 
   @Post()
   async create(@Body() createUser: CreateUserDto): Promise<User> {

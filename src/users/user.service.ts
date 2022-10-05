@@ -12,7 +12,6 @@ import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
-
   /**
    * Get all users from database
    * @returns {[]:User}
@@ -120,5 +119,17 @@ export class UserService {
   async checkEmail(emailDto: CheckEmailDto): Promise<boolean> {
     const foundUser = await this.userModel.find({ email: emailDto.email }).exec();
     return foundUser.length > 0;
+  }
+
+  /**
+   * delete user by email
+   * @param emailDto
+   */
+
+  async deleteUserByEmail(emailDto: CheckEmailDto): Promise<{ message?: string }> {
+    const DeleteUser = await this.userModel.deleteOne({ email: emailDto.email });
+    return DeleteUser.deletedCount > 0
+      ? { message: `User deleted successfully` }
+      : { message: `User no found` };
   }
 }
