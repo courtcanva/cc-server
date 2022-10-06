@@ -10,13 +10,9 @@ import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 @Controller("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Post()
+  @Post("status")
   async checkEmail(@Body() emailDto: CheckEmailDto): Promise<boolean> {
     return await this.userService.checkEmail(emailDto);
-  }
-  @Post("delete")
-  async deleteUserByEmail(@Body() emailDto: CheckEmailDto): Promise<{ message?: string }> {
-    return await this.userService.deleteUserByEmail(emailDto);
   }
 
   @Post()

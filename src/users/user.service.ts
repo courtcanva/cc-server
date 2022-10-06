@@ -114,22 +114,16 @@ export class UserService {
 
   /**
    * Check user existence by email
+   * Check if user is deleted and active by email
    * @param emailDto
    */
   async checkEmail(emailDto: CheckEmailDto): Promise<boolean> {
     const foundUser = await this.userModel.find({ email: emailDto.email }).exec();
-    return foundUser.length > 0;
-  }
-
-  /**
-   * delete user by email
-   * @param emailDto
-   */
-
-  async deleteUserByEmail(emailDto: CheckEmailDto): Promise<{ message?: string }> {
-    const DeleteUser = await this.userModel.deleteOne({ email: emailDto.email });
-    return DeleteUser.deletedCount > 0
-      ? { message: `User deleted successfully` }
-      : { message: `User no found` };
+    if (foundUser.length > 0) {
+      const user = await this.userModel.findOne({ email: emailDto.email }).exec();
+      const { isActivated, isDeleted } = user;
+      return !isActivated || isDeleted ? false : true;
+    }
+    return false;
   }
 }
