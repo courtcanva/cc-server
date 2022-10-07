@@ -5,6 +5,8 @@ import { User } from "src/users/schemas/user.schema";
 import { TemplateDocument, TemplateItem } from "./schemas/template.schema";
 import { TemplateItemDto } from "./dto/template.dto";
 import { ObjectId } from "mongoose";
+import { UpdateTemplateDto } from "./dto/updatedTemplate.dto";
+import { getAllTemplatesDto } from "./dto/getAllTemplate.dto";
 
 @Injectable()
 export class TemplateItemService {
@@ -13,8 +15,19 @@ export class TemplateItemService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async findAll(): Promise<TemplateItem[]> {
-    return await this.TemplateModel.find({});
+  async findAll(getAllTemplates: getAllTemplatesDto): Promise<TemplateItem[]> {
+    const { user_id, limit = 0, offset = 0 } = getAllTemplates;
+    const optionalQuery: { [key: string]: any } = {};
+    if (user_id) optionalQuery.user_id = user_id;
+    try {
+      return await this.TemplateModel.find({ isDeleted: false, ...optionalQuery })
+        .sort({ createdAt: -1 })
+        .skip(offset)
+        .limit(limit)
+        .exec();
+    } catch {
+      throw new NotFoundException("user_id cannot be empty string");
+    }
   }
 
   async getTemplateById(item_id: ObjectId): Promise<TemplateItem> {
@@ -28,7 +41,7 @@ export class TemplateItemService {
       );
     } catch {
       throw new NotFoundException({
-        message: " User template cannot be find ,please search again",
+        message: " User template cannot be found ,please search again",
       });
     }
   }
@@ -38,14 +51,19 @@ export class TemplateItemService {
     return newTemplate;
   }
 
-  //   removeTemplateByUser() {
-  //     return;
-  //   }
-  // NOTE: 是否添加update 的功能，update 的信息目前只有下架
-
-  //   updateTemplateByAdmin() {
-  //     return;
-  //   }
+  async update(id: ObjectId, updateTemplateDto: UpdateTemplateDto): Promise<TemplateItem> {
+    try {
+      return await this.TemplateModel.findByIdAndUpdate(
+        { _id: id },
+        { $set: updateTemplateDto, $currentDate: { updatedAt: true } },
+        { new: true },
+      ).exec();
+    } catch {
+      throw new NotFoundException({
+        message: " Template cannot be found,please search again",
+      });
+    }
+  }
 
   async remove(id: ObjectId): Promise<boolean> {
     try {
