@@ -1,3 +1,1 @@
-export class updateByAdminDto {
-  IsCensored: boolean;
-}
+export class updateByAdminDto {}

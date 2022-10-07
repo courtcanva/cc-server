@@ -3,10 +3,19 @@ import { Document } from "mongoose";
 
 export type TemplateDocument = TemplateItem & Document;
 
-// export enum StatusType {
-//   PUBLISHED = "published",
-//   UNAVAILABLE = "unavailable",
-// }
+export enum StatusType {
+  PUBLISHED = "published",
+  UNAVAILABLE = "unavailable",
+  CENSORING = "censoring",
+  ILLEGAL = "illegal",
+}
+
+export enum CourtCategory {
+  ProFullCourt,
+  FullCourt,
+  SmallCourt,
+  HalfCourt,
+}
 
 export class Design extends Document {
   @Prop({ type: String })
@@ -34,13 +43,6 @@ export class Design extends Document {
   };
 }
 
-export enum CourtCategory {
-  ProFullCourt,
-  FullCourt,
-  SmallCourt,
-  HalfCourt,
-}
-
 @Schema()
 export class TemplateItem {
   @Prop({ required: true })
@@ -54,18 +56,27 @@ export class TemplateItem {
   image: string;
 
   // 考虑下多层enum怎么写
-  @Prop({ type: String, enum: CourtCategory })
-  tags: CourtCategory;
+  @Prop({
+    type: String,
+    enum: [
+      CourtCategory.FullCourt,
+      CourtCategory.HalfCourt,
+      CourtCategory.ProFullCourt,
+      CourtCategory.SmallCourt,
+    ],
+  })
+  tags: string;
 
   @Prop({ type: Boolean, default: false })
   isOfficial: boolean;
 
-  // 有没有通过审核
-  @Prop({ type: Boolean, default: false })
-  isCensored: boolean;
-
-  //   @Prop({ type: StatusType, default: StatusType.UNAVAILABLE })
-  //   status: StatusType;
+  // 不确定是不是这么写，status仍然待讨论
+  @Prop({
+    type: String,
+    enum: [StatusType.CENSORING, StatusType.ILLEGAL, StatusType.PUBLISHED, StatusType.UNAVAILABLE],
+    default: StatusType.CENSORING,
+  })
+  status: string;
 
   @Prop({ type: String, default: "" })
   description: string;
