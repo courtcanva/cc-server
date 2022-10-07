@@ -5,8 +5,9 @@ import { User } from "src/users/schemas/user.schema";
 import { StatusType, TemplateDocument, TemplateItem } from "./schemas/template.schema";
 import { TemplateItemDto } from "./dto/template.dto";
 import { ObjectId } from "mongoose";
-import { UpdateTemplateDto } from "./dto/updatedTemplate.dto";
-import { getAllTemplatesDto } from "./dto/getAllTemplate.dto";
+import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
+import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
+import { SearchTemplateDto } from "./dto/searchTemplate.dto";
 
 @Injectable()
 export class TemplateItemService {
@@ -16,7 +17,8 @@ export class TemplateItemService {
   ) {}
 
   // get all the templates in database
-  async findAll(getAllTemplates: getAllTemplatesDto): Promise<TemplateItem[]> {
+  // 这个只是找到一个user自己全部的template。还需要一个搜索的，比如我需要找到所有full court的template
+  async findAll(getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
     try {
       const { user_id, limit = 0, offset = 0 } = getAllTemplates;
       const optionalQuery: { [key: string]: any } = {};
@@ -37,6 +39,21 @@ export class TemplateItemService {
     }
   }
 
+  // 需要修改，可改成万能搜索
+  // FIXME: 已经修改，看是否需要删掉这个
+  // 别删，我想看看和上面复杂的有啥区别
+  async findAll_(user_id: string): Promise<TemplateItem[]> {
+    try {
+      return (
+        await this.TemplateModel.find({ user_id: user_id }).sort({ createdAt: -1 }).exec()
+      ).filter((template) => template.isDeleted != true);
+    } catch {
+      throw new NotFoundException({
+        message: " User template cannot be found ,please search again",
+      });
+    }
+  }
+
   // get template by template id
   async getTemplateById(item_id: ObjectId): Promise<TemplateItem> {
     const templateItem = await this.TemplateModel.findById(item_id).exec();
@@ -44,20 +61,6 @@ export class TemplateItemService {
       throw new NotFoundException(`Template #${item_id} not found`);
     }
     return templateItem;
-  }
-
-  // 需要修改，可改成万能搜索
-  // FIXME: 已经修改，看是否需要删掉这个
-  async getTemplatesByUserId(user_id: string): Promise<TemplateItem[]> {
-    try {
-      return (await this.TemplateModel.find({ user_id: user_id }).exec()).filter(
-        (template) => template.isDeleted != true,
-      );
-    } catch {
-      throw new NotFoundException({
-        message: " User template cannot be found ,please search again",
-      });
-    }
   }
 
   async create(createNewTemplate: TemplateItemDto): Promise<TemplateItem> {
@@ -78,7 +81,7 @@ export class TemplateItemService {
       ).exec();
     } catch {
       throw new NotFoundException({
-        message: " Template cannot be found,please search again",
+        message: "Template cannot be found, please search again",
       });
     }
   }
@@ -92,6 +95,21 @@ export class TemplateItemService {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  async searchTemplate(searchTemplateDto: SearchTemplateDto): Promise<TemplateItem[]> {
+    try {
+      const { limit = 0, offset = 0 } = searchTemplateDto;
+      return await this.TemplateModel.find(searchTemplateDto)
+        .sort({ createdAt: -1 })
+        .skip(offset)
+        .limit(limit)
+        .exec();
+    } catch {
+      throw new NotFoundException({
+        message: "Nothing was found, please try to search something else!",
+      });
     }
   }
 }

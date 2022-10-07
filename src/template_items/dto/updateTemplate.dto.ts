@@ -1,7 +1,7 @@
 import { IsBoolean, IsEnum, IsNotEmpty, IsOptional } from "class-validator";
 import { StatusType } from "../schemas/template.schema";
 
-export class updateTemplate {
+export class UpdateTemplateDto {
   @IsOptional()
   @IsEnum(StatusType)
   @IsNotEmpty()
