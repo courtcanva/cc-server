@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Design } from "src/cart_items/schemas/cartItem.schema";
 import { Document } from "mongoose";
 
 export type TemplateDocument = TemplateItem & Document;
@@ -8,6 +7,39 @@ export type TemplateDocument = TemplateItem & Document;
 //   PUBLISHED = "published",
 //   UNAVAILABLE = "unavailable",
 // }
+
+export class Design extends Document {
+  @Prop({ type: String })
+  designer: string;
+
+  @Prop({ required: true })
+  designName: string;
+
+  @Prop({ type: Array, required: true })
+  tileColor: [{ location: string; color: string }];
+
+  @Prop({ type: Object, required: true })
+  courtSize: {
+    name: string;
+    length: number;
+    width: number;
+    centreCircleRadius: number;
+    threePointRadius: number;
+    threePointLine: number;
+    lengthOfCorner: number;
+    restrictedAreaLength: number;
+    restrictedAreaWidth: number;
+    sideBorderWidth: number;
+    lineBorderWidth: number;
+  };
+}
+
+export enum CourtCategory {
+  ProFullCourt,
+  FullCourt,
+  SmallCourt,
+  HalfCourt,
+}
 
 @Schema()
 export class TemplateItem {
@@ -22,8 +54,8 @@ export class TemplateItem {
   image: string;
 
   // 考虑下多层enum怎么写
-  @Prop()
-  tags: [];
+  @Prop({ type: String, enum: CourtCategory })
+  tags: CourtCategory;
 
   @Prop({ type: Boolean, default: false })
   isOfficial: boolean;

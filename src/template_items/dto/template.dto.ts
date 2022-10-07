@@ -2,7 +2,7 @@ import { Type } from "class-transformer";
 import { IsNotEmpty, IsObject, IsString, MaxLength, ValidateNested } from "class-validator";
 import { Design } from "src/cart_items/dto/create-cartItem.dto";
 
-export class CreateTemplateItemDto {
+export class TemplateItemDto {
   @IsString()
   @IsNotEmpty()
   readonly userId: string;
@@ -23,4 +23,7 @@ export class CreateTemplateItemDto {
   description: string;
 
   // automaticly generate the tags??? or manual input？
+
+  @IsString()
+  readonly tags: string;
 }
