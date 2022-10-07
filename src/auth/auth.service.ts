@@ -48,23 +48,31 @@ export class AuthService {
         lastName: family_name,
         isActivated: true,
       });
+      // get access token and refresh token
+      const ATandRT = await this.getTokens(newUser._id, newUser.email);
+      await this.updateRtHash(newUser._id, ATandRT.refreshToken);
       const newUserInfo: ReturnUserInfo = {
         userId: newUser._id,
         googleId: sub,
         email: email,
         firstName: given_name,
         lastName: family_name,
+        tokens: ATandRT,
         needConnection: false,
       };
       // Return the user info who has been created when logging
       return newUserInfo;
     } else {
+      // get access token and refresh token
+      const ATandRT = await this.getTokens(user._id, user.email);
+      await this.updateRtHash(user._id, ATandRT.refreshToken);
       const userInfo: ReturnUserInfo = {
         userId: user._id,
         googleId: sub,
         email: email,
         firstName: user.firstName,
         lastName: user.lastName,
+        tokens: ATandRT,
         needConnection: !user.googleId,
       };
       // Return the user who has already existed in the database

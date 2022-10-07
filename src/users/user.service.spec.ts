@@ -6,6 +6,9 @@ import { Model, Query } from "mongoose";
 import { connectedAccount, unconnectedAccount, updatedUser, userArray } from "./user.testData";
 import { User } from "./schemas/user.schema";
 import { UserService } from "./user.service";
+import { AuthService } from "src/auth/auth.service";
+import { ConfigModule } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
 
 describe("UserService", () => {
   let service: UserService;
@@ -13,8 +16,11 @@ describe("UserService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule.forRoot({ isGlobal: true })],
       providers: [
         UserService,
+        AuthService,
+        JwtService,
         {
           provide: getModelToken(User.name),
           useValue: {
@@ -127,6 +133,11 @@ describe("UserService", () => {
     jest.spyOn(model, "findOne").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(unconnectedAccount),
+      }) as any,
+    );
+    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(connectedAccount),
       }) as any,
     );
     jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
