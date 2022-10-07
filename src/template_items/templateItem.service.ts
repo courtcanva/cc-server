@@ -17,7 +17,11 @@ export class TemplateItemService {
     return await this.TemplateModel.find({});
   }
 
-  async find(user_id: string): Promise<TemplateItem[]> {
+  async getTemplateById(item_id: ObjectId): Promise<TemplateItem> {
+    return await this.TemplateModel.findById(item_id);
+  }
+
+  async getTemplatesByUserId(user_id: string): Promise<TemplateItem[]> {
     try {
       return (await this.TemplateModel.find({ user_id: user_id }).exec()).filter(
         (template) => template.isDeleted != true,
