@@ -15,6 +15,7 @@ export class TemplateItemController {
     return await this.templateItemsService.findAll(getAllTemplates);
   }
 
+  // 如何验证ObjectId？DTO还是自定义pipe
   @Get(":Id")
   async getTemplateById(@Param("id") item_id: ObjectId): Promise<TemplateItem> {
     return await this.templateItemsService.getTemplateById(item_id);

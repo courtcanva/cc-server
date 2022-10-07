@@ -11,10 +11,10 @@ export enum StatusType {
 }
 
 export enum CourtCategory {
-  ProFullCourt,
-  FullCourt,
-  SmallCourt,
-  HalfCourt,
+  PROFULL = "proFullCourt",
+  Full = "fullCourt",
+  SMALL = "smallCourt",
+  HALF = "halfCourt",
 }
 
 export class Design extends Document {
@@ -58,12 +58,7 @@ export class TemplateItem {
   // 考虑下多层enum怎么写
   @Prop({
     type: String,
-    enum: [
-      CourtCategory.FullCourt,
-      CourtCategory.HalfCourt,
-      CourtCategory.ProFullCourt,
-      CourtCategory.SmallCourt,
-    ],
+    enum: CourtCategory,
   })
   tags: string;
 
@@ -78,7 +73,7 @@ export class TemplateItem {
   })
   status: string;
 
-  @Prop({ type: String, default: "" })
+  @Prop({ type: String })
   description: string;
 
   @Prop({ type: Date, default: new Date() })

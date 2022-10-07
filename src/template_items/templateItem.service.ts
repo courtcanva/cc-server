@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { User } from "src/users/schemas/user.schema";
-import { TemplateDocument, TemplateItem } from "./schemas/template.schema";
+import { StatusType, TemplateDocument, TemplateItem } from "./schemas/template.schema";
 import { TemplateItemDto } from "./dto/template.dto";
 import { ObjectId } from "mongoose";
 import { UpdateTemplateDto } from "./dto/updatedTemplate.dto";
@@ -15,25 +15,39 @@ export class TemplateItemService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
+  // get all the templates in database
   async findAll(getAllTemplates: getAllTemplatesDto): Promise<TemplateItem[]> {
-    const { user_id, limit = 0, offset = 0 } = getAllTemplates;
-    const optionalQuery: { [key: string]: any } = {};
-    if (user_id) optionalQuery.user_id = user_id;
     try {
-      return await this.TemplateModel.find({ isDeleted: false, ...optionalQuery })
+      const { user_id, limit = 0, offset = 0 } = getAllTemplates;
+      const optionalQuery: { [key: string]: any } = {};
+      if (user_id) optionalQuery.user_id = user_id;
+      return await this.TemplateModel.find({
+        isDeleted: false,
+        status: StatusType.PUBLISHED,
+        ...optionalQuery,
+      })
         .sort({ createdAt: -1 })
         .skip(offset)
         .limit(limit)
         .exec();
-    } catch {
-      throw new NotFoundException("user_id cannot be empty string");
+    } catch (err) {
+      throw new NotFoundException({
+        message: "Something went wrong, pls try again",
+      });
     }
   }
 
+  // get template by template id
   async getTemplateById(item_id: ObjectId): Promise<TemplateItem> {
-    return await this.TemplateModel.findById(item_id);
+    const templateItem = await this.TemplateModel.findById(item_id).exec();
+    if (!templateItem) {
+      throw new NotFoundException(`Template #${item_id} not found`);
+    }
+    return templateItem;
   }
 
+  // 需要修改，可改成万能搜索
+  // FIXME: 已经修改，看是否需要删掉这个
   async getTemplatesByUserId(user_id: string): Promise<TemplateItem[]> {
     try {
       return (await this.TemplateModel.find({ user_id: user_id }).exec()).filter(
@@ -47,7 +61,11 @@ export class TemplateItemService {
   }
 
   async create(createNewTemplate: TemplateItemDto): Promise<TemplateItem> {
-    const newTemplate = await this.TemplateModel.create(createNewTemplate);
+    const newTemplate = await this.TemplateModel.create({
+      ...createNewTemplate,
+      createdAt: new Date(),
+      updateAt: new Date(),
+    });
     return newTemplate;
   }
 
