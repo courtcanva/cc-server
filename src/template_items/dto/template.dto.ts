@@ -2,6 +2,7 @@ import { Type } from "class-transformer";
 import {
   ArrayMinSize,
   IsArray,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsObject,
@@ -10,6 +11,7 @@ import {
   MaxLength,
   ValidateNested,
 } from "class-validator";
+import { CourtCategory } from "../schemas/template.schema";
 
 export class Color {
   @IsString()
@@ -97,12 +99,13 @@ export class TemplateItemDto {
   @Type(() => Design)
   readonly design: Design;
 
+  @IsOptional()
   @IsString()
   @MaxLength(200)
   readonly description: string;
 
   // automaticly generate the tags??? or manual input？
-
   @IsString()
+  @IsEnum(CourtCategory)
   readonly tags: string;
 }
