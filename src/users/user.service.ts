@@ -113,8 +113,8 @@ export class UserService {
   }
 
   /**
-   * Check user existence by email
-   * Check if user is deleted and active by email
+   * check if the users exist in database, if yes,
+   * Check if the user is not deleted and active by email.
    * @param emailDto
    */
   async checkEmail(emailDto: CheckEmailDto): Promise<boolean> {
