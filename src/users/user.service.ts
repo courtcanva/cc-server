@@ -122,7 +122,7 @@ export class UserService {
     if (foundUser.length > 0) {
       const user = await this.userModel.findOne({ email: emailDto.email }).exec();
       const { isActivated, isDeleted } = user;
-      return !isActivated || isDeleted ? false : true;
+      return isActivated && !isDeleted;
     }
     return false;
   }
