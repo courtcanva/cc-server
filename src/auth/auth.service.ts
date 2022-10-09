@@ -81,13 +81,22 @@ export class AuthService {
   }
 
   async userRegister(body): Promise<any> {
-    const hashedPassword = await argon.hash(body.password);
-    // generate user without otp info
-    const newUserInfo = {
-      ...body,
-      password: hashedPassword,
-    };
-    const newUser = await this.userModel.create(newUserInfo);
+    let newUser: User;
+    const existingUser = await this.userModel.findOne({ email: body.email }).exec();
+    if (existingUser) {
+      newUser = await this.userModel.findOneAndUpdate(
+        { email: existingUser.email },
+        { isDeleted: false },
+      );
+    } else {
+      const hashedPassword = await argon.hash(body.password);
+      // generate user without otp info
+      const newUserInfo = {
+        ...body,
+        password: hashedPassword,
+      };
+      newUser = await this.userModel.create(newUserInfo);
+    }
     const { _id, email } = newUser;
     const response = await this.sendOTPVerificationEmail(_id, email);
     return response;
