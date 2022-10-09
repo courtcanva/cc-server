@@ -87,15 +87,15 @@ export class UserService {
       .findByIdAndUpdate({ _id: id }, { $set: accountToConnect }, { new: true })
       .exec();
     // get access token and refresh token
-    const ATandRT = await this.authservice.getTokens(connectedAccount._id, connectedAccount.email);
-    await this.authservice.updateRtHash(connectedAccount._id, ATandRT.refreshToken);
+    const tokens = await this.authservice.getTokens(connectedAccount._id, connectedAccount.email);
+    await this.authservice.updateRtHash(connectedAccount._id, tokens.refreshToken);
     const userInfo: ReturnUserInfo = {
       userId: connectedAccount._id,
       googleId: connectedAccount.googleId,
       email: connectedAccount.email,
       firstName: connectedAccount.firstName,
       lastName: connectedAccount.lastName,
-      tokens: ATandRT,
+      tokens,
       needConnection: false,
     };
     return userInfo;

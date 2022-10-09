@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
 import { ObjectId } from "mongoose";
-import { GetCurrentClient, GetCurrentClientId } from "src/common/decorators";
+import { GetCurrentUserId, GetCurrentUser } from "src/common/decorators";
 import { RefreshTokenGuard } from "src/common/guards";
 import { AuthService } from "./auth.service";
 import { Tokens } from "./types";
@@ -35,8 +35,8 @@ export class AuthController {
   @Post("refresh")
   @HttpCode(HttpStatus.OK)
   refreshTokens(
-    @GetCurrentClientId() userId: ObjectId,
-    @GetCurrentClient("refreshToken") refreshToken: string,
+    @GetCurrentUserId() userId: ObjectId,
+    @GetCurrentUser("refreshToken") refreshToken: string,
   ) {
     return this.authService.refreshTokens(userId, refreshToken);
   }

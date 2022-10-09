@@ -2,7 +2,7 @@ import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 /**
  * Get user info from request
  */
-export const GetCurrentClient = createParamDecorator(
+export const GetCurrentUser = createParamDecorator(
   (data: any | undefined, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
     if (!data) {
