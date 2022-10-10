@@ -10,11 +10,23 @@ export enum StatusType {
   ILLEGAL = "illegal",
 }
 
-export type CourtCategory = "proFullCourt" | "fullCourt" | "smallCourt" | "halfCourt";
+export enum CourtCategory {
+  PFC = "proFullCourt",
+  FC = "fullCourt",
+  SC = "smallCourt",
+  HF = "halfCourt",
+}
 
-export type CourtSubcategory = "28m×15m" | "10m×7m" | "9m×5m";
+export enum CourtType {
+  BASKETBALL = "basketball",
+  TENIS = "tenis",
+}
 
-type TagsOptions = CourtCategory | CourtSubcategory;
+// export type CourtCategory = "proFullCourt" | "fullCourt" | "smallCourt" | "halfCourt";
+
+// export type CourtSubcategory = "28m×15m" | "10m×7m" | "9m×5m";
+
+// type TagsOptions = CourtCategory | CourtSubcategory;
 
 export class Design extends Document {
   @Prop({ type: String })
@@ -42,12 +54,24 @@ export class Design extends Document {
   };
 }
 
+// export class Tags extends Document {
+//   @Prop({ type: String })
+//   CourtCategory: TagsOptions;
+
+//   @Prop({ type: String })
+//   CourtSize: TagsOptions;
+// }
+
+// 我觉得都使用Object来储存tags，那就没必要合并tags的type了
+// 在type能找到合适的检验对错的情况下，先用enum
+// enum的dto过滤我改好了，但是存数据库之前的验证还是有问题
+
 export class Tags extends Document {
   @Prop({ type: String })
-  CourtCategory: TagsOptions;
+  CourtCategory: CourtCategory;
 
   @Prop({ type: String })
-  CourtSize: TagsOptions;
+  CourtType: CourtType;
 }
 
 @Schema()
@@ -74,7 +98,7 @@ export class TemplateItem {
   // 不确定是不是这么写，status仍然待讨论
   @Prop({
     type: String,
-    enum: [StatusType.CENSORING, StatusType.ILLEGAL, StatusType.PUBLISHED, StatusType.UNAVAILABLE],
+    enum: StatusType,
     default: StatusType.CENSORING,
   })
   status: string;

@@ -14,17 +14,18 @@ export class TemplateItemController {
   @Get()
   async getAllTemplates(@Query() getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
     return await this.templateItemsService.findAll(getAllTemplates);
-    // return await this.templateItemsService.findAll_(getAllTemplates);
   }
 
+  // 考虑到后续的search功能，这个得删掉和seatch合并
+  // 同一个路径不能有两个get方法
+  // 还有一种方法就是给每个装饰器多加一层路径
+  // 需要讨论
   @Get(":Id")
   async getTemplateById(@Param("id") item_id: ObjectId): Promise<TemplateItem> {
     return await this.templateItemsService.getTemplateById(item_id);
   }
 
-  // 这个可以考虑改一下，改成万能查询，利用query，还可以吧findAll给合并进来
-  // 有了getALL 是不是这个就不需要了？
-  // 改成search了
+  // 待讨论
   @Get()
   async searchTemplates(@Query() searchTemplateDto: SearchTemplateDto): Promise<TemplateItem[]> {
     return await this.templateItemsService.searchTemplate(searchTemplateDto);

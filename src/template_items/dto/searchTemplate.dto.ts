@@ -1,13 +1,15 @@
-import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsBoolean, IsNotEmpty, IsOptional, ValidateNested } from "class-validator";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
-import { CourtCategory } from "../schemas/template.schema";
+import { Tags } from "./template.dto";
 
 // 这个改成搜索的dto
 export class SearchTemplateDto extends PaginationQueryDto {
   @IsNotEmpty()
-  // @IsEnum(CourtCategory)
   @IsOptional()
-  tags: string;
+  @ValidateNested({ each: true })
+  @Type(() => Tags)
+  tags: Tags;
 
   @IsBoolean()
   @IsOptional()

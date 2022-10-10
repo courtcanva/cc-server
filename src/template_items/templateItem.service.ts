@@ -16,22 +16,33 @@ export class TemplateItemService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  // get all the templates in database
-  // 这个只是找到一个user自己全部的template。还需要一个搜索的，比如我需要找到所有full court的template
+  // 考虑到user可以查看自己template的状态（下架，违法，上架，审核中）这个逻辑还有问题
+  // 我修改了下
+  // 当userId存在的时候，说明是user想找自己的template，所以除了违法的都返回给他
+  // 当userId不存在的时候，说明是社区页面需要获取服务器里所有的templates，所以返回所有上架的templates
+  // 但是直接返回所有doc，肯定offset和limit有问题，需要结合以后的需求讨论
+  // 待讨论
   async findAll(getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
     try {
       const { user_id, limit = 0, offset = 0 } = getAllTemplates;
       const optionalQuery: { [key: string]: any } = {};
+
       if (user_id) optionalQuery.user_id = user_id;
-      return await this.TemplateModel.find({
+
+      const response = await this.TemplateModel.find({
         isDeleted: false,
-        status: StatusType.PUBLISHED,
         ...optionalQuery,
       })
         .sort({ createdAt: -1 })
         .skip(offset)
         .limit(limit)
         .exec();
+
+      if (user_id) {
+        return response.filter((res) => res.status !== StatusType.ILLEGAL);
+      } else {
+        return response.filter((res) => res.status === StatusType.PUBLISHED);
+      }
     } catch (err) {
       throw new NotFoundException({
         message: "Something went wrong, pls try again",
@@ -39,24 +50,15 @@ export class TemplateItemService {
     }
   }
 
-  // 需要修改，可改成万能搜索
-  // FIXME: 已经修改，看是否需要删掉这个
-  // 别删，我想看看和上面复杂的有啥区别
-  // async findAll_(user_id: string): Promise<TemplateItem[]> {
-  //   try {
-  //     return (
-  //       await this.TemplateModel.find({ user_id: user_id }).sort({ createdAt: -1 }).exec()
-  //     ).filter((template) => template.isDeleted != true);
-  //   } catch {
-  //     throw new NotFoundException({
-  //       message: " User template cannot be found ,please search again",
-  //     });
-  //   }
-  // }
+  // 下面这坨我删了，我懂Derek的良苦用心了
 
+  // 待修改
   // get template by template id
   async getTemplateById(item_id: ObjectId): Promise<TemplateItem> {
-    const templateItem = await this.TemplateModel.findById(item_id).exec();
+    const templateItem = await this.TemplateModel.findOne({
+      _id: item_id,
+      isDeleted: false,
+    }).exec();
     if (!templateItem) {
       throw new NotFoundException(`Template #${item_id} not found`);
     }
@@ -75,8 +77,11 @@ export class TemplateItemService {
 
   async update(id: ObjectId, updateTemplateDto: UpdateTemplateDto): Promise<TemplateItem> {
     try {
-      return await this.TemplateModel.findByIdAndUpdate(
-        { _id: id },
+      return await this.TemplateModel.findOneAndUpdate(
+        {
+          _id: id,
+          isDeleted: false,
+        },
         { $set: updateTemplateDto, $currentDate: { updatedAt: true } },
         { new: true },
       ).exec();
@@ -90,8 +95,14 @@ export class TemplateItemService {
   async remove(id: ObjectId): Promise<boolean> {
     try {
       await this.TemplateModel.findOneAndUpdate(
-        { _id: id },
-        { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
+        {
+          _id: id,
+          isDeleted: false,
+        },
+        {
+          $set: { isDeleted: true },
+          $currentDate: { updatedAt: true },
+        },
       );
       return true;
     } catch {
@@ -99,6 +110,7 @@ export class TemplateItemService {
     }
   }
 
+  // 待修改
   async searchTemplate(searchTemplateDto: SearchTemplateDto): Promise<TemplateItem[]> {
     try {
       const { limit = 0, offset = 0 } = searchTemplateDto;
