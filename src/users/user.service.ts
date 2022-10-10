@@ -8,10 +8,15 @@ import { User } from "./schemas/user.schema";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 import { ConnectAccountDto } from "./dto/connectAccount.dto";
 import { ReturnUserInfo } from "../auth/ReturnUserInfo";
+import { AuthService } from "src/auth/auth.service";
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly authservice: AuthService,
+  ) {}
+
   /**
    * Get all users from database
    * @returns {[]:User}
@@ -81,12 +86,16 @@ export class UserService {
     const connectedAccount = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: accountToConnect }, { new: true })
       .exec();
+    // get access token and refresh token
+    const tokens = await this.authservice.getTokens(connectedAccount._id, connectedAccount.email);
+    await this.authservice.updateRtHash(connectedAccount._id, tokens.refreshToken);
     const userInfo: ReturnUserInfo = {
       userId: connectedAccount._id,
       googleId: connectedAccount.googleId,
       email: connectedAccount.email,
       firstName: connectedAccount.firstName,
       lastName: connectedAccount.lastName,
+      tokens,
       needConnection: false,
     };
     return userInfo;
