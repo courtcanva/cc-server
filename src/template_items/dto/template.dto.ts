@@ -2,7 +2,6 @@ import { Type } from "class-transformer";
 import {
   ArrayMinSize,
   IsArray,
-  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsObject,
@@ -11,9 +10,8 @@ import {
   MaxLength,
   ValidateNested,
 } from "class-validator";
-import { CourtCategory } from "../schemas/template.schema";
 
-export class Color {
+class Color {
   @IsString()
   @IsNotEmpty()
   location: string;
@@ -23,7 +21,7 @@ export class Color {
   color: string;
 }
 
-export class CourtSize {
+class CourtSize {
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -61,7 +59,7 @@ export class CourtSize {
   lineBorderWidth: number;
 }
 
-export class Design {
+class Design {
   @IsString()
   @IsOptional()
   readonly designer?: string;
@@ -84,14 +82,22 @@ export class Design {
   readonly courtSize: CourtSize;
 }
 
+class Tags {
+  @IsString()
+  @IsOptional()
+  @IsNotEmpty()
+  CourtCategory: string;
+
+  @IsString()
+  @IsOptional()
+  @IsNotEmpty()
+  CourtSize: string;
+}
+
 export class TemplateItemDto {
   @IsString()
   @IsNotEmpty()
-  readonly userId: string;
-
-  @IsString()
-  @IsNotEmpty()
-  readonly image: string;
+  readonly user_id: string;
 
   @IsObject()
   @IsNotEmpty()
@@ -99,13 +105,21 @@ export class TemplateItemDto {
   @Type(() => Design)
   readonly design: Design;
 
+  @IsString()
+  @IsNotEmpty()
+  readonly image: string;
+
   @IsOptional()
   @IsString()
   @MaxLength(200)
   readonly description: string;
 
   // automaticly generate the tags??? or manual input？
-  @IsString()
-  @IsEnum(CourtCategory)
-  readonly tags: string;
+  // @IsString()
+  // @IsEnum(CourtCategory)
+  @IsObject()
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => Tags)
+  readonly tags: Tags;
 }

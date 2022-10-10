@@ -10,12 +10,11 @@ export enum StatusType {
   ILLEGAL = "illegal",
 }
 
-export enum CourtCategory {
-  PROFULL = "proFullCourt",
-  Full = "fullCourt",
-  SMALL = "smallCourt",
-  HALF = "halfCourt",
-}
+export type CourtCategory = "proFullCourt" | "fullCourt" | "smallCourt" | "halfCourt";
+
+export type CourtSubcategory = "28m×15m" | "10m×7m" | "9m×5m";
+
+type TagsOptions = CourtCategory | CourtSubcategory;
 
 export class Design extends Document {
   @Prop({ type: String })
@@ -43,6 +42,14 @@ export class Design extends Document {
   };
 }
 
+export class Tags extends Document {
+  @Prop({ type: String })
+  CourtCategory: TagsOptions;
+
+  @Prop({ type: String })
+  CourtSize: TagsOptions;
+}
+
 @Schema()
 export class TemplateItem {
   @Prop({ required: true })
@@ -55,12 +62,11 @@ export class TemplateItem {
   @Prop({ type: String })
   image: string;
 
+  @Prop({ type: String })
+  description: string;
   // 考虑下多层enum怎么写
-  @Prop({
-    type: String,
-    enum: CourtCategory,
-  })
-  tags: string;
+  @Prop({ type: Tags })
+  tags: Tags;
 
   @Prop({ type: Boolean, default: false })
   isOfficial: boolean;
@@ -72,9 +78,6 @@ export class TemplateItem {
     default: StatusType.CENSORING,
   })
   status: string;
-
-  @Prop({ type: String })
-  description: string;
 
   @Prop({ type: Date, default: new Date() })
   createdAt: Date;

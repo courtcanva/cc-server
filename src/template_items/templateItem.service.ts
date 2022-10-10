@@ -42,17 +42,17 @@ export class TemplateItemService {
   // 需要修改，可改成万能搜索
   // FIXME: 已经修改，看是否需要删掉这个
   // 别删，我想看看和上面复杂的有啥区别
-  async findAll_(user_id: string): Promise<TemplateItem[]> {
-    try {
-      return (
-        await this.TemplateModel.find({ user_id: user_id }).sort({ createdAt: -1 }).exec()
-      ).filter((template) => template.isDeleted != true);
-    } catch {
-      throw new NotFoundException({
-        message: " User template cannot be found ,please search again",
-      });
-    }
-  }
+  // async findAll_(user_id: string): Promise<TemplateItem[]> {
+  //   try {
+  //     return (
+  //       await this.TemplateModel.find({ user_id: user_id }).sort({ createdAt: -1 }).exec()
+  //     ).filter((template) => template.isDeleted != true);
+  //   } catch {
+  //     throw new NotFoundException({
+  //       message: " User template cannot be found ,please search again",
+  //     });
+  //   }
+  // }
 
   // get template by template id
   async getTemplateById(item_id: ObjectId): Promise<TemplateItem> {
@@ -69,6 +69,7 @@ export class TemplateItemService {
       createdAt: new Date(),
       updateAt: new Date(),
     });
+
     return newTemplate;
   }
 

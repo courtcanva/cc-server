@@ -5,7 +5,7 @@ import { CourtCategory } from "../schemas/template.schema";
 // 这个改成搜索的dto
 export class SearchTemplateDto extends PaginationQueryDto {
   @IsNotEmpty()
-  @IsEnum(CourtCategory)
+  // @IsEnum(CourtCategory)
   @IsOptional()
   tags: string;
 
