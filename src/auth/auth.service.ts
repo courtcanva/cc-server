@@ -48,23 +48,31 @@ export class AuthService {
         lastName: family_name,
         isActivated: true,
       });
+      // get access token and refresh token
+      const tokens = await this.getTokens(newUser._id, newUser.email);
+      await this.updateRtHash(newUser._id, tokens.refreshToken);
       const newUserInfo: ReturnUserInfo = {
         userId: newUser._id,
         googleId: sub,
         email: email,
         firstName: given_name,
         lastName: family_name,
+        tokens,
         needConnection: false,
       };
       // Return the user info who has been created when logging
       return newUserInfo;
     } else {
+      // get access token and refresh token
+      const tokens = await this.getTokens(user._id, user.email);
+      await this.updateRtHash(user._id, tokens.refreshToken);
       const userInfo: ReturnUserInfo = {
         userId: user._id,
         googleId: sub,
         email: email,
         firstName: user.firstName,
         lastName: user.lastName,
+        tokens,
         needConnection: !user.googleId,
       };
       // Return the user who has already existed in the database
@@ -73,13 +81,22 @@ export class AuthService {
   }
 
   async userRegister(body): Promise<any> {
-    const hashedPassword = await argon.hash(body.password);
-    // generate user without otp info
-    const newUserInfo = {
-      ...body,
-      password: hashedPassword,
-    };
-    const newUser = await this.userModel.create(newUserInfo);
+    let newUser: User;
+    const existingUser = await this.userModel.findOne({ email: body.email }).exec();
+    if (existingUser) {
+      newUser = await this.userModel.findOneAndUpdate(
+        { email: existingUser.email },
+        { isDeleted: false },
+      );
+    } else {
+      const hashedPassword = await argon.hash(body.password);
+      // generate user without otp info
+      const newUserInfo = {
+        ...body,
+        password: hashedPassword,
+      };
+      newUser = await this.userModel.create(newUserInfo);
+    }
     const { _id, email } = newUser;
     const response = await this.sendOTPVerificationEmail(_id, email);
     return response;
@@ -111,7 +128,8 @@ export class AuthService {
     return respond;
   }
 
-  async userLogout(userId: ObjectId) {
+  async userLogout(body) {
+    const { userId } = body;
     const user = await this.userModel.findById(userId);
     user.hashedRefreshToken &&
       (await this.userModel.findByIdAndUpdate(userId, { hashedRefreshToken: null }));
@@ -246,9 +264,9 @@ export class AuthService {
     return tokens;
   }
 
-  async getTokens(adminId: ObjectId, email: string) {
+  async getTokens(userId: ObjectId, email: string) {
     const payload = {
-      sub: adminId,
+      sub: userId,
       email,
     };
     const atExp = {
@@ -276,7 +294,7 @@ export class AuthService {
     const hashedRefreshToken = await argon.hash(rt);
     const updateUserDto = {
       ...CreateUserDto,
-      hashedRefreshToken: hashedRefreshToken,
+      hashedRefreshToken,
       updatedAt: new Date(),
     };
     await this.userModel
