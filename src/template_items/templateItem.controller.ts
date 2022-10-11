@@ -5,7 +5,7 @@ import { ObjectId } from "mongoose";
 import { TemplateItemDto } from "./dto/template.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
-import { SearchTemplateDto } from "./dto/searchTemplate.dto";
+// import { SearchTemplateDto } from "./dto/searchTemplate.dto";
 
 @Controller("templates")
 export class TemplateItemController {
@@ -26,10 +26,10 @@ export class TemplateItemController {
   }
 
   // 待讨论
-  @Get()
-  async searchTemplates(@Query() searchTemplateDto: SearchTemplateDto): Promise<TemplateItem[]> {
-    return await this.templateItemsService.searchTemplate(searchTemplateDto);
-  }
+  // @Get()
+  // async searchTemplates(@Query() searchTemplateDto: SearchTemplateDto): Promise<TemplateItem[]> {
+  //   return await this.templateItemsService.searchTemplate(searchTemplateDto);
+  // }
 
   @Post()
   async create(@Body() createTemplateDto: TemplateItemDto): Promise<TemplateItem> {

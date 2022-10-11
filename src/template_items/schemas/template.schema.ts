@@ -19,7 +19,7 @@ export enum CourtCategory {
 
 export enum CourtType {
   BASKETBALL = "basketball",
-  TENIS = "tenis",
+  TENNIS = "tennis",
 }
 
 // export type CourtCategory = "proFullCourt" | "fullCourt" | "smallCourt" | "halfCourt";
