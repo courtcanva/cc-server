@@ -3,7 +3,13 @@ import { NotFoundException } from "@nestjs/common";
 import { getModelToken } from "@nestjs/mongoose";
 import { Test, TestingModule } from "@nestjs/testing";
 import { Model, Query } from "mongoose";
-import { connectedAccount, unconnectedAccount, updatedUser, userArray } from "./user.testData";
+import {
+  connectedAccount,
+  unconnectedAccount,
+  updatedUser,
+  user,
+  userArray,
+} from "./user.testData";
 import { User } from "./schemas/user.schema";
 import { UserService } from "./user.service";
 import { AuthService } from "src/auth/auth.service";
@@ -147,5 +153,49 @@ describe("UserService", () => {
     );
     const updatedUser = await service.connectAccount(unconnectedAccount);
     expect(updatedUser.googleId).toEqual(connectedAccount.googleId);
+  });
+
+  it("should update a user's password by id", async () => {
+    jest.spyOn(model, "findById").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(user),
+      }) as any,
+    );
+    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(updatedUser),
+      }) as any,
+    );
+    const updatedAccount = await service.updateUser({
+      userId: user.id,
+      password: updatedUser.password,
+      firstName: undefined,
+      lastName: undefined,
+      email: undefined,
+      updatedAt: undefined,
+    });
+    expect(updatedAccount.password).toEqual(updatedUser.password);
+  });
+
+  it("should update a user's password by email", async () => {
+    jest.spyOn(model, "findOne").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(user),
+      }) as any,
+    );
+    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(updatedUser),
+      }) as any,
+    );
+    const updatedAccount = await service.updateUser({
+      userId: undefined,
+      password: updatedUser.password,
+      firstName: undefined,
+      lastName: undefined,
+      email: user.email,
+      updatedAt: undefined,
+    });
+    expect(updatedAccount.password).toEqual(updatedUser.password);
   });
 });

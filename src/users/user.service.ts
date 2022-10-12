@@ -60,17 +60,17 @@ export class UserService {
     let id = updateUserDto.userId;
     const email = updateUserDto.email;
     const password = updateUserDto.password;
-    let existingUser = null;
-    if (id != undefined) {
-      existingUser = await this.userModel.findById(id).exec();
-    } else if (email != undefined) {
-      existingUser = await this.userModel.findOne({ email: email }).exec();
+    let user = null;
+    if (id) {
+      user = await this.userModel.findById(id).exec();
+    } else if (email) {
+      user = await this.userModel.findOne({ email: email }).exec();
     }
     // if there is no such a user or the user has been deleted, then throw an error.
-    if (!existingUser || existingUser.isDeleted) {
+    if (!user || user.isDeleted) {
       throw new NotFoundException(`User not found`);
     }
-    id = id ? id : existingUser._id;
+    id = id ? id : user._id;
     const hashedPassword = password ? await argon.hash(password) : null;
     // Add new update date
     updateUserDto = { ...updateUserDto, updatedAt: new Date() };
