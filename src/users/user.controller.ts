@@ -11,7 +11,10 @@ import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post("status")
-  async checkEmail(@Body() emailDto: CheckEmailDto): Promise<boolean> {
+  async checkEmail(@Body() emailDto: CheckEmailDto): Promise<{
+    findUser: boolean;
+    needPwd: boolean;
+  }> {
     return await this.userService.checkEmail(emailDto);
   }
 
