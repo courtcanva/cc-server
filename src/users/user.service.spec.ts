@@ -120,13 +120,13 @@ describe("UserService", () => {
   });
 
   it("should check user by email", async () => {
-    jest.spyOn(model, "find").mockReturnValueOnce(
+    jest.spyOn(model, "findOne").mockReturnValueOnce(
       createMock<Query<any, any>>({
-        exec: jest.fn().mockResolvedValueOnce(userArray[0]),
+        exec: jest.fn().mockResolvedValueOnce(null),
       }) as any,
     );
-    const status = await service.checkEmail({ email: "test@gmail.com" });
-    expect(status).toEqual(false);
+    const status = await service.checkEmail({ email: "null@gmail.com" });
+    expect(status.findUser).toEqual(false);
   });
 
   it("should update a user's google ID", async () => {

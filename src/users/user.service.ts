@@ -122,17 +122,24 @@ export class UserService {
   }
 
   /**
-   * check if the users exist in database, if yes,
-   * Check if the user is not deleted and active by email.
+   * @findUser false if the user needs registration, true if not
+   * @needPwd
    * @param emailDto
    */
-  async checkEmail(emailDto: CheckEmailDto): Promise<boolean> {
-    const foundUser = await this.userModel.find({ email: emailDto.email }).exec();
-    if (foundUser.length > 0) {
-      const user = await this.userModel.findOne({ email: emailDto.email }).exec();
-      const { isActivated, isDeleted } = user;
-      return isActivated && !isDeleted;
+  async checkEmail(emailDto: CheckEmailDto): Promise<{
+    findUser: boolean;
+    needPwd: boolean;
+  }> {
+    const user = await this.userModel.findOne({ email: emailDto.email }).exec();
+    if (user) {
+      return {
+        findUser: user.isActivated && !user.isDeleted,
+        needPwd: !user.password,
+      };
     }
-    return false;
+    return {
+      findUser: false,
+      needPwd: false,
+    };
   }
 }
