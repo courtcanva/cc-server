@@ -9,12 +9,13 @@ import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto
 import { ConnectAccountDto } from "./dto/connectAccount.dto";
 import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 import { AuthService } from "src/auth/auth.service";
+import * as argon from "argon2";
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
-    private readonly authservice: AuthService,
+    private readonly authService: AuthService,
   ) {}
 
   /**
@@ -51,19 +52,29 @@ export class UserService {
   }
 
   /**
-   * Update user by ID
-   * @param {CreateUserDto}id
+   * Update user by id or email
    * @param updateUserDto
    * @returns {User}
    */
-  async updateUserById(id: ObjectId, updateUserDto: UpdateUserDto): Promise<User> {
-    const existingUser = await this.userModel.findById(id).exec();
+  async updateUser(updateUserDto: UpdateUserDto): Promise<User> {
+    let id = updateUserDto.userId;
+    const email = updateUserDto.email;
+    const password = updateUserDto.password;
+    let existingUser = null;
+    if (id != undefined) {
+      existingUser = await this.userModel.findById(id).exec();
+    } else if (email != undefined) {
+      existingUser = await this.userModel.findOne({ email: email }).exec();
+    }
     // if there is no such a user or the user has been deleted, then throw an error.
     if (!existingUser || existingUser.isDeleted) {
-      throw new NotFoundException(`User ${id} not found`);
+      throw new NotFoundException(`User not found`);
     }
+    id = id ? id : existingUser._id;
+    const hashedPassword = password ? await argon.hash(password) : null;
     // Add new update date
     updateUserDto = { ...updateUserDto, updatedAt: new Date() };
+    updateUserDto = hashedPassword ? { ...updateUserDto, password: hashedPassword } : updateUserDto;
     const updatedUser = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true })
       .exec();
@@ -87,8 +98,8 @@ export class UserService {
       .findByIdAndUpdate({ _id: id }, { $set: accountToConnect }, { new: true })
       .exec();
     // get access token and refresh token
-    const tokens = await this.authservice.getTokens(connectedAccount._id, connectedAccount.email);
-    await this.authservice.updateRtHash(connectedAccount._id, tokens.refreshToken);
+    const tokens = await this.authService.getTokens(connectedAccount._id, connectedAccount.email);
+    await this.authService.updateRtHash(connectedAccount._id, tokens.refreshToken);
     const userInfo: ReturnUserInfo = {
       userId: connectedAccount._id,
       googleId: connectedAccount.googleId,

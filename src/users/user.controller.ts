@@ -6,6 +6,7 @@ import { User } from "./schemas/user.schema";
 import { UserService } from "./user.service";
 import { ConnectAccountDto } from "./dto/connectAccount.dto";
 import { ReturnUserInfo } from "../auth/ReturnUserInfo";
+import { UpdateUserDto } from "./dto/updateUser.dto";
 
 @Controller("user")
 export class UserController {
@@ -27,6 +28,11 @@ export class UserController {
   async getAllUsers(@Query() paginationQuery: PaginationQueryDto): Promise<User[]> {
     const { limit, offset } = paginationQuery;
     return await this.userService.getAllUsers(paginationQuery);
+  }
+
+  @Put()
+  async update(@Body() updateUser: UpdateUserDto) {
+    return await this.userService.updateUser(updateUser);
   }
 
   @Put("connect")
