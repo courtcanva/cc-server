@@ -13,7 +13,7 @@ export class TemplateItemController {
 
   @Get()
   async getAllTemplates(@Query() getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
-    return await this.templateItemsService.findAll(getAllTemplates);
+    return await this.templateItemsService.getAllTemplates(getAllTemplates);
   }
 
   // 考虑到后续的search功能，这个得删掉和seatch合并

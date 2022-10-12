@@ -22,7 +22,7 @@ export class TemplateItemService {
   // 当userId不存在的时候，说明是社区页面需要获取服务器里所有的templates，所以返回所有上架的templates
   // 但是直接返回所有doc，肯定offset和limit有问题，需要结合以后的需求讨论
   // 待讨论
-  async findAll(getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
+  async getAllTemplates(getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
     try {
       const { user_id, limit = 0, offset = 0 } = getAllTemplates;
       const optionalQuery: { [key: string]: any } = {};
@@ -38,7 +38,7 @@ export class TemplateItemService {
         .limit(limit)
         .exec();
 
-      if (user_id) {
+      if (user_id && response) {
         return response.filter((res) => res.status !== StatusType.ILLEGAL);
       } else {
         return response.filter((res) => res.status === StatusType.PUBLISHED);

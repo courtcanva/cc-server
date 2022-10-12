@@ -44,17 +44,17 @@ describe("TemplateItemController", () => {
   });
 
   // FIXME:有bug 待修复
-  // describe("getAllTemplates", () => {
-  //   it("should get all template items in a given user id with pagination", () => {
-  //     const user_id = "123456";
-  //     const getAllTemplatesDto: GetAllTemplatesDto = {
-  //       user_id: user_id,
-  //       limit: 3,
-  //       offset: 2,
-  //     };
-  //     expect(controller.getAllTemplates(getAllTemplatesDto)).resolves.toEqual([mockTemplateItem]);
-  //   });
-  // });
+  describe("getAllTemplates", () => {
+    it("should get all template items in a given user id with pagination", () => {
+      const user_id = "123456";
+      const getAllTemplatesDto: GetAllTemplatesDto = {
+        user_id: user_id,
+        limit: 3,
+        offset: 2,
+      };
+      expect(controller.getAllTemplates(getAllTemplatesDto)).resolves.toEqual([mockTemplateItem]);
+    });
+  });
 
   describe("getTemplateById", () => {
     it("should get a template item in a given objectId", () => {
