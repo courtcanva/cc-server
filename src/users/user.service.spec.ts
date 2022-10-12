@@ -198,4 +198,32 @@ describe("UserService", () => {
     });
     expect(updatedAccount.password).toEqual(updatedUser.password);
   });
+
+  it("should fail to update a user's password if no id or password", async () => {
+    jest.spyOn(model, "findById").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      }) as any,
+    );
+    jest.spyOn(model, "findOne").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      }) as any,
+    );
+    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      }) as any,
+    );
+    await expect(
+      service.updateUser({
+        userId: undefined,
+        password: updatedUser.password,
+        firstName: undefined,
+        lastName: undefined,
+        email: undefined,
+        updatedAt: undefined,
+      }),
+    ).rejects.toThrow(`User not found`);
+  });
 });
