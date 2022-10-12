@@ -133,8 +133,8 @@ export class UserService {
   }
 
   /**
-   * @findUser false if the user needs registration, true if not
-   * @needPwd
+   * @findUser false if the user needs registration
+   * @needPwd true if the user registered through google and does not have password
    * @param emailDto
    */
   async checkEmail(emailDto: CheckEmailDto): Promise<{
