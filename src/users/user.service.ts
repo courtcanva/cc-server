@@ -140,17 +140,28 @@ export class UserService {
   async checkEmail(emailDto: CheckEmailDto): Promise<{
     findUser: boolean;
     needPwd: boolean;
+    emailRes: {
+      status: string;
+      message: string;
+    };
   }> {
     const user = await this.userModel.findOne({ email: emailDto.email }).exec();
     if (user) {
+      const needPwd = !user.password;
+      let emailRes = null;
+      needPwd
+        ? (emailRes = await this.authService.sendOTPVerificationEmail(user._id, user.email))
+        : null;
       return {
         findUser: user.isActivated && !user.isDeleted,
-        needPwd: !user.password,
+        needPwd: needPwd,
+        emailRes: emailRes,
       };
     }
     return {
       findUser: false,
       needPwd: false,
+      emailRes: null,
     };
   }
 }
