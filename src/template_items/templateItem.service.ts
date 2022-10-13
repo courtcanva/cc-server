@@ -111,18 +111,18 @@ export class TemplateItemService {
   }
 
   // 待修改
-  async searchTemplate(searchTemplateDto: SearchTemplateDto): Promise<TemplateItem[]> {
-    try {
-      const { limit = 0, offset = 0 } = searchTemplateDto;
-      return await this.TemplateModel.find(searchTemplateDto)
-        .sort({ createdAt: -1 })
-        .skip(offset)
-        .limit(limit)
-        .exec();
-    } catch {
-      throw new NotFoundException({
-        message: "Nothing was found, please try to search something else!",
-      });
-    }
-  }
+  // async searchTemplate(searchTemplateDto: SearchTemplateDto): Promise<TemplateItem[]> {
+  //   try {
+  //     const { limit = 0, offset = 0 } = searchTemplateDto;
+  //     return await this.TemplateModel.find(searchTemplateDto)
+  //       .sort({ createdAt: -1 })
+  //       .skip(offset)
+  //       .limit(limit)
+  //       .exec();
+  //   } catch {
+  //     throw new NotFoundException({
+  //       message: "Nothing was found, please try to search something else!",
+  //     });
+  //   }
+  // }
 }

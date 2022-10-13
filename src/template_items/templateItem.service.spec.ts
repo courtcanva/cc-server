@@ -11,8 +11,6 @@ import {
   mockTemplateItemInDatabase,
 } from "./templateItem.testData";
 import { User } from "src/users/schemas/user.schema";
-import { mockData } from "./mock";
-import { TemplateItemDto } from "./dto/template.dto";
 
 describe("TemplateItemService", () => {
   let service: TemplateItemService;
