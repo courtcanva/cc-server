@@ -90,7 +90,7 @@ describe("TemplateItemService", () => {
     const updateTemplateItem = {
       ...mockTemplateItem,
       isOfficial: true,
-      status: "punished",
+      status: "published",
     };
     jest.spyOn(model, "findOneAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({
