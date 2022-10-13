@@ -316,7 +316,7 @@ export const mockTemplateItemInDatabase = {
     CourtSize: "tennis",
   },
   isOfficial: false,
-  status: "punished",
+  status: "published",
   createdAt: "2022-10-11T04:15:29.050+00:00",
   updatedAt: "2022-10-11T04:27:36.677+00:00",
   isDeleted: false,
