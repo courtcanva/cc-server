@@ -22,8 +22,8 @@ export class UserService {
    * Get all users from database
    * @returns {[]:User}
    */
-  async getAllUsers(paginationQuery: PaginationQueryDto): Promise<User[]> {
-    const { limit, offset } = paginationQuery;
+  async getAllUsers(paginationQueryDto: PaginationQueryDto): Promise<User[]> {
+    const { limit, offset } = paginationQueryDto;
     const users = await this.userModel.find().skip(offset).limit(limit).exec();
     return users.filter((item) => !item.isDeleted);
   }
@@ -84,18 +84,18 @@ export class UserService {
 
   /**
    * connect account
-   * @param accountToConnect
+   * @param accountToConnectDto
    * @returns {User}
    */
-  async connectAccount(accountToConnect: ConnectAccountDto): Promise<ReturnUserInfo> {
-    const existingUser = await this.userModel.findOne({ email: accountToConnect.email }).exec();
+  async connectAccount(accountToConnectDto: ConnectAccountDto): Promise<ReturnUserInfo> {
+    const existingUser = await this.userModel.findOne({ email: accountToConnectDto.email }).exec();
     const id = existingUser._id;
     if (!existingUser || existingUser.isDeleted) {
       throw new NotFoundException(`User ${id} not found`);
     }
-    accountToConnect = { ...accountToConnect, updatedAt: new Date() };
+    accountToConnectDto = { ...accountToConnectDto, updatedAt: new Date() };
     const connectedAccount = await this.userModel
-      .findByIdAndUpdate({ _id: id }, { $set: accountToConnect }, { new: true })
+      .findByIdAndUpdate({ _id: id }, { $set: accountToConnectDto }, { new: true })
       .exec();
     // get access token and refresh token
     const tokens = await this.authService.getTokens(connectedAccount._id, connectedAccount.email);
@@ -135,9 +135,9 @@ export class UserService {
   /**
    * @findUser false if the user needs registration
    * @needPwd true if the user registered through google and does not have password
-   * @param emailDto
+   * @param checkEmailDto
    */
-  async checkEmail(emailDto: CheckEmailDto): Promise<{
+  async checkEmail(checkEmailDto: CheckEmailDto): Promise<{
     findUser: boolean;
     needPwd: boolean;
     emailRes: {
@@ -145,7 +145,7 @@ export class UserService {
       message: string;
     };
   }> {
-    const user = await this.userModel.findOne({ email: emailDto.email }).exec();
+    const user = await this.userModel.findOne({ email: checkEmailDto.email }).exec();
     if (user) {
       const needPwd = !user.password;
       let emailRes = null;

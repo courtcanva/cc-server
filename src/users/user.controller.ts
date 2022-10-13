@@ -24,8 +24,8 @@ export class UserController {
   }
 
   @Post()
-  async create(@Body() createUser: CreateUserDto): Promise<User> {
-    return await this.userService.create(createUser);
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return await this.userService.create(createUserDto);
   }
 
   @Get()
@@ -35,12 +35,12 @@ export class UserController {
   }
 
   @Put()
-  async updateUser(@Body() updateUser: UpdateUserDto): Promise<User> {
-    return await this.userService.updateUser(updateUser);
+  async updateUser(@Body() updateUserDto: UpdateUserDto): Promise<User> {
+    return await this.userService.updateUser(updateUserDto);
   }
 
   @Put("connect")
-  async connectAccount(@Body() accountToConnect: ConnectAccountDto): Promise<ReturnUserInfo> {
-    return await this.userService.connectAccount(accountToConnect);
+  async connectAccount(@Body() connectAccountDto: ConnectAccountDto): Promise<ReturnUserInfo> {
+    return await this.userService.connectAccount(connectAccountDto);
   }
 }
