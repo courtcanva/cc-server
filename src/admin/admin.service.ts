@@ -1,7 +1,8 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { AdminDto } from "./dto/admin.dto";
+import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { Admin } from "./schemas/admin.schema";
 import { JwtService } from "@nestjs/jwt";
 import { Tokens } from "./types";
@@ -105,5 +106,42 @@ export class AdminService {
     await this.adminModel
       .findByIdAndUpdate({ _id: adminId }, { $set: updateAdminDto }, { new: true })
       .exec();
+  }
+
+  async getAllAdmin() {
+    return await this.adminModel.find().exec();
+  }
+
+  async getAdminById(adminId: ObjectId): Promise<Admin> {
+    const admin = await this.adminModel.findById(adminId).exec();
+    if (!admin || admin.isDeleted) {
+      throw new NotFoundException("Admin not found");
+    }
+    return admin;
+  }
+
+  async updateAdminById(adminId: ObjectId, updateAdminDto): Promise<Admin> {
+    const admin = await this.adminModel.findById(adminId).exec();
+    if (!admin || admin.isDeleted) {
+      throw new NotFoundException("Admin not found");
+    }
+    updateAdminDto = { ...updateAdminDto, updatedAt: new Date() };
+    const updatedAdmin = await this.adminModel
+      .findByIdAndUpdate(adminId, { $set: updateAdminDto }, { new: true })
+      .exec();
+    return updatedAdmin;
+  }
+
+  async deleteAdminById(adminId: ObjectId): Promise<boolean> {
+    const admin = await this.adminModel.findById(adminId).exec();
+
+    if (!admin || admin.isDeleted) {
+      throw new NotFoundException("Admin not found");
+    }
+    await this.adminModel.findByIdAndUpdate(adminId, {
+      isDeleted: true,
+      updatedAt: new Date(),
+    });
+    return true;
   }
 }

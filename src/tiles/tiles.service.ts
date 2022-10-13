@@ -9,6 +9,7 @@ import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto
 @Injectable()
 export class TilesService {
   constructor(@InjectModel(Tile.name) private readonly tileModel: Model<Tile>) {}
+
   async findAll(paginationQuery: PaginationQueryDto): Promise<Tile[]> {
     const { limit, offset } = paginationQuery;
     return (await this.tileModel.find().skip(offset).limit(limit).exec()).filter(

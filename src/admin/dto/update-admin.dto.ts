@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
-export class AdminDto {
+export class UpdateAdminDto {
   @IsNotEmpty()
   @IsEmail()
   readonly email: string;
