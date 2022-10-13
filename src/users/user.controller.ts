@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Get, Post, Put, Query } from "@nestjs/common";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 import { CheckEmailDto } from "./dto/checkEmail.dto";
 import { CreateUserDto } from "./dto/createUser.dto";
@@ -15,6 +15,10 @@ export class UserController {
   async checkEmail(@Body() emailDto: CheckEmailDto): Promise<{
     findUser: boolean;
     needPwd: boolean;
+    emailRes: {
+      status: string;
+      message: string;
+    };
   }> {
     return await this.userService.checkEmail(emailDto);
   }
@@ -31,7 +35,7 @@ export class UserController {
   }
 
   @Put()
-  async update(@Body() updateUser: UpdateUserDto) {
+  async updateUser(@Body() updateUser: UpdateUserDto): Promise<User> {
     return await this.userService.updateUser(updateUser);
   }
 
