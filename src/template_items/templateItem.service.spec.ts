@@ -11,7 +11,8 @@ import {
   mockTemplateItemInDatabase,
 } from "./templateItem.testData";
 import { User } from "src/users/schemas/user.schema";
-import { mockCartItemInDatabase } from "src/cart_items/cartItem.testData";
+import { mockData } from "./mock";
+import { TemplateItemDto } from "./dto/template.dto";
 
 describe("TemplateItemService", () => {
   let service: TemplateItemService;
@@ -82,11 +83,10 @@ describe("TemplateItemService", () => {
     expect(templateItem).toEqual(expectedTemplateItem);
   });
 
-  // FIXME: need to be fixed
-  // it("should return a template item created", async () => {
-  //   jest.spyOn(model, "create").mockImplementationOnce(() => Promise.resolve(mockTemplateItem));
-  //   expect(await service.create(mockTemplateItem)).toEqual(mockTemplateItem);
-  // });
+  it("should return a template item created", async () => {
+    jest.spyOn(model, "create").mockImplementationOnce(() => Promise.resolve(mockTemplateItem));
+    expect(await service.create(mockNewTemplateItem)).toEqual(mockTemplateItem);
+  });
 
   it("should update a template item", async () => {
     const updateTemplateItem = {

@@ -40,10 +40,15 @@ export const mockTemplateItem = {
       sideBorderWidth: 1000,
       lengthOfCorner: 1575,
       lineBorderWidth: 200,
-      designName: "Court Canva 1",
     },
-    isOfficial: false,
-    status: "censoring",
+    // image: "url123",
+    // description: "Basketball Full Court Small Family first choice",
+    // tags: {
+    //   CourtCategory: "full pro court",
+    //   CourtSize: "tennis",
+    // },
+    // isOfficial: false,
+    // status: "censoring",
   },
 };
 
@@ -90,7 +95,6 @@ export const mockTemplateItemArray = [
         sideBorderWidth: 1000,
         lengthOfCorner: 1575,
         lineBorderWidth: 200,
-        designName: "Court Canva 1",
       },
       image: "www.youtube.com",
       description: "Basketball Full Court Small Family first choice",
@@ -253,12 +257,12 @@ export const mockNewTemplateItem = {
       lengthOfCorner: 1575,
       lineBorderWidth: 200,
     },
-    image: "url123456",
-    description: "small family first choice",
-    tags: {
-      CourtCategory: "full pro court",
-      CourtType: "tennis",
-    },
+  },
+  image: "url123",
+  description: "Basketball Full Court",
+  tags: {
+    CourtCategory: "full pro court",
+    CourtType: "tennis",
   },
 };
 
