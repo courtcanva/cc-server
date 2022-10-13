@@ -42,6 +42,8 @@ export const mockTemplateItem = {
       lineBorderWidth: 200,
       designName: "Court Canva 1",
     },
+    isOfficial: false,
+    status: "censoring",
   },
 };
 
@@ -151,11 +153,9 @@ export const mockTemplateItemArray = [
       CourtCategory: "full court",
       CourtType: "basketball",
     },
-    isOfficial: false,
-    status: "punished",
   },
   {
-    user_id: "user123",
+    user_id: "123456",
     design: {
       designName: "Court Canva 3",
       tileColor: [
@@ -211,9 +211,9 @@ export const mockTemplateItemArray = [
 ];
 
 export const mockNewTemplateItem = {
-  user_id: "user888",
+  user_id: "123456",
   design: {
-    designName: "Court Canva 8",
+    designName: "Court Canva 1",
     tileColor: [
       {
         location: "threePoint",
@@ -252,35 +252,14 @@ export const mockNewTemplateItem = {
       sideBorderWidth: 1000,
       lengthOfCorner: 1575,
       lineBorderWidth: 200,
-      designName: "Court Canva 1",
+    },
+    image: "url123456",
+    description: "small family first choice",
+    tags: {
+      CourtCategory: "full pro court",
+      CourtType: "tennis",
     },
   },
-  quotation: "67445.40",
-  quotationDetails: [
-    {
-      color: "#7088B1",
-      quantity: 1273,
-    },
-    {
-      color: "#E18E11",
-      quantity: 2572,
-    },
-    {
-      color: "#B6B6B6",
-      quantity: 231,
-    },
-    {
-      color: "#834085",
-      quantity: 1000,
-    },
-    {
-      color: "#2C4E8A",
-      quantity: 624,
-    },
-  ],
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  image: "url12345566721",
 };
 
 export const mockTemplateItemInDatabase = {

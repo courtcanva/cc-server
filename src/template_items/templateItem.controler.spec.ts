@@ -20,7 +20,7 @@ describe("TemplateItemController", () => {
             getAllTemplates: jest
               .fn()
               .mockImplementation(() => Promise.resolve([mockTemplateItem])),
-            getTemplateById: jest.fn().mockImplementation(() => Promise.resolve(mockTemplateItem)),
+            findOne: jest.fn().mockImplementation(() => Promise.resolve(mockTemplateItem)),
             create: jest
               .fn()
               .mockImplementation((createTemplateDto: TemplateItemDto) =>
@@ -58,7 +58,7 @@ describe("TemplateItemController", () => {
 
   describe("getTemplateById", () => {
     it("should get a template item in a given objectId", () => {
-      expect(controller.getTemplateById(Object("1"))).resolves.toEqual(mockTemplateItem);
+      expect(controller.findOne(Object("1"))).resolves.toEqual(mockTemplateItem);
     });
   });
 

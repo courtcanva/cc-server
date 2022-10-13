@@ -21,8 +21,8 @@ export class TemplateItemController {
   // 还有一种方法就是给每个装饰器多加一层路径
   // 需要讨论
   @Get(":Id")
-  async getTemplateById(@Param("id") item_id: ObjectId): Promise<TemplateItem> {
-    return await this.templateItemsService.getTemplateById(item_id);
+  async findOne(@Param("id") item_id: ObjectId): Promise<TemplateItem> {
+    return await this.templateItemsService.findOne(item_id);
   }
 
   // 待讨论

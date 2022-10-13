@@ -54,7 +54,7 @@ export class TemplateItemService {
 
   // 待修改
   // get template by template id
-  async getTemplateById(item_id: ObjectId): Promise<TemplateItem> {
+  async findOne(item_id: ObjectId): Promise<TemplateItem> {
     const templateItem = await this.TemplateModel.findOne({
       _id: item_id,
       isDeleted: false,
