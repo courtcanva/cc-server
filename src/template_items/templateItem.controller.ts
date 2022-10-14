@@ -15,7 +15,7 @@ export class TemplateItemController {
     return await this.templateItemsService.getAllTemplates(getAllTemplates);
   }
 
-  @Get(":Id")
+  @Get(":id")
   async findOne(@Param("id") item_id: ObjectId): Promise<TemplateItem> {
     return await this.templateItemsService.findOne(item_id);
   }

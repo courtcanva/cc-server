@@ -47,6 +47,7 @@ export class TemplateItemService {
     const templateItem = await this.TemplateModel.findOne({
       _id: item_id,
       isDeleted: false,
+      status: StatusType.PUBLISHED,
     }).exec();
     if (!templateItem) {
       throw new NotFoundException(`Template #${item_id} not found`);
