@@ -169,10 +169,6 @@ describe("UserService", () => {
     const updatedAccount = await service.updateUserById({
       userId: user.id,
       password: updatedUser.password,
-      firstName: undefined,
-      lastName: undefined,
-      email: undefined,
-      updatedAt: undefined,
     });
     expect(updatedAccount.password).toEqual(updatedUser.password);
   });
@@ -190,12 +186,8 @@ describe("UserService", () => {
     );
     await expect(
       service.updateUserById({
-        userId: undefined,
+        userId: "null",
         password: updatedUser.password,
-        firstName: undefined,
-        lastName: undefined,
-        email: undefined,
-        updatedAt: undefined,
       }),
     ).rejects.toThrow(`User not found`);
   });
