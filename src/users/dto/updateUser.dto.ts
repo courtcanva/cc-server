@@ -1,26 +1,33 @@
-import { IsEmpty, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsEmpty, IsOptional, IsString } from "class-validator";
 
 export class UpdateUserDto {
   @IsString()
-  @IsOptional()
   readonly userId: string;
 
   @IsString()
   @IsOptional()
-  readonly email: string;
+  readonly googleId?: string;
 
   @IsString()
   @IsOptional()
-  readonly password: string;
+  readonly email?: string;
 
   @IsString()
   @IsOptional()
-  readonly firstName: string;
+  readonly password?: string;
 
   @IsString()
   @IsOptional()
-  readonly lastName: string;
+  readonly firstName?: string;
+
+  @IsString()
+  @IsOptional()
+  readonly lastName?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  readonly isActivated?: boolean;
 
   @IsEmpty()
-  readonly updatedAt: Date;
+  readonly updatedAt?: Date;
 }

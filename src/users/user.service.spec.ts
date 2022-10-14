@@ -166,7 +166,7 @@ describe("UserService", () => {
         exec: jest.fn().mockResolvedValueOnce(updatedUser),
       }) as any,
     );
-    const updatedAccount = await service.updateUser({
+    const updatedAccount = await service.updateUserById({
       userId: user.id,
       password: updatedUser.password,
       firstName: undefined,
@@ -177,35 +177,8 @@ describe("UserService", () => {
     expect(updatedAccount.password).toEqual(updatedUser.password);
   });
 
-  it("should update a user's password by email", async () => {
-    jest.spyOn(model, "findOne").mockReturnValueOnce(
-      createMock<Query<any, any>>({
-        exec: jest.fn().mockResolvedValueOnce(user),
-      }) as any,
-    );
-    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
-      createMock<Query<any, any>>({
-        exec: jest.fn().mockResolvedValueOnce(updatedUser),
-      }) as any,
-    );
-    const updatedAccount = await service.updateUser({
-      userId: undefined,
-      password: updatedUser.password,
-      firstName: undefined,
-      lastName: undefined,
-      email: user.email,
-      updatedAt: undefined,
-    });
-    expect(updatedAccount.password).toEqual(updatedUser.password);
-  });
-
-  it("should fail to update a user's password if no id or password", async () => {
+  it("should fail to update a user's password if no user", async () => {
     jest.spyOn(model, "findById").mockReturnValueOnce(
-      createMock<Query<any, any>>({
-        exec: jest.fn().mockResolvedValueOnce(null),
-      }) as any,
-    );
-    jest.spyOn(model, "findOne").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(null),
       }) as any,
@@ -216,7 +189,7 @@ describe("UserService", () => {
       }) as any,
     );
     await expect(
-      service.updateUser({
+      service.updateUserById({
         userId: undefined,
         password: updatedUser.password,
         firstName: undefined,

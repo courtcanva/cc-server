@@ -14,11 +14,12 @@ export class UserController {
   @Post("status")
   async checkEmail(@Body() emailDto: CheckEmailDto): Promise<{
     findUser: boolean;
-    needPwd: boolean;
-    emailRes: {
+    needPwd?: boolean;
+    emailRes?: {
       status: string;
       message: string;
     };
+    userId?: string;
   }> {
     return await this.userService.checkEmail(emailDto);
   }
@@ -36,7 +37,7 @@ export class UserController {
 
   @Put()
   async updateUser(@Body() updateUserDto: UpdateUserDto): Promise<User> {
-    return await this.userService.updateUser(updateUserDto);
+    return await this.userService.updateUserById(updateUserDto);
   }
 
   @Put("connect")

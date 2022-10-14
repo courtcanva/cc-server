@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { CheckEmailDto } from "./dto/checkEmail.dto";
@@ -15,7 +15,7 @@ import * as argon from "argon2";
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
-    private readonly authService: AuthService,
+    @Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
   ) {}
 
   /**
@@ -52,25 +52,20 @@ export class UserService {
   }
 
   /**
-   * Update user by id or email
+   * Update user by id
    * @param updateUserDto
    * @returns {User}
    */
-  async updateUser(updateUserDto: UpdateUserDto): Promise<User> {
-    let id = updateUserDto.userId;
-    const email = updateUserDto.email;
-    const password = updateUserDto.password;
-    let user = null;
-    if (id) {
-      user = await this.userModel.findById(id).exec();
-    } else if (email) {
-      user = await this.userModel.findOne({ email: email }).exec();
-    }
+  async updateUserById(updateUserDto: UpdateUserDto): Promise<User> {
+    const id = updateUserDto.userId;
+    const user = await this.userModel.findById(id).exec();
+
     // if there is no such a user or the user has been deleted, then throw an error.
     if (!user || user.isDeleted) {
       throw new NotFoundException(`User not found`);
     }
-    id = id ? id : user._id;
+
+    const password = updateUserDto.password;
     const hashedPassword = password ? await argon.hash(password) : null;
     // Add new update date
     updateUserDto = { ...updateUserDto, updatedAt: new Date() };
@@ -139,11 +134,12 @@ export class UserService {
    */
   async checkEmail(checkEmailDto: CheckEmailDto): Promise<{
     findUser: boolean;
-    needPwd: boolean;
-    emailRes: {
+    needPwd?: boolean;
+    emailRes?: {
       status: string;
       message: string;
     };
+    userId?: string;
   }> {
     const user = await this.userModel.findOne({ email: checkEmailDto.email }).exec();
     if (user) {
@@ -156,12 +152,11 @@ export class UserService {
         findUser: user.isActivated && !user.isDeleted,
         needPwd: needPwd,
         emailRes: emailRes,
+        userId: user._id,
       };
     }
     return {
       findUser: false,
-      needPwd: false,
-      emailRes: null,
     };
   }
 }
