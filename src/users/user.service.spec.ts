@@ -173,7 +173,7 @@ describe("UserService", () => {
     expect(updatedAccount.password).toEqual(updatedUser.password);
   });
 
-  it("should fail to update a user's password if no user", async () => {
+  it("should fail to update a user's password if no such user", async () => {
     jest.spyOn(model, "findById").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(null),
