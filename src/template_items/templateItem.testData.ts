@@ -41,14 +41,6 @@ export const mockTemplateItem = {
       lengthOfCorner: 1575,
       lineBorderWidth: 200,
     },
-    // image: "url123",
-    // description: "Basketball Full Court Small Family first choice",
-    // tags: {
-    //   CourtCategory: "full pro court",
-    //   CourtSize: "tennis",
-    // },
-    // isOfficial: false,
-    // status: "censoring",
   },
 };
 

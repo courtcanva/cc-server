@@ -5,7 +5,6 @@ import { mockTemplateItem } from "./templateItem.testData";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { TemplateItemDto } from "./dto/template.dto";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
-import { TemplateMetadata } from "@aws-sdk/client-ses";
 
 describe("TemplateItemController", () => {
   let controller: TemplateItemController;
@@ -43,7 +42,6 @@ describe("TemplateItemController", () => {
     expect(controller).toBeDefined();
   });
 
-  // FIXME:有bug 待修复
   describe("getAllTemplates", () => {
     it("should get all template items in a given user id with pagination", () => {
       const user_id = "123456";

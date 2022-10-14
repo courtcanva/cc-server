@@ -5,7 +5,6 @@ import { ObjectId } from "mongoose";
 import { TemplateItemDto } from "./dto/template.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
-// import { SearchTemplateDto } from "./dto/searchTemplate.dto";
 
 @Controller("templates")
 export class TemplateItemController {
@@ -16,20 +15,10 @@ export class TemplateItemController {
     return await this.templateItemsService.getAllTemplates(getAllTemplates);
   }
 
-  // 考虑到后续的search功能，这个得删掉和seatch合并
-  // 同一个路径不能有两个get方法
-  // 还有一种方法就是给每个装饰器多加一层路径
-  // 需要讨论
   @Get(":Id")
   async findOne(@Param("id") item_id: ObjectId): Promise<TemplateItem> {
     return await this.templateItemsService.findOne(item_id);
   }
-
-  // 待讨论
-  // @Get()
-  // async searchTemplates(@Query() searchTemplateDto: SearchTemplateDto): Promise<TemplateItem[]> {
-  //   return await this.templateItemsService.searchTemplate(searchTemplateDto);
-  // }
 
   @Post()
   async create(@Body() createTemplateDto: TemplateItemDto): Promise<TemplateItem> {
