@@ -7,6 +7,7 @@ import { Admin } from "./schemas/admin.schema";
 import { JwtService } from "@nestjs/jwt";
 import { Tokens } from "./types";
 import * as argon from "argon2";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Injectable()
 export class AdminService {
@@ -108,11 +109,12 @@ export class AdminService {
       .exec();
   }
 
-  async getAllAdmin() {
-    return await this.adminModel.find().exec();
+  async findAll(paginationQuery: PaginationQueryDto) {
+    const { limit, offset } = paginationQuery;
+    return await this.adminModel.find().sort({ createdAt: -1 }).skip(offset).limit(limit).exec();
   }
 
-  async getAdminById(adminId: ObjectId): Promise<Admin> {
+  async findOne(adminId: ObjectId): Promise<Admin> {
     const admin = await this.adminModel.findById(adminId).exec();
     if (!admin || admin.isDeleted) {
       throw new NotFoundException("Admin not found");
@@ -120,7 +122,7 @@ export class AdminService {
     return admin;
   }
 
-  async updateAdminById(adminId: ObjectId, updateAdminDto): Promise<Admin> {
+  async update(adminId: ObjectId, updateAdminDto): Promise<Admin> {
     const admin = await this.adminModel.findById(adminId).exec();
     if (!admin || admin.isDeleted) {
       throw new NotFoundException("Admin not found");
@@ -129,10 +131,11 @@ export class AdminService {
     const updatedAdmin = await this.adminModel
       .findByIdAndUpdate(adminId, { $set: updateAdminDto }, { new: true })
       .exec();
+
     return updatedAdmin;
   }
 
-  async deleteAdminById(adminId: ObjectId): Promise<boolean> {
+  async remove(adminId: ObjectId): Promise<boolean> {
     const admin = await this.adminModel.findById(adminId).exec();
 
     if (!admin || admin.isDeleted) {
