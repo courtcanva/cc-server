@@ -11,10 +11,10 @@ export enum StatusType {
 }
 
 export enum CourtCategory {
-  PFC = "proFullCourt",
-  FC = "fullCourt",
-  SC = "smallCourt",
-  HF = "halfCourt",
+  PFC = "ProFullCourt",
+  FC = "FullCourt",
+  SC = "SmallCourt",
+  HF = "HalfCourt",
 }
 
 export enum CourtType {
