@@ -14,5 +14,5 @@ export class UpdateAdminDto {
 
   readonly updatedAt: Date;
 
-  readonly isDelete: boolean;
+  readonly isDeleted: boolean;
 }
