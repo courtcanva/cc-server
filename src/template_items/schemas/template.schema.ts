@@ -22,7 +22,7 @@ export enum CourtType {
   TENNIS = "tennis",
 }
 
-export class Design extends Document {
+class Design extends Document {
   @Prop({ type: String })
   designer: string;
 

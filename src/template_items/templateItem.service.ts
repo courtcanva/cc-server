@@ -16,30 +16,23 @@ export class TemplateItemService {
   ) {}
 
   async getAllTemplates(getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
-    try {
-      const { user_id, limit = 0, offset = 0 } = getAllTemplates;
-      const optionalQuery: { [key: string]: any } = {};
+    const { user_id, limit = 0, offset = 0 } = getAllTemplates;
+    const optionalQuery: { [key: string]: any } = {};
 
-      if (user_id) optionalQuery.user_id = user_id;
+    if (user_id) optionalQuery.user_id = user_id;
 
-      const response = await this.TemplateModel.find({
-        isDeleted: false,
-        ...optionalQuery,
-      })
-        .sort({ createdAt: -1 })
-        .skip(offset)
-        .limit(limit)
-        .exec();
-
-      if (user_id && response) {
-        return response.filter((res) => res.status !== StatusType.ILLEGAL);
-      } else {
-        return response.filter((res) => res.status === StatusType.PUBLISHED);
-      }
-    } catch (err) {
-      throw new NotFoundException({
-        message: "Something went wrong, pls try again",
-      });
+    const response = await this.TemplateModel.find({
+      isDeleted: false,
+      ...optionalQuery,
+    })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+    if (user_id) {
+      return response.filter((res) => res.status !== StatusType.ILLEGAL);
+    } else {
+      return response.filter((res) => res.status === StatusType.PUBLISHED);
     }
   }
 
@@ -61,42 +54,41 @@ export class TemplateItemService {
       createdAt: new Date(),
       updateAt: new Date(),
     });
-
+    if (!newTemplate) {
+      throw new NotFoundException(`Update template failed`);
+    }
     return newTemplate;
   }
 
   async update(id: ObjectId, updateTemplateDto: UpdateTemplateDto): Promise<TemplateItem> {
-    try {
-      return await this.TemplateModel.findOneAndUpdate(
-        {
-          _id: id,
-          isDeleted: false,
-        },
-        { $set: updateTemplateDto, $currentDate: { updatedAt: true } },
-        { new: true },
-      ).exec();
-    } catch {
-      throw new NotFoundException({
-        message: "Template cannot be found, please search again",
-      });
+    const updatedTemplate = await this.TemplateModel.findOneAndUpdate(
+      {
+        _id: id,
+        isDeleted: false,
+      },
+      { $set: updateTemplateDto, $currentDate: { updatedAt: true } },
+      { new: true },
+    ).exec();
+    if (!updatedTemplate) {
+      throw new NotFoundException(`Template #${id} not found`);
     }
+    return updatedTemplate;
   }
 
   async remove(id: ObjectId): Promise<boolean> {
-    try {
-      await this.TemplateModel.findOneAndUpdate(
-        {
-          _id: id,
-          isDeleted: false,
-        },
-        {
-          $set: { isDeleted: true },
-          $currentDate: { updatedAt: true },
-        },
-      );
-      return true;
-    } catch {
+    const response = await this.TemplateModel.findOneAndUpdate(
+      {
+        _id: id,
+        isDeleted: false,
+      },
+      {
+        $set: { isDeleted: true },
+        $currentDate: { updatedAt: true },
+      },
+    );
+    if (!response) {
       return false;
     }
+    return true;
   }
 }

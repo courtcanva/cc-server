@@ -84,7 +84,7 @@ class Design {
   readonly courtSize: CourtSize;
 }
 
-export class Tags {
+class Tags {
   @IsEnum(CourtCategory)
   @IsOptional()
   @IsNotEmpty()
@@ -93,7 +93,6 @@ export class Tags {
   @IsOptional()
   @IsNotEmpty()
   @IsEnum(CourtType)
-  // CourtSize: string;
   CourtType: string;
 }
 
@@ -114,7 +113,6 @@ export class TemplateItemDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(200)
   readonly description: string;
 
   @IsObject()
