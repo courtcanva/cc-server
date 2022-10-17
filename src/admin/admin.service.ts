@@ -21,8 +21,10 @@ export class AdminService {
 
     const newAdminInfo = {
       ...adminDto,
+      name: adminDto.name,
       email: adminDto.email,
       password: hashedPassword,
+      permission: adminDto.permission,
     };
 
     const newAdmin = await this.adminModel.create(newAdminInfo);

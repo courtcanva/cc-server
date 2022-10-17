@@ -14,6 +14,12 @@ export class Admin extends Document {
 
   @Prop({ default: false })
   isDeleted: boolean;
+
+  @Prop()
+  permission: string;
+
+  @Prop()
+  name: string;
 }
 
 export const AdminSchema = SchemaFactory.createForClass(Admin);

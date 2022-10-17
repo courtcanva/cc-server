@@ -5,8 +5,8 @@ export class UpdateAdminDto {
   @IsEmail()
   readonly email: string;
 
-  @IsString()
-  readonly password: string;
+  // @IsString()
+  // readonly password: string;
 
   readonly hashedRefreshToken: string;
 
@@ -14,5 +14,10 @@ export class UpdateAdminDto {
 
   readonly updatedAt: Date;
 
+  readonly permission: string;
+
   readonly isDeleted: boolean;
+
+  @IsString()
+  readonly name: string;
 }

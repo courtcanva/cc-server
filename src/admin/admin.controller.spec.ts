@@ -1,12 +1,12 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { ObjectId } from "mongoose";
-import { AdminDto } from "./dto/admin.dto";
+// import { AdminDto } from "./dto/admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { AdminController } from "./admin.controller";
 import { AdminService } from "./admin.service";
 import { mockAdminData } from "./admin.testData";
-import { Admin } from "./schemas/admin.schema";
-import { BadRequestException, NotFoundException } from "@nestjs/common";
+// import { Admin } from "./schemas/admin.schema";
+// import { BadRequestException, NotFoundException } from "@nestjs/common";
 
 describe("AdminController", () => {
   let controller: AdminController;

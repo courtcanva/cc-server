@@ -15,5 +15,11 @@ export class AdminDto {
 
   readonly updatedAt: Date;
 
+  readonly permission: string;
+
   readonly isDeleted: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  readonly name: string;
 }
