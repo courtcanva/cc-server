@@ -1,11 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Query, Put, UseFilters } from "@nestjs/common";
 import { TemplateItemService } from "./templateItem.service";
 import { TemplateItem } from "./schemas/template.schema";
 import { ObjectId } from "mongoose";
 import { TemplateItemDto } from "./dto/template.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
+import { MongoExceptionFilter } from "src/common/filters/mongoose-exception.filter";
 
+// @UseFilters(MongoExceptionFilter)
 @Controller("templates")
 export class TemplateItemController {
   constructor(private readonly templateItemsService: TemplateItemService) {}
@@ -17,6 +19,7 @@ export class TemplateItemController {
 
   @Get(":id")
   async findOne(@Param("id") item_id: ObjectId): Promise<TemplateItem> {
+    console.log("achieve here1");
     return await this.templateItemsService.findOne(item_id);
   }
 
