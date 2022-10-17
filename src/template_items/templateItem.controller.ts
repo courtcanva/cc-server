@@ -5,9 +5,7 @@ import { ObjectId } from "mongoose";
 import { TemplateItemDto } from "./dto/template.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
-import { MongoExceptionFilter } from "src/common/filters/mongoose-exception.filter";
 
-// @UseFilters(MongoExceptionFilter)
 @Controller("templates")
 export class TemplateItemController {
   constructor(private readonly templateItemsService: TemplateItemService) {}
