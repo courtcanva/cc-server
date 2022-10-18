@@ -10,7 +10,7 @@ export class PriceService {
   async findAll(paginationQuery: PaginationQueryDto): Promise<Price[]> {
     const { limit, offset } = paginationQuery;
     return (await this.priceModel.find().skip(offset).limit(limit).exec()).filter(
-      (price) => price.isDeleted !== true,
+      (price) => !price.isDeleted,
     );
   }
 

@@ -12,7 +12,7 @@ export class TilesService {
   async findAll(paginationQuery: PaginationQueryDto): Promise<Tile[]> {
     const { limit, offset } = paginationQuery;
     return (await this.tileModel.find().skip(offset).limit(limit).exec()).filter(
-      (tile) => tile.isDeleted !== true,
+      (tile) => !tile.isDeleted,
     );
   }
 
