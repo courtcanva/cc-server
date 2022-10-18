@@ -47,6 +47,9 @@ export class CourtSpec extends Document {
   updatedAt: Date;
 
   @Prop({ default: false })
+  isHidden: boolean;
+
+  @Prop({ default: false })
   isDeleted: boolean;
 }
 

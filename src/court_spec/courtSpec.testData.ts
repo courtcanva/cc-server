@@ -14,6 +14,7 @@ export const court = {
   description: "Court #1",
   createdAt: new Date(),
   updatedAt: new Date(),
+  isHidden: false,
 };
 
 export const updatedCourt = {
@@ -32,6 +33,7 @@ export const updatedCourt = {
   description: "Court #1",
   createdAt: new Date("2022-06-18T09:44:29.044+00:00"),
   updatedAt: new Date(),
+  isHidden: !court.isHidden,
 };
 
 export const courtArray = [
