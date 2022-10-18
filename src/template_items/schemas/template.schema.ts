@@ -61,7 +61,6 @@ export class TemplateItem {
   @Prop({ required: true })
   user_id: string;
 
-  // 为啥这个是必须的
   @Prop({ type: Design, required: true })
   design: Design;
 
