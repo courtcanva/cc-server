@@ -11,7 +11,7 @@ export class DesignService {
   async find(user_id: string): Promise<Design[]> {
     try {
       return (await this.designModel.find({ user_id: user_id }).exec()).filter(
-        (design) => design.isDeleted !== true,
+        (design) => !design.isDeleted,
       );
     } catch {
       throw new NotFoundException({
