@@ -84,10 +84,10 @@ export class UserService {
    */
   async connectAccount(accountToConnectDto: ConnectAccountDto): Promise<ReturnUserInfo> {
     const existingUser = await this.userModel.findOne({ email: accountToConnectDto.email }).exec();
-    const id = existingUser._id;
     if (!existingUser || existingUser.isDeleted) {
-      throw new NotFoundException(`User ${id} not found`);
+      throw new NotFoundException(`User not found`);
     }
+    const id = existingUser._id;
     accountToConnectDto = { ...accountToConnectDto, updatedAt: new Date() };
     const connectedAccount = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: accountToConnectDto }, { new: true })
@@ -144,9 +144,8 @@ export class UserService {
     const user = await this.userModel.findOne({ email: checkEmailDto.email }).exec();
     if (user) {
       const needPwd = !user.password;
-      let emailRes = null;
-      needPwd
-        ? (emailRes = await this.authService.sendOTPVerificationEmail(user._id, user.email))
+      const emailRes = needPwd
+        ? await this.authService.sendOTPVerificationEmail(user._id, user.email)
         : null;
       return {
         findUser: user.isActivated && !user.isDeleted,
