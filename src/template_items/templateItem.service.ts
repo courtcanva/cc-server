@@ -58,9 +58,7 @@ export class TemplateItemService {
 
   async create(createNewTemplate: TemplateItemDto): Promise<TemplateItem> {
     try {
-      const newTemplate = await this.TemplateModel.create({
-        ...createNewTemplate,
-      });
+      const newTemplate = await this.TemplateModel.create(createNewTemplate);
       if (!newTemplate) {
         throw new NotFoundException(`Fail to create new template`);
       }

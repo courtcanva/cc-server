@@ -59,9 +59,7 @@ export class CartItemService {
       );
     }
     */
-    const cartItem = await this.cartItemModel.create({
-      ...createCartItemDto,
-    });
+    const cartItem = await this.cartItemModel.create(createCartItemDto);
     return cartItem;
   }
 
