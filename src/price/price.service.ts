@@ -22,11 +22,7 @@ export class PriceService {
         cementFloorPrice: priceDto.cementFloorPrice,
       };
       const existingPrice = await this.priceModel
-        .findOneAndUpdate(
-          { _id: id },
-          { $set: updatePriceDto, $currentDate: { updatedAt: true } },
-          { new: true },
-        )
+        .findOneAndUpdate({ _id: id }, { $set: updatePriceDto }, { new: true })
         .exec();
       return existingPrice;
     } catch {

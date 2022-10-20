@@ -58,7 +58,7 @@ export class Tags extends Document {
   CourtType: CourtType;
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class TemplateItem {
   @Prop({ required: true })
   user_id: string;
@@ -84,12 +84,6 @@ export class TemplateItem {
     default: StatusType.CENSORING,
   })
   status: string;
-
-  @Prop({ type: Date, default: new Date() })
-  createdAt: Date;
-
-  @Prop({ type: Date, default: new Date() })
-  updatedAt: Date;
 
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;

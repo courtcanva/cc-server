@@ -63,7 +63,7 @@ export class UserService {
       throw new NotFoundException(`User ${id} not found`);
     }
     // Add new update date
-    updateUserDto = { ...updateUserDto, updatedAt: new Date() };
+    updateUserDto = { ...updateUserDto };
     const updatedUser = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true })
       .exec();
@@ -82,7 +82,7 @@ export class UserService {
     if (!existingUser || existingUser.isDeleted) {
       throw new NotFoundException(`User ${id} not found`);
     }
-    accountToConnect = { ...accountToConnect, updatedAt: new Date() };
+    accountToConnect = { ...accountToConnect };
     const connectedAccount = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: accountToConnect }, { new: true })
       .exec();
@@ -115,7 +115,6 @@ export class UserService {
     }
     await this.userModel.findByIdAndUpdate(id, {
       isDeleted: true,
-      updatedAt: new Date(),
     });
     //return the user who has been deleted
     return { message: `User deleted successfully` };

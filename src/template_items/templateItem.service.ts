@@ -60,8 +60,6 @@ export class TemplateItemService {
     try {
       const newTemplate = await this.TemplateModel.create({
         ...createNewTemplate,
-        createdAt: new Date(),
-        updateAt: new Date(),
       });
       if (!newTemplate) {
         throw new NotFoundException(`Fail to create new template`);
@@ -79,7 +77,7 @@ export class TemplateItemService {
           _id: id,
           isDeleted: false,
         },
-        { $set: updateTemplateDto, $currentDate: { updatedAt: true } },
+        { $set: updateTemplateDto },
         { new: true },
       ).exec();
       if (!updatedTemplate) {
@@ -100,7 +98,6 @@ export class TemplateItemService {
         },
         {
           $set: { isDeleted: true },
-          $currentDate: { updatedAt: true },
         },
       );
       if (!response) {

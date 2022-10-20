@@ -12,7 +12,7 @@ export class CourtSpecService {
   constructor(@InjectModel(CourtSpec.name) private readonly courtSpecModel: Model<CourtSpec>) {}
 
   async create(createCourtSpecDto: CreateCourtSpecDto): Promise<CourtSpec> {
-    createCourtSpecDto = { ...createCourtSpecDto, createdAt: new Date(), updatedAt: new Date() };
+    createCourtSpecDto = { ...createCourtSpecDto };
     const court_spec = await this.courtSpecModel.create(createCourtSpecDto);
     return court_spec;
   }
@@ -39,7 +39,7 @@ export class CourtSpecService {
     if (!court || court.isDeleted) {
       throw new NotFoundException("court not found");
     }
-    updateCourtSpecDto = { ...updateCourtSpecDto, updatedAt: new Date() };
+    updateCourtSpecDto = { ...updateCourtSpecDto };
     const updatedCourtSpec = await this.courtSpecModel
       .findByIdAndUpdate(courtId, { $set: updateCourtSpecDto }, { new: true })
       .exec();
@@ -54,7 +54,6 @@ export class CourtSpecService {
 
     const DeletedCount = await this.courtSpecModel.findByIdAndUpdate(courtId, {
       isDeleted: true,
-      updatedAt: new Date(),
     });
 
     return true;

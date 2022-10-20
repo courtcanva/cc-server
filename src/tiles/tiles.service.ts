@@ -35,11 +35,7 @@ export class TilesService {
   async update(id: ObjectId, updateTileDto: UpdateTileDto): Promise<Tile> {
     try {
       const existingTile = await this.tileModel
-        .findOneAndUpdate(
-          { _id: id },
-          { $set: updateTileDto, $currentDate: { updatedAt: true } },
-          { new: true },
-        )
+        .findOneAndUpdate({ _id: id }, { $set: updateTileDto }, { new: true })
         .exec();
       return existingTile;
     } catch {
@@ -51,10 +47,7 @@ export class TilesService {
 
   async remove(id: ObjectId, updateTileDto: UpdateTileDto): Promise<boolean> {
     try {
-      await this.tileModel.findOneAndUpdate(
-        { _id: id },
-        { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
-      );
+      await this.tileModel.findOneAndUpdate({ _id: id }, { $set: { isDeleted: true } });
       return true;
     } catch {
       return false;

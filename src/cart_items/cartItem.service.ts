@@ -61,19 +61,13 @@ export class CartItemService {
     */
     const cartItem = await this.cartItemModel.create({
       ...createCartItemDto,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
     return cartItem;
   }
 
   async update(id: ObjectId, updateCartItemDto: UpdateCartItemDto): Promise<CartItem> {
     const cartItem = await this.cartItemModel
-      .findByIdAndUpdate(
-        { _id: id },
-        { $set: updateCartItemDto, $currentDate: { updatedAt: true } },
-        { new: true },
-      )
+      .findByIdAndUpdate({ _id: id }, { $set: updateCartItemDto }, { new: true })
       .exec();
     if (!cartItem) {
       throw new NotFoundException(`Cart Item #${id} not found`);
@@ -83,10 +77,7 @@ export class CartItemService {
 
   async remove(id: ObjectId): Promise<boolean> {
     try {
-      await this.cartItemModel.findOneAndUpdate(
-        { _id: id },
-        { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
-      );
+      await this.cartItemModel.findOneAndUpdate({ _id: id }, { $set: { isDeleted: true } });
       return true;
     } catch {
       return false;

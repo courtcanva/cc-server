@@ -76,7 +76,6 @@ describe("CourtSpecService", () => {
     );
     const court = await service.updateCourtSpecById(Object("62ad9efe1bc0ca4561d9ca45"), {
       ...updatedCourt,
-      updatedAt: new Date(),
     });
     expect(court).toEqual(updatedCourt);
   });

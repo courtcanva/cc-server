@@ -10,8 +10,4 @@ export class AdminDto {
   readonly password: string;
 
   readonly hashedRefreshToken: string;
-
-  readonly createdAt: Date;
-
-  readonly updatedAt: Date;
 }
