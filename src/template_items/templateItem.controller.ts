@@ -17,7 +17,6 @@ export class TemplateItemController {
 
   @Get(":id")
   async findOne(@Param("id") item_id: ObjectId): Promise<TemplateItem> {
-    console.log("achieve here1");
     return await this.templateItemsService.findOne(item_id);
   }
 
