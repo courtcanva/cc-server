@@ -14,7 +14,9 @@ export enum CourtCategory {
   PFC = "ProFullCourt",
   FC = "FullCourt",
   SC = "SmallCourt",
-  HF = "HalfCourt",
+  HC = "HalfCourt",
+  PHC = "ProHalfCourt",
+  MC = "MediumCourt",
 }
 
 export enum CourtType {
