@@ -64,6 +64,9 @@ export class UserService {
     if (!user || user.isDeleted) {
       throw new NotFoundException(`User not found`);
     }
+    if (updateUserDto.password) {
+      updateUserDto = { ...updateUserDto, password: await argon.hash(updateUserDto.password) };
+    }
     const updatedUser = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true })
       .exec();
