@@ -21,4 +21,15 @@ export const mockAdminData = [
     updatedAt: "2022-10-13T13:56:15.362Z",
     isDeleted: false,
   },
+  {
+    id: "6352457649dfd4dd6e7bb31c",
+    email: "admin3@gmail.com",
+    password:
+      "$argon2id$v=19$m=4096,t=3,p=1$iwU+LP8nmDhPj4OXKV8peQ$wUXNy3uBGcrvKyBqVcsDN2j5IMnnrLu2nqgAmn44SN8",
+    hashedRefreshToken:
+      "$argon2id$v=19$m=4096,t=3,p=1$YUG611scNjiC87zmImLtGw$dtJ8Q29YWkeCtsBp03q4xhVSxaw99mZbmfAO6je+HHg",
+    createdAt: "2022-10-21T07:08:38.280Z",
+    updatedAt: "2022-10-22T14:50:12.203Z",
+    isDeleted: true,
+  },
 ];

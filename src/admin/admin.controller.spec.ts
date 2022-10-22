@@ -30,6 +30,7 @@ describe("AdminController", () => {
                 Promise.resolve({ email: "admin2_Upadte@gmail.com", ...UpdateAdminDto }),
               ),
             remove: jest.fn().mockResolvedValue({ isDeleted: true }),
+            restore: jest.fn().mockResolvedValue({ isDeleted: false }),
           },
         },
       ],
@@ -73,6 +74,12 @@ describe("AdminController", () => {
   it("remove should delete a admin", () => {
     expect(controller.deleteAdminById(Object("634818ff801e2c3713056222"))).resolves.toEqual({
       isDeleted: true,
+    });
+  });
+
+  it("remove should restore a deleted admin", () => {
+    expect(controller.restoreAdminById(Object("634818ff801e2c3713056222"))).resolves.toEqual({
+      isDeleted: false,
     });
   });
 });

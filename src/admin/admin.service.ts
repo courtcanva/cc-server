@@ -149,4 +149,17 @@ export class AdminService {
     });
     return true;
   }
+
+  async restore(adminId: ObjectId): Promise<boolean> {
+    const admin = await this.adminModel.findById(adminId).exec();
+
+    if (!admin || !admin.isDeleted) {
+      throw new NotFoundException("Not a deleted admin");
+    }
+    await this.adminModel.findByIdAndUpdate(adminId, {
+      isDeleted: false,
+      updatedAt: new Date(),
+    });
+    return true;
+  }
 }

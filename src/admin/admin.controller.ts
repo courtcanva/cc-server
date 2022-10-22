@@ -50,6 +50,11 @@ export class AdminController {
     return await this.adminService.remove(adminId);
   }
 
+  @Patch(":adminId/restore")
+  async restoreAdminById(@Param("adminId", ParseObjectIdPipe) adminId: ObjectId): Promise<boolean> {
+    return await this.adminService.restore(adminId);
+  }
+
   @Post("register")
   @HttpCode(HttpStatus.CREATED)
   adminRegister(@Body() dto: AdminDto): Promise<Tokens> {

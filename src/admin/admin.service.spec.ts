@@ -102,6 +102,20 @@ describe("AdminService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockAdminData),
       }) as any,
     );
-    expect(await service.remove(Object("634659ef7321c0f11a775a8b"))).toEqual(true);
+    expect(await service.remove(Object("634818ff801e2c37130565f3"))).toEqual(true);
+  });
+
+  it("should restore a deleted admin", async () => {
+    jest.spyOn(model, "findById").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockAdminData[2]),
+      }) as any,
+    );
+    jest.spyOn(model, "findOneAndUpdate").mockResolvedValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockAdminData),
+      }) as any,
+    );
+    expect(await service.restore(Object("6352457649dfd4dd6e7bb31c"))).toEqual(true);
   });
 });
