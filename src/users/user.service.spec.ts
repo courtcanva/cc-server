@@ -3,7 +3,13 @@ import { NotFoundException } from "@nestjs/common";
 import { getModelToken } from "@nestjs/mongoose";
 import { Test, TestingModule } from "@nestjs/testing";
 import { Model, Query } from "mongoose";
-import { connectedAccount, unconnectedAccount, updatedUser, userArray } from "./user.testData";
+import {
+  connectedAccount,
+  unconnectedAccount,
+  updatedUser,
+  user,
+  userArray,
+} from "./user.testData";
 import { User } from "./schemas/user.schema";
 import { UserService } from "./user.service";
 import { AuthService } from "src/auth/auth.service";
@@ -120,13 +126,13 @@ describe("UserService", () => {
   });
 
   it("should check user by email", async () => {
-    jest.spyOn(model, "find").mockReturnValueOnce(
+    jest.spyOn(model, "findOne").mockReturnValueOnce(
       createMock<Query<any, any>>({
-        exec: jest.fn().mockResolvedValueOnce(userArray[0]),
+        exec: jest.fn().mockResolvedValueOnce(null),
       }) as any,
     );
-    const status = await service.checkEmail({ email: "test@gmail.com" });
-    expect(status).toEqual(false);
+    const status = await service.checkEmail({ email: "null@gmail.com" });
+    expect(status.findUser).toEqual(false);
   });
 
   it("should update a user's google ID", async () => {
@@ -147,5 +153,42 @@ describe("UserService", () => {
     );
     const updatedUser = await service.connectAccount(unconnectedAccount);
     expect(updatedUser.googleId).toEqual(connectedAccount.googleId);
+  });
+
+  it("should update a user's password by id", async () => {
+    jest.spyOn(model, "findById").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(user),
+      }) as any,
+    );
+    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(updatedUser),
+      }) as any,
+    );
+    const updatedAccount = await service.updateUserById({
+      userId: user.id,
+      password: updatedUser.password,
+    });
+    expect(updatedAccount.password).toEqual(updatedUser.password);
+  });
+
+  it("should fail to update a user's password if no such user", async () => {
+    jest.spyOn(model, "findById").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      }) as any,
+    );
+    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      }) as any,
+    );
+    await expect(
+      service.updateUserById({
+        userId: "null",
+        password: updatedUser.password,
+      }),
+    ).rejects.toThrow(`User not found`);
   });
 });

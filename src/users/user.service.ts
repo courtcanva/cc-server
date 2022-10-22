@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { CheckEmailDto } from "./dto/checkEmail.dto";
@@ -9,20 +9,21 @@ import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto
 import { ConnectAccountDto } from "./dto/connectAccount.dto";
 import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 import { AuthService } from "src/auth/auth.service";
+import * as argon from "argon2";
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
-    private readonly authservice: AuthService,
+    @Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
   ) {}
 
   /**
    * Get all users from database
    * @returns {[]:User}
    */
-  async getAllUsers(paginationQuery: PaginationQueryDto): Promise<User[]> {
-    const { limit, offset } = paginationQuery;
+  async getAllUsers(paginationQueryDto: PaginationQueryDto): Promise<User[]> {
+    const { limit, offset } = paginationQueryDto;
     const users = await this.userModel.find().skip(offset).limit(limit).exec();
     return users.filter((item) => !item.isDeleted);
   }
@@ -51,19 +52,23 @@ export class UserService {
   }
 
   /**
-   * Update user by ID
-   * @param {CreateUserDto}id
+   * Update user by id
    * @param updateUserDto
    * @returns {User}
    */
-  async updateUserById(id: ObjectId, updateUserDto: UpdateUserDto): Promise<User> {
-    const existingUser = await this.userModel.findById(id).exec();
+  async updateUserById(updateUserDto: UpdateUserDto): Promise<User> {
+    const id = updateUserDto.userId;
+    const user = await this.userModel.findById(id).exec();
+
     // if there is no such a user or the user has been deleted, then throw an error.
-    if (!existingUser || existingUser.isDeleted) {
-      throw new NotFoundException(`User ${id} not found`);
+    if (!user || user.isDeleted) {
+      throw new NotFoundException(`User not found`);
     }
     // Add new update date
     updateUserDto = { ...updateUserDto, updatedAt: new Date() };
+    if (updateUserDto.password) {
+      updateUserDto = { ...updateUserDto, password: await argon.hash(updateUserDto.password) };
+    }
     const updatedUser = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true })
       .exec();
@@ -73,22 +78,22 @@ export class UserService {
 
   /**
    * connect account
-   * @param accountToConnect
+   * @param accountToConnectDto
    * @returns {User}
    */
-  async connectAccount(accountToConnect: ConnectAccountDto): Promise<ReturnUserInfo> {
-    const existingUser = await this.userModel.findOne({ email: accountToConnect.email }).exec();
-    const id = existingUser._id;
+  async connectAccount(accountToConnectDto: ConnectAccountDto): Promise<ReturnUserInfo> {
+    const existingUser = await this.userModel.findOne({ email: accountToConnectDto.email }).exec();
     if (!existingUser || existingUser.isDeleted) {
-      throw new NotFoundException(`User ${id} not found`);
+      throw new NotFoundException(`User not found`);
     }
-    accountToConnect = { ...accountToConnect, updatedAt: new Date() };
+    const id = existingUser._id;
+    accountToConnectDto = { ...accountToConnectDto, updatedAt: new Date() };
     const connectedAccount = await this.userModel
-      .findByIdAndUpdate({ _id: id }, { $set: accountToConnect }, { new: true })
+      .findByIdAndUpdate({ _id: id }, { $set: accountToConnectDto }, { new: true })
       .exec();
     // get access token and refresh token
-    const tokens = await this.authservice.getTokens(connectedAccount._id, connectedAccount.email);
-    await this.authservice.updateRtHash(connectedAccount._id, tokens.refreshToken);
+    const tokens = await this.authService.getTokens(connectedAccount._id, connectedAccount.email);
+    await this.authService.updateRtHash(connectedAccount._id, tokens.refreshToken);
     const userInfo: ReturnUserInfo = {
       userId: connectedAccount._id,
       googleId: connectedAccount.googleId,
@@ -122,17 +127,34 @@ export class UserService {
   }
 
   /**
-   * check if the users exist in database, if yes,
-   * Check if the user is not deleted and active by email.
-   * @param emailDto
+   * @findUser false if the user needs registration
+   * @needPwd true if the user registered through google and does not have passwords
+   * @param checkEmailDto
    */
-  async checkEmail(emailDto: CheckEmailDto): Promise<boolean> {
-    const foundUser = await this.userModel.find({ email: emailDto.email }).exec();
-    if (foundUser.length > 0) {
-      const user = await this.userModel.findOne({ email: emailDto.email }).exec();
-      const { isActivated, isDeleted } = user;
-      return isActivated && !isDeleted;
+  async checkEmail(checkEmailDto: CheckEmailDto): Promise<{
+    findUser: boolean;
+    needPwd?: boolean;
+    emailRes?: {
+      status: string;
+      message: string;
+    };
+    userId?: string;
+  }> {
+    const user = await this.userModel.findOne({ email: checkEmailDto.email }).exec();
+    if (user) {
+      const needPwd = !user.password;
+      const emailRes = needPwd
+        ? await this.authService.sendOTPVerificationEmail(user._id, user.email)
+        : null;
+      return {
+        findUser: user.isActivated && !user.isDeleted,
+        needPwd: needPwd,
+        emailRes: emailRes,
+        userId: user._id,
+      };
     }
-    return false;
+    return {
+      findUser: false,
+    };
   }
 }
