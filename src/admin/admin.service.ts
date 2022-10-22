@@ -101,7 +101,6 @@ export class AdminService {
     const updateAdminDto = {
       ...AdminDto,
       hashedRefreshToken: hashedRefreshToken,
-      updatedAt: new Date(),
     };
     await this.adminModel
       .findByIdAndUpdate({ _id: adminId }, { $set: updateAdminDto }, { new: true })

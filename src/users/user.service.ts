@@ -64,8 +64,6 @@ export class UserService {
     if (!user || user.isDeleted) {
       throw new NotFoundException(`User not found`);
     }
-    // Add new update date
-    updateUserDto = { ...updateUserDto, updatedAt: new Date() };
     if (updateUserDto.password) {
       updateUserDto = { ...updateUserDto, password: await argon.hash(updateUserDto.password) };
     }
@@ -87,7 +85,6 @@ export class UserService {
       throw new NotFoundException(`User not found`);
     }
     const id = existingUser._id;
-    accountToConnectDto = { ...accountToConnectDto, updatedAt: new Date() };
     const connectedAccount = await this.userModel
       .findByIdAndUpdate({ _id: id }, { $set: accountToConnectDto }, { new: true })
       .exec();
@@ -120,7 +117,6 @@ export class UserService {
     }
     await this.userModel.findByIdAndUpdate(id, {
       isDeleted: true,
-      updatedAt: new Date(),
     });
     //return the user who has been deleted
     return { message: `User deleted successfully` };

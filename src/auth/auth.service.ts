@@ -317,7 +317,6 @@ export class AuthService {
     const updateUserDto = {
       ...CreateUserDto,
       hashedRefreshToken,
-      updatedAt: new Date(),
     };
     await this.userModel
       .findByIdAndUpdate({ _id: userId }, { $set: updateUserDto }, { new: true })

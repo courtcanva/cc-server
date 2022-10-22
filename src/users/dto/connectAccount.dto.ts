@@ -8,7 +8,4 @@ export class ConnectAccountDto {
   @IsString()
   @IsNotEmpty()
   readonly email: string;
-
-  @IsEmpty()
-  readonly updatedAt: Date;
 }

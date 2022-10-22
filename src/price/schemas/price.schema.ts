@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-@Schema()
+@Schema({ timestamps: true })
 export class Price extends Document {
   @Prop({ required: true })
   cementFloorPrice: number;
@@ -16,12 +16,6 @@ export class Price extends Document {
       isDeleted: boolean;
     },
   ];
-
-  @Prop({ type: Date, default: new Date() })
-  createdAt: Date;
-
-  @Prop({ type: Date, default: new Date() })
-  updatedAt: Date;
 
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;

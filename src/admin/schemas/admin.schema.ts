@@ -12,12 +12,6 @@ export class Admin extends Document {
   @Prop()
   hashedRefreshToken: string;
 
-  @Prop()
-  createdAt: Date;
-
-  @Prop()
-  updatedAt: Date;
-
   @Prop({ default: false })
   isDeleted: boolean;
 }

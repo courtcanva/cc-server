@@ -27,7 +27,4 @@ export class UpdateUserDto {
   @IsBoolean()
   @IsOptional()
   readonly isActivated?: boolean;
-
-  @IsEmpty()
-  readonly updatedAt?: Date;
 }

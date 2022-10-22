@@ -8,7 +8,4 @@ export class UpdateCourtSpecDto extends CreateCourtSpecDto {
   @IsOptional()
   @IsBoolean()
   readonly isHidden: boolean;
-
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
 }

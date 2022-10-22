@@ -59,7 +59,4 @@ export class CreateCourtSpecDto {
   @IsString()
   @IsOptional()
   readonly description: string;
-
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
 }

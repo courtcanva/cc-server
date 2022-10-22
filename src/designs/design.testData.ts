@@ -40,8 +40,6 @@ export const mockDesign = {
     sideBorderWidth: 1000,
     lineBorderWidth: 200,
   },
-  createdAt: new Date(),
-  updatedAt: new Date(),
 };
 
 export const mockDesignArray = [
@@ -87,8 +85,6 @@ export const mockDesignArray = [
       sideBorderWidth: 1000,
       lineBorderWidth: 200,
     },
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
     user_id: "user123",
@@ -132,7 +128,5 @@ export const mockDesignArray = [
       sideBorderWidth: 1000,
       lineBorderWidth: 200,
     },
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
 ];
