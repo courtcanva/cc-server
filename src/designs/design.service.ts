@@ -9,15 +9,9 @@ export class DesignService {
   constructor(@InjectModel(Design.name) private readonly designModel: Model<Design>) {}
 
   async find(user_id: string): Promise<Design[]> {
-    try {
-      return (await this.designModel.find({ user_id: user_id }).exec()).filter(
-        (design) => !design.isDeleted,
-      );
-    } catch {
-      throw new NotFoundException({
-        message: "User design cannot be find, please search again",
-      });
-    }
+    return (await this.designModel.find({ user_id: user_id }).exec()).filter(
+      (design) => !design.isDeleted,
+    );
   }
 
   async create(createDesign: DesignDto): Promise<Design> {
@@ -32,24 +26,18 @@ export class DesignService {
       tileColor: designDto.tileColor,
       courtSize: designDto.courtSize,
     };
-    try {
-      const existingDesign = await this.designModel
-        .findOneAndUpdate({ _id: _id }, { $set: updateDesign }, { new: true })
-        .exec();
-      return existingDesign;
-    } catch {
-      throw new NotFoundException({
-        message: "User design cannot be found, please search again",
-      });
-    }
+    const existingDesign = await this.designModel
+      .findOneAndUpdate({ _id: _id }, { $set: updateDesign }, { new: true })
+      .exec();
+    return existingDesign;
   }
 
   async remove(id: ObjectId): Promise<boolean> {
-    try {
-      await this.designModel.findOneAndUpdate({ _id: id }, { $set: { isDeleted: true } });
-      return true;
-    } catch {
-      return false;
-    }
+    const response = await this.designModel.findOneAndUpdate(
+      { _id: id, isDeleted: false },
+      { $set: { isDeleted: true } },
+    );
+    if (!response) return false;
+    return true;
   }
 }

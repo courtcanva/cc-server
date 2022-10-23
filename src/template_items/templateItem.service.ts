@@ -22,7 +22,7 @@ export class TemplateItemService {
     if (user_id) optionalQuery.user_id = user_id;
 
     const response = await this.TemplateModel.find({
-      isDeleted: 111,
+      isDeleted: false,
       ...optionalQuery,
     })
       .sort({ createdAt: -1 })

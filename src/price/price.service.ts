@@ -15,20 +15,14 @@ export class PriceService {
   }
 
   async update(id: ObjectId, priceDto: PriceDto): Promise<Price> {
-    try {
-      const updatePriceDto = {
-        ...priceDto,
-        tilePrices: priceDto.tilePrices,
-        cementFloorPrice: priceDto.cementFloorPrice,
-      };
-      const existingPrice = await this.priceModel
-        .findOneAndUpdate({ _id: id }, { $set: updatePriceDto }, { new: true })
-        .exec();
-      return existingPrice;
-    } catch {
-      throw new NotFoundException({
-        message: "Price cannot be found, please search again",
-      });
-    }
+    const updatePriceDto = {
+      ...priceDto,
+      tilePrices: priceDto.tilePrices,
+      cementFloorPrice: priceDto.cementFloorPrice,
+    };
+    const existingPrice = await this.priceModel
+      .findOneAndUpdate({ _id: id }, { $set: updatePriceDto }, { new: true })
+      .exec();
+    return existingPrice;
   }
 }

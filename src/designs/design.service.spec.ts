@@ -78,6 +78,6 @@ describe("DesignService", () => {
       }) as any,
     );
     const deleteDesign = await service.remove(Object("1"));
-    expect(deleteDesign).toEqual(true);
+    expect(deleteDesign).toEqual(false);
   });
 });
