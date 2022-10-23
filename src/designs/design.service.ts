@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { Model, ObjectId } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { Design } from "./schemas/design.schema";
