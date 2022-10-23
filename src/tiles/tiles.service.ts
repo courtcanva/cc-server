@@ -34,14 +34,11 @@ export class TilesService {
   }
 
   async remove(id: ObjectId, updateTileDto: UpdateTileDto): Promise<boolean> {
-    try {
-      await this.tileModel.findOneAndUpdate(
-        { _id: id, isDeleted: false },
-        { $set: { isDeleted: true } },
-      );
-      return true;
-    } catch {
-      return false;
-    }
+    const response = await this.tileModel.findOneAndUpdate(
+      { _id: id, isDeleted: false },
+      { $set: { isDeleted: true } },
+    );
+    if (!response) return false;
+    return true;
   }
 }
