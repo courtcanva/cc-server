@@ -1,10 +1,11 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { User, UserSchema } from "../users/schemas/user.schema";
 import { JwtModule } from "@nestjs/jwt";
 import { AccessTokenStrategy, RefreshTokenStrategy } from "./strategies";
+import { UserModule } from "../users/user.module";
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AccessTokenStrategy, RefreshTokenStrategy } from "./strategies";
       },
     ]),
     JwtModule.register({}),
+    forwardRef(() => UserModule),
   ],
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
   controllers: [AuthController],

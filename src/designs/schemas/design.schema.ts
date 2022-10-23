@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-@Schema()
+@Schema({ timestamps: true })
 export class Design extends Document {
   @Prop({ required: true })
   user_id: string;
@@ -26,12 +26,6 @@ export class Design extends Document {
     sideBorderWidth: number;
     lineBorderWidth: number;
   };
-
-  @Prop({ type: Date, default: new Date() })
-  createdAt: Date;
-
-  @Prop({ type: Date, default: new Date() })
-  updatedAt: Date;
 
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;

@@ -22,10 +22,6 @@ export class CreateUserDto {
   @IsBoolean()
   readonly isActivated: boolean;
 
-  readonly createdAt: Date;
-
-  readonly updatedAt: Date;
-
   @IsString()
   readonly otp: string;
 

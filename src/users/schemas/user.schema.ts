@@ -20,12 +20,6 @@ export class User extends Document {
   @Optional()
   password: string;
 
-  @Prop()
-  createdAt: Date;
-
-  @Prop()
-  updatedAt: Date;
-
   @Prop({ default: false })
   isDeleted: boolean;
 

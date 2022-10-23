@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { ForbiddenException, forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { User } from "../users/schemas/user.schema";
@@ -8,12 +8,15 @@ import * as argon from "argon2";
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserDto } from "src/users/dto/createUser.dto";
 import { sendEmail } from "./emailHelpers";
+import { UserService } from "../users/user.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private jwtService: JwtService,
+    @Inject(forwardRef(() => UserService))
+    private userService: UserService,
   ) {}
 
   /**
@@ -62,6 +65,25 @@ export class AuthService {
       };
       // Return the user info who has been created when logging
       return newUserInfo;
+    } else if (!user.isActivated) {
+      await this.userService.updateUserById({
+        userId: user._id,
+        googleId: sub,
+        isActivated: true,
+      });
+      // get access token and refresh token
+      const tokens = await this.getTokens(user._id, user.email);
+      await this.updateRtHash(user._id, tokens.refreshToken);
+      const updatedUserInfo: ReturnUserInfo = {
+        userId: user._id,
+        googleId: sub,
+        email: email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        tokens,
+        needConnection: false,
+      };
+      return updatedUserInfo;
     } else {
       // get access token and refresh token
       const tokens = await this.getTokens(user._id, user.email);
@@ -295,7 +317,6 @@ export class AuthService {
     const updateUserDto = {
       ...CreateUserDto,
       hashedRefreshToken,
-      updatedAt: new Date(),
     };
     await this.userModel
       .findByIdAndUpdate({ _id: userId }, { $set: updateUserDto }, { new: true })

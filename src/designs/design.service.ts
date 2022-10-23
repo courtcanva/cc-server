@@ -34,11 +34,7 @@ export class DesignService {
     };
     try {
       const existingDesign = await this.designModel
-        .findOneAndUpdate(
-          { _id: _id },
-          { $set: updateDesign, $currentDate: { updatedAt: true } },
-          { new: true },
-        )
+        .findOneAndUpdate({ _id: _id }, { $set: updateDesign }, { new: true })
         .exec();
       return existingDesign;
     } catch {
@@ -50,10 +46,7 @@ export class DesignService {
 
   async remove(id: ObjectId): Promise<boolean> {
     try {
-      await this.designModel.findOneAndUpdate(
-        { _id: id },
-        { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
-      );
+      await this.designModel.findOneAndUpdate({ _id: id }, { $set: { isDeleted: true } });
       return true;
     } catch {
       return false;

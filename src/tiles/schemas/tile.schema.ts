@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as MongooseSchema } from "mongoose";
 import { Price } from "../../price/schemas/price.schema";
 
-@Schema()
+@Schema({ timestamps: true })
 export class Tile extends Document {
   @Prop({ type: String, required: true })
   name: string;
@@ -18,12 +18,6 @@ export class Tile extends Document {
 
   @Prop({ type: Number, required: true })
   height: number;
-
-  @Prop({ type: Date, default: new Date() })
-  createdAt: Date;
-
-  @Prop({ type: Date, default: new Date() })
-  updatedAt: Date;
 
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;

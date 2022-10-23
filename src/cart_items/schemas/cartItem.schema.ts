@@ -27,7 +27,7 @@ export class Design extends Document {
   };
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class CartItem extends Document {
   @Prop({ type: String, required: true })
   quotation: string;
@@ -46,12 +46,6 @@ export class CartItem extends Document {
 
   @Prop({ type: Design, required: true })
   design: Design;
-
-  @Prop({ type: Date, default: new Date() })
-  createdAt: Date;
-
-  @Prop({ type: Date, default: new Date() })
-  updatedAt: Date;
 
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;

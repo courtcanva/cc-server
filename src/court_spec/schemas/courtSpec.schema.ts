@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
 export type CourtSpecDocument = CourtSpec & Document;
-@Schema()
+@Schema({ timestamps: true })
 export class CourtSpec extends Document {
   @Prop({ required: true, minLength: 5, maxLength: 50 })
   name: string;
@@ -39,12 +39,6 @@ export class CourtSpec extends Document {
 
   @Prop({ default: "" })
   description: string;
-
-  @Prop({ default: new Date() })
-  createdAt: Date;
-
-  @Prop({ default: new Date() })
-  updatedAt: Date;
 
   @Prop({ default: false })
   isHidden: boolean;
