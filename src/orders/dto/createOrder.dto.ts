@@ -128,6 +128,7 @@ export class CreateOrderDto {
 
   @IsArray()
   @IsNotEmpty()
+  @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => Items)
   readonly items: Items[];
