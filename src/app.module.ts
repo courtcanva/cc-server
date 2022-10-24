@@ -11,6 +11,7 @@ import { PriceModule } from "./price/price.module";
 import { DesignModule } from "./designs/design.module";
 import { CartItemModule } from "./cart_items/cartItem.module";
 import { TemplateItemsModule } from "./template_items/templateItem.module";
+import { TeamMemberModule } from "./team_members/teamMember.module";
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TemplateItemsModule } from "./template_items/templateItem.module";
     DesignModule,
     CartItemModule,
     TemplateItemsModule,
+    TeamMemberModule,
   ],
 })
 export class AppModule {}
