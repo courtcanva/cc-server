@@ -19,7 +19,7 @@ export class OrderService {
     if (user_id) optionalQuery.user_id = user_id;
 
     return await this.orderModel
-      .find({ isDeleted: false, ...optionalQuery })
+      .find({ ...optionalQuery })
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
@@ -61,7 +61,7 @@ export class OrderService {
     try {
       await this.orderModel.findOneAndUpdate(
         { _id: id },
-        { $set: { isDeleted: true }, $currentDate: { updatedAt: true } },
+        { $set: { status: "cancelled" }, $currentDate: { updatedAt: true } },
       );
       return true;
     } catch {

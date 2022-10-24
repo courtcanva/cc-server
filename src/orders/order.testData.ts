@@ -1,11 +1,11 @@
 export const mockOrder = {
   user_id: "user123",
-  isPaid: false,
+  status: "unpaid",
+  depositRatio: 0.02,
   items: [
     {
       image: "test",
       constructionDrawing: "test",
-      needLevelGround: false,
       design: {
         designName: "Court Canva 1",
         tileColor: [
@@ -72,30 +72,8 @@ export const mockOrder = {
           quantity: 624,
         },
       ],
-      constructionAddress: {
-        country: "test",
-        state: "test",
-        city: "test",
-        line1: "test",
-        postCode: "test",
-      },
     },
   ],
-  discount: { discountType: "test", discountRatio: 123, discountAmount: "test" },
-  userInfo: {
-    email: "test",
-    phone: "test",
-    billingAddress: {
-      country: "test",
-      state: "test",
-      city: "test",
-      line1: "test",
-      postCode: "test",
-    },
-  },
-  stripeSessionId: "test",
-  currency: "test",
-  totalPrice: "test",
 };
 
 export const mockOrderArray = [{ ...mockOrder }, { ...mockOrder }, { ...mockOrder }];
@@ -105,6 +83,5 @@ export const mockOrderInDatabase = {
   _id: "6320bd57f3dee2ee6deeecf2",
   createdAt: "2022-09-13T17:26:43.520Z",
   updatedAt: "2022-09-14T10:39:11.476Z",
-  isDeleted: false,
   __v: 0,
 };

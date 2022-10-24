@@ -100,7 +100,7 @@ describe("OrderService", () => {
     expect(updatedOrder).toEqual(updateOrder);
   });
 
-  it("should delete a order", async () => {
+  it("should cancel a order", async () => {
     jest.spyOn(model, "findOneAndUpdate").mockResolvedValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockOrderInDatabase),

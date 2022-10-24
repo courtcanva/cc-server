@@ -2,15 +2,15 @@ import { Type } from "class-transformer";
 import {
   ArrayMinSize,
   IsArray,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsObject,
-  IsOptional,
   IsString,
-  IsBoolean,
   Min,
   ValidateNested,
 } from "class-validator";
+import { StatusType } from "../schemas/order.schema";
 
 export class Color {
   @IsString()
@@ -90,44 +90,18 @@ export class QuotationDetail {
   quantity: number;
 }
 
-export class Address {
-  @IsString()
-  @IsNotEmpty()
-  country: string;
-
-  @IsString()
-  @IsNotEmpty()
-  state: string;
-
-  @IsString()
-  @IsNotEmpty()
-  city: string;
-
-  @IsString()
-  @IsNotEmpty()
-  line1: string;
-
-  @IsString()
-  @IsOptional()
-  postCode: string;
-}
-
 export class Items {
   @IsString()
   @IsNotEmpty()
   quotation: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   image: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   constructionDrawing: string;
-
-  @IsBoolean()
-  @IsOptional()
-  needLevelGround: boolean;
 
   @IsObject()
   @IsNotEmpty()
@@ -141,23 +115,6 @@ export class Items {
   @ValidateNested({ each: true })
   @Type(() => QuotationDetail)
   quotationDetails: QuotationDetail[];
-
-  @IsObject()
-  @IsNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => Address)
-  constructionAddress: Address;
-}
-
-export class Discount {
-  @IsString()
-  discountType: string;
-
-  @IsNumber()
-  discountRatio: number;
-
-  @IsString()
-  discountAmount: string;
 }
 
 export class CreateOrderDto {
@@ -165,15 +122,17 @@ export class CreateOrderDto {
   @IsNotEmpty()
   readonly user_id: string;
 
+  @IsEnum(StatusType)
+  @IsNotEmpty()
+  status: string;
+
   @IsArray()
   @IsNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => Items)
   readonly items: Items[];
 
-  @IsObject()
-  @ValidateNested({ each: true })
-  @IsOptional()
-  @Type(() => Discount)
-  readonly discount: Discount;
+  @IsNumber()
+  @IsNotEmpty()
+  readonly depositRatio: number;
 }
