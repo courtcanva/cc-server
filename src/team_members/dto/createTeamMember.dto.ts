@@ -29,14 +29,17 @@ export class CreateTeamMemberDto {
 
   @IsUrl()
   @IsNotEmpty()
+  @IsOptional()
   readonly linkedInUrl: string;
 
   @IsUrl()
   @IsNotEmpty()
+  @IsOptional()
   readonly githubUrl: string;
 
   @IsEmail()
   @IsNotEmpty()
+  @IsOptional()
   readonly emailAddress: string;
 
   @IsNumber()

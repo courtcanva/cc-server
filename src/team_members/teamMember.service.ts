@@ -10,7 +10,7 @@ import { TeamMember } from "./schemas/teamMembers.schema";
 export class TeamMemberService {
   constructor(@InjectModel(TeamMember.name) private readonly TeamMemberModel: Model<TeamMember>) {}
 
-  async getAllTeamMembers(getAllTeamMembers: GetAllTeamMembersDto) {
+  async getAllTeamMembers(getAllTeamMembers: GetAllTeamMembersDto): Promise<any> {
     const { isGrouped = false, limit = 0, offset = 0 } = getAllTeamMembers;
     const optionalQuery: { [key: string]: any } = {};
 
@@ -33,7 +33,7 @@ export class TeamMemberService {
     return groupedTeamMembers;
   }
 
-  async findOne(id: ObjectId) {
+  async findOne(id: ObjectId): Promise<TeamMember> {
     const teamMember = await this.TeamMemberModel.findById(id).exec();
     if (!teamMember) {
       throw new NotFoundException(`Team member #${id} not found`);
@@ -42,12 +42,12 @@ export class TeamMemberService {
     return teamMember;
   }
 
-  async create(createTeamMemberDto: CreateTeamMemberDto) {
+  async create(createTeamMemberDto: CreateTeamMemberDto): Promise<TeamMember> {
     const teamMember = await this.TeamMemberModel.create(createTeamMemberDto);
     return teamMember;
   }
 
-  async update(id: ObjectId, updateTeamMemberDto: UpdateTeamMemberDto) {
+  async update(id: ObjectId, updateTeamMemberDto: UpdateTeamMemberDto): Promise<TeamMember> {
     const teamMember = await this.TeamMemberModel.findByIdAndUpdate(
       { _id: id },
       { $set: updateTeamMemberDto },
@@ -59,7 +59,7 @@ export class TeamMemberService {
     return teamMember;
   }
 
-  async remove(id: ObjectId) {
+  async remove(id: ObjectId): Promise<boolean> {
     try {
       await this.TeamMemberModel.findOneAndUpdate({ _id: id }, { $set: { isDeleted: true } });
       return true;

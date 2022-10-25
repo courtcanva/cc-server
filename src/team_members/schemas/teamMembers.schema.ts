@@ -21,13 +21,13 @@ export class TeamMember extends Document {
   @Prop({ type: String, enum: RoleType, default: RoleType.DEVELOPER })
   role: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   linkedInUrl: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   githubUrl: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   emailAddress: string;
 
   @Prop({ type: Number, default: 1 })
