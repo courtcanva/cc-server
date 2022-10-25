@@ -1,4 +1,15 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsEmail,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Max,
+  Min,
+} from "class-validator";
 import { RoleType } from "../schemas/teamMembers.schema";
 
 export class CreateTeamMemberDto {
@@ -6,7 +17,7 @@ export class CreateTeamMemberDto {
   @IsNotEmpty()
   readonly name: string;
 
-  @IsString()
+  @IsUrl()
   @IsNotEmpty()
   @IsOptional()
   readonly profileImgUrl: string;
@@ -16,11 +27,11 @@ export class CreateTeamMemberDto {
   @IsOptional()
   readonly role: string;
 
-  @IsString()
+  @IsUrl()
   @IsNotEmpty()
   readonly linkedInUrl: string;
 
-  @IsString()
+  @IsUrl()
   @IsNotEmpty()
   readonly githubUrl: string;
 
@@ -31,5 +42,8 @@ export class CreateTeamMemberDto {
   @IsNumber()
   @IsNotEmpty()
   @IsOptional()
+  @Max(5)
+  @Min(0)
+  @IsInt()
   readonly priority: number;
 }

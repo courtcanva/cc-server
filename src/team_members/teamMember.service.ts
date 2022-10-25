@@ -11,19 +11,26 @@ export class TeamMemberService {
   constructor(@InjectModel(TeamMember.name) private readonly TeamMemberModel: Model<TeamMember>) {}
 
   async getAllTeamMembers(getAllTeamMembers: GetAllTeamMembersDto) {
-    const { isSorted = false, limit = 0, offset = 0 } = getAllTeamMembers;
+    const { isGrouped = false, limit = 0, offset = 0 } = getAllTeamMembers;
     const optionalQuery: { [key: string]: any } = {};
 
     const teamMembers = await this.TeamMemberModel.find({
       isDeleted: false,
       ...optionalQuery,
     })
-      .sort({ priority: 1 })
+      .sort({ priority: -1 })
       .skip(offset)
       .limit(limit)
       .exec();
 
-    return teamMembers;
+    if (!isGrouped) return teamMembers;
+
+    const groupedTeamMembers = {};
+    teamMembers.forEach((teamMember) => {
+      if (!groupedTeamMembers[teamMember.role]) groupedTeamMembers[teamMember.role] = [];
+      groupedTeamMembers[teamMember.role].push(teamMember);
+    });
+    return groupedTeamMembers;
   }
 
   async findOne(id: ObjectId) {
@@ -41,35 +48,23 @@ export class TeamMemberService {
   }
 
   async update(id: ObjectId, updateTeamMemberDto: UpdateTeamMemberDto) {
-    const updatedTeamMember = await this.TeamMemberModel.findOneAndUpdate(
-      {
-        _id: id,
-        isDeleted: false,
-      },
+    const teamMember = await this.TeamMemberModel.findByIdAndUpdate(
+      { _id: id },
       { $set: updateTeamMemberDto },
       { new: true },
     ).exec();
-
-    if (!updatedTeamMember) {
+    if (!teamMember) {
       throw new NotFoundException(`Team member #${id} not found`);
     }
-
-    return updatedTeamMember;
+    return teamMember;
   }
 
   async remove(id: ObjectId) {
-    const response = await this.TeamMemberModel.findOneAndUpdate(
-      {
-        _id: id,
-        isDeleted: false,
-      },
-      {
-        $set: { isDeleted: true },
-      },
-    );
-    if (!response) {
+    try {
+      await this.TeamMemberModel.findOneAndUpdate({ _id: id }, { $set: { isDeleted: true } });
+      return true;
+    } catch {
       return false;
     }
-    return true;
   }
 }

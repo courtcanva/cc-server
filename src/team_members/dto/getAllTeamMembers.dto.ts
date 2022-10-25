@@ -5,5 +5,5 @@ export class GetAllTeamMembersDto extends PaginationQueryDto {
   @IsBoolean()
   @IsNotEmpty()
   @IsOptional()
-  isSorted: boolean;
+  isGrouped: boolean;
 }
