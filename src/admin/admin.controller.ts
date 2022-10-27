@@ -13,13 +13,14 @@ import {
 } from "@nestjs/common";
 import { ObjectId } from "mongoose";
 import { AdminService } from "./admin.service";
-import { AdminDto } from "./dto/admin.dto";
 import { Tokens } from "./types/tokens.type";
 import { AccessTokenGuard, RefreshTokenGuard } from "src/common/guards";
 import { GetCurrentAdmin, GetCurrentAdminId } from "src/common/decorators";
 import { ParseObjectIdPipe } from "src/utils/ParseObjectIdPipe";
 import { Admin } from "./schemas/admin.schema";
+import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
+import { LoginAdminDto } from "./dto/login-admin.dto";
 import { PaginationQueryDto } from "../utils/PaginationDto/pagination-query.dto";
 
 @Controller("admin")
@@ -57,13 +58,13 @@ export class AdminController {
 
   @Post("register")
   @HttpCode(HttpStatus.CREATED)
-  adminRegister(@Body() dto: AdminDto): Promise<Tokens> {
+  adminRegister(@Body() dto: CreateAdminDto): Promise<Tokens> {
     return this.adminService.adminRegister(dto);
   }
 
   @Post("login")
   @HttpCode(HttpStatus.OK)
-  adminSignIn(@Body() dto: AdminDto): Promise<Tokens> {
+  adminSignIn(@Body() dto: LoginAdminDto): Promise<Tokens> {
     return this.adminService.adminLogin(dto);
   }
 

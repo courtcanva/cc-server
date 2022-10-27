@@ -1,7 +1,8 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
-import { AdminDto } from "./dto/admin.dto";
+import { LoginAdminDto } from "./dto/login-admin.dto";
+import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { Admin } from "./schemas/admin.schema";
 import { JwtService } from "@nestjs/jwt";
@@ -16,7 +17,7 @@ export class AdminService {
     private jwtService: JwtService,
   ) {}
 
-  async adminRegister(adminDto: AdminDto): Promise<Tokens> {
+  async adminRegister(adminDto: CreateAdminDto): Promise<Tokens> {
     const hashedPassword = await argon.hash(adminDto.password);
 
     const newAdminInfo = {
@@ -35,7 +36,7 @@ export class AdminService {
     return tokens;
   }
 
-  async adminLogin(adminDto: AdminDto): Promise<Tokens> {
+  async adminLogin(adminDto: LoginAdminDto): Promise<Tokens> {
     const admin = await this.adminModel.findOne({ email: adminDto.email }).exec();
     if (!admin) {
       throw new ForbiddenException("Access Denied");
@@ -103,7 +104,7 @@ export class AdminService {
   async updateRtHash(adminId: ObjectId, rt: string) {
     const hashedRefreshToken = await argon.hash(rt);
     const updateAdminDto = {
-      ...AdminDto,
+      ...UpdateAdminDto,
       hashedRefreshToken: hashedRefreshToken,
     };
     await this.adminModel
