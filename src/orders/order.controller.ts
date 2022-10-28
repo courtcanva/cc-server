@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { OrderService } from "./order.service";
-import { FindAllOrderDto } from "./dto/FindAllOrder.dto";
+import { FindAllOrderDto } from "./dto/findAllOrder.dto";
 import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 import { Order } from "./schemas/order.schema";
