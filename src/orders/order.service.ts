@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Order } from "./schemas/order.schema";
 import { Model, ObjectId } from "mongoose";
-import { FindAllOrderDto } from "./dto/findAllOrder.dto";
+import { findAllOrderDto } from "./dto/findAllOrder.dto";
 import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 
@@ -10,7 +10,7 @@ import { UpdateOrderDto } from "./dto/updateOrder.dto";
 export class OrderService {
   constructor(@InjectModel(Order.name) private readonly orderModel: Model<Order>) {}
 
-  async findAll(findAllOrder: FindAllOrderDto): Promise<Order[]> {
+  async findAll(findAllOrder: findAllOrderDto): Promise<Order[]> {
     const { user_id, limit = 0, offset = 0 } = findAllOrder;
     if (user_id === "") {
       throw new NotFoundException("userId cannot be empty string");

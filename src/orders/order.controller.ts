@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { OrderService } from "./order.service";
-import { FindAllOrderDto } from "./dto/FindAllOrder.dto";
+import { findAllOrderDto } from "./dto/FindAllOrder.dto";
 import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 import { Order } from "./schemas/order.schema";
@@ -11,7 +11,7 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Get()
-  async findAll(@Query() findAllOrder: FindAllOrderDto): Promise<Order[]> {
+  async findAll(@Query() findAllOrder: findAllOrderDto): Promise<Order[]> {
     return await this.orderService.findAll(findAllOrder);
   }
 
