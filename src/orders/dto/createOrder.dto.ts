@@ -2,15 +2,14 @@ import { Type } from "class-transformer";
 import {
   ArrayMinSize,
   IsArray,
-  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsObject,
   IsString,
+  IsUrl,
   Min,
   ValidateNested,
 } from "class-validator";
-import { StatusType } from "../schemas/order.schema";
 
 export class Color {
   @IsString()
@@ -95,11 +94,11 @@ export class Items {
   @IsNotEmpty()
   quotation: string;
 
-  @IsString()
+  @IsUrl()
   @IsNotEmpty()
   image: string;
 
-  @IsString()
+  @IsUrl()
   @IsNotEmpty()
   constructionDrawing: string;
 
@@ -121,10 +120,6 @@ export class CreateOrderDto {
   @IsString()
   @IsNotEmpty()
   readonly user_id: string;
-
-  @IsEnum(StatusType)
-  @IsNotEmpty()
-  status: string;
 
   @IsArray()
   @IsNotEmpty()

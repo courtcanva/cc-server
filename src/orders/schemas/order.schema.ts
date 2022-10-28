@@ -31,7 +31,7 @@ export class Design extends Document {
   };
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class Order extends Document {
   @Prop({ type: String, required: true })
   user_id: string;
@@ -49,12 +49,6 @@ export class Order extends Document {
       quotationDetails: [{ color: string; quantity: number }];
     },
   ];
-
-  @Prop({ type: Date, default: new Date() })
-  createdAt: Date;
-
-  @Prop({ type: Date, default: new Date() })
-  updatedAt: Date;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
