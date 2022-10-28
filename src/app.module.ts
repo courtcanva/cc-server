@@ -12,6 +12,7 @@ import { DesignModule } from "./designs/design.module";
 import { CartItemModule } from "./cart_items/cartItem.module";
 import { TemplateItemsModule } from "./template_items/templateItem.module";
 import { TeamMemberModule } from "./team_members/teamMember.module";
+import { OrderModule } from "./orders/order.module";
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { TeamMemberModule } from "./team_members/teamMember.module";
     CartItemModule,
     TemplateItemsModule,
     TeamMemberModule,
+    OrderModule,
   ],
 })
 export class AppModule {}
