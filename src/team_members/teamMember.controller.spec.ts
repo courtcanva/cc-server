@@ -9,7 +9,7 @@ import {
 } from "./teamMember.testData";
 import { CreateTeamMemberDto } from "./dto/createTeamMember.dto";
 import { UpdateTeamMemberDto } from "./dto/updateTeamMember.dto";
-import { GetAllTeamMembersDto } from "./dto/getAllTeamMembers.dto";
+import { ListTeamMembersDto } from "./dto/listTeamMembers.dto";
 import { ObjectId } from "mongoose";
 
 describe("Team Member Controller", () => {
@@ -22,7 +22,7 @@ describe("Team Member Controller", () => {
         {
           provide: TeamMemberService,
           useValue: {
-            getAllTeamMembers: jest
+            listTeamMembers: jest
               .fn()
               .mockImplementation(() => Promise.resolve(mockGroupedTeamMembers)),
             findOne: jest.fn().mockImplementation(() => Promise.resolve(mockTeamMemberResult1)),
@@ -56,8 +56,8 @@ describe("Team Member Controller", () => {
 
   describe("getAllTeamMembers", () => {
     it("should get all team members", async () => {
-      const getAllTeamMembersDto: GetAllTeamMembersDto = { isGrouped: true, limit: 0, offset: 0 };
-      expect(controller.getAllTeamMembers(getAllTeamMembersDto)).resolves.toEqual(
+      const listTeamMembersDto: ListTeamMembersDto = { isGrouped: "true", limit: 0, offset: 0 };
+      expect(controller.listTeamMembers(listTeamMembersDto)).resolves.toEqual(
         mockGroupedTeamMembers,
       );
     });

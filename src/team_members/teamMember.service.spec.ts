@@ -61,7 +61,7 @@ describe("Team Member Service", () => {
         }),
       }),
     } as any);
-    expect(await service.getAllTeamMembers({ isGrouped: true, limit: 0, offset: 0 })).toEqual(
+    expect(await service.listTeamMembers({ isGrouped: "true", limit: 0, offset: 0 })).toEqual(
       mockGroupedTeamMembers,
     );
   });

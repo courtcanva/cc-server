@@ -120,7 +120,7 @@ module.exports = {
         linkedInUrl: "https://www.linkedin.com/in/sunny-lin-devops/",
         githubUrl: "https://github.com/SunnyLLL",
         emailAddress: "sunnylinql@gmail.com",
-        priority: 0,
+        priority: 1,
       },
       {
         name: "Kylie Wang",
@@ -129,7 +129,7 @@ module.exports = {
         role: "DevOps",
         linkedInUrl: "https://www.linkedin.com/in/qianyu-wang-2020/",
         emailAddress: "qianyuwang@outlook.com",
-        priority: 0,
+        priority: 1,
       },
       {
         name: "Sunny Yang",
@@ -139,7 +139,7 @@ module.exports = {
         linkedInUrl: "https://www.linkedin.com/in/sunnyyangyyc/",
         githubUrl: "https://github.com/sunnyyangyyc",
         emailAddress: "6sunnywork@gmail.com",
-        priority: 0,
+        priority: 1,
       },
       {
         name: "Timmy Lin",
@@ -149,7 +149,7 @@ module.exports = {
         linkedInUrl: "https://www.linkedin.com/in/timmy-lin/",
         githubUrl: "https://github.com/timmyBeef",
         emailAddress: "tim.lin028@gmail.com",
-        priority: 0,
+        priority: 1,
       },
       {
         name: "Eden Wang",
@@ -158,7 +158,7 @@ module.exports = {
         role: "DevOps",
         linkedInUrl: "https://www.linkedin.com/in/eden-wang-86981b241/",
         emailAddress: "Edenwang0080@gmail.com",
-        priority: 0,
+        priority: 1,
       },
       {
         name: "Heath Chen",

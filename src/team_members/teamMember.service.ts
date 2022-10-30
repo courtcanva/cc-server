@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { CreateTeamMemberDto } from "./dto/createTeamMember.dto";
-import { GetAllTeamMembersDto } from "./dto/getAllTeamMembers.dto";
+import { ListTeamMembersDto } from "./dto/listTeamMembers.dto";
 import { UpdateTeamMemberDto } from "./dto/updateTeamMember.dto";
 import { TeamMember } from "./schemas/teamMembers.schema";
 
@@ -10,8 +10,8 @@ import { TeamMember } from "./schemas/teamMembers.schema";
 export class TeamMemberService {
   constructor(@InjectModel(TeamMember.name) private readonly TeamMemberModel: Model<TeamMember>) {}
 
-  async getAllTeamMembers(getAllTeamMembers: GetAllTeamMembersDto): Promise<any> {
-    const { isGrouped = false, limit = 0, offset = 0 } = getAllTeamMembers;
+  async listTeamMembers(getAllTeamMembers: ListTeamMembersDto): Promise<any> {
+    const { isGrouped = "false", limit = 0, offset = 0 } = getAllTeamMembers;
     const optionalQuery: { [key: string]: any } = {};
 
     const teamMembers = await this.TeamMemberModel.find({
@@ -23,7 +23,7 @@ export class TeamMemberService {
       .limit(limit)
       .exec();
 
-    if (!isGrouped) return teamMembers;
+    if (isGrouped === "false") return teamMembers;
 
     const groupedTeamMembers = {};
     teamMembers.forEach((teamMember) => {

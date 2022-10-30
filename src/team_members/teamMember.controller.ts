@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { ObjectId } from "mongoose";
 import { CreateTeamMemberDto } from "./dto/createTeamMember.dto";
-import { GetAllTeamMembersDto } from "./dto/getAllTeamMembers.dto";
 import { UpdateTeamMemberDto } from "./dto/updateTeamMember.dto";
+import { ListTeamMembersDto } from "./dto/listTeamMembers.dto";
 import { TeamMember } from "./schemas/teamMembers.schema";
 import { TeamMemberService } from "./teamMember.service";
 
@@ -11,8 +11,10 @@ export class TeamMemberController {
   constructor(private readonly teamMemberService: TeamMemberService) {}
 
   @Get()
-  async getAllTeamMembers(@Query() getAllTeamMembers: GetAllTeamMembersDto): Promise<any> {
-    return await this.teamMemberService.getAllTeamMembers(getAllTeamMembers);
+  async listTeamMembers(
+    @Query() { isGrouped, ...paginationQuery }: ListTeamMembersDto,
+  ): Promise<any> {
+    return await this.teamMemberService.listTeamMembers({ isGrouped, ...paginationQuery });
   }
 
   @Get(":id")
