@@ -74,11 +74,11 @@ export class CartItemService {
   }
 
   async remove(id: ObjectId): Promise<boolean> {
-    try {
-      await this.cartItemModel.findOneAndUpdate({ _id: id }, { $set: { isDeleted: true } });
-      return true;
-    } catch {
-      return false;
-    }
+    const response = await this.cartItemModel.findOneAndUpdate(
+      { _id: id, isDeleted: false },
+      { $set: { isDeleted: true } },
+    );
+    if (!response) return false;
+    return true;
   }
 }

@@ -2,6 +2,7 @@ import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app.module";
+import { MongoExceptionFilter } from "./common/filters/mongoose-exception.filter";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -15,6 +16,7 @@ async function bootstrap() {
       },
     }),
   );
+  app.useGlobalFilters(new MongoExceptionFilter());
   app.setGlobalPrefix("v1");
   await app.listen(process.env.PORT || 8080);
 }

@@ -49,11 +49,9 @@ export class CourtSpecService {
     if (!court || court.isDeleted) {
       throw new NotFoundException("court not found");
     }
-
-    const DeletedCount = await this.courtSpecModel.findByIdAndUpdate(courtId, {
+    await this.courtSpecModel.findByIdAndUpdate(courtId, {
       isDeleted: true,
     });
-
     return true;
   }
 }
