@@ -96,7 +96,7 @@ export const mockTeamMemberArray = [
   },
   {
     name: "10/25 test5",
-    role: "BA",
+    role: "Business Analyst",
     linkedInUrl: "https://www.linkedin.com/in/test1/",
     githubUrl: "https://github.com/test1",
     emailAddress: "testData1modefied@gmail.com",
@@ -122,7 +122,7 @@ export const mockTeamMemberArray = [
   },
   {
     name: "10/25 test7",
-    role: "UI",
+    role: "UI/UX Designer",
     linkedInUrl: "https://www.linkedin.com/in/test1/",
     githubUrl: "https://github.com/test1",
     emailAddress: "testData1modefied@gmail.com",
@@ -205,10 +205,10 @@ export const mockGroupedTeamMembers = {
       __v: 0,
     },
   ],
-  BA: [
+  "Business Analyst": [
     {
       name: "10/25 test5",
-      role: "BA",
+      role: "Business Analyst",
       linkedInUrl: "https://www.linkedin.com/in/test1/",
       githubUrl: "https://github.com/test1",
       emailAddress: "testData1modefied@gmail.com",
@@ -220,10 +220,10 @@ export const mockGroupedTeamMembers = {
       __v: 0,
     },
   ],
-  UI: [
+  "UI/UX Designer": [
     {
       name: "10/25 test7",
-      role: "UI",
+      role: "UI/UX Designer",
       linkedInUrl: "https://www.linkedin.com/in/test1/",
       githubUrl: "https://github.com/test1",
       emailAddress: "testData1modefied@gmail.com",

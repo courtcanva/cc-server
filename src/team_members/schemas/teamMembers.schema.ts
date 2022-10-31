@@ -4,8 +4,8 @@ import { Document } from "mongoose";
 export enum RoleType {
   DEVELOPER = "Developer",
   DEVOPS = "DevOps",
-  BUSINESS_ANALYST = "BA",
-  UIUX_DESINGER = "UI",
+  BUSINESS_ANALYST = "Business Analyst",
+  UIUX_DESINGER = "UI/UX Designer",
   TUTOR = "Tutor",
   PROJECT_OWNER = "PO",
 }

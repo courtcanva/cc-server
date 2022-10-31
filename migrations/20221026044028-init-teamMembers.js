@@ -164,7 +164,7 @@ module.exports = {
         name: "Heath Chen",
         profileImgUrl:
           "https://courtcanva-image-node.s3.ap-southeast-2.amazonaws.com/team-page-image/89u6O6mZ5nIDpQCbgK9ydheath-chen.jpg",
-        role: "BA",
+        role: "Business Analyst",
         linkedInUrl: "https://www.linkedin.com/in/heath-chen-7611a0150/",
         emailAddress: "joechen95315@gmail.com",
       },
@@ -172,7 +172,7 @@ module.exports = {
         name: "Jie Wei",
         profileImgUrl:
           "https://courtcanva-image-node.s3.ap-southeast-2.amazonaws.com/team-page-image/7t0YLc4rw_xXTlfdFsBZzjie-wei.jpg",
-        role: "UI",
+        role: "UI/UX Designer",
         linkedInUrl: "https://www.linkedin.com/in/jie-wei-987b841aa/",
       },
     ]);
