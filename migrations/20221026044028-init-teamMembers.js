@@ -39,6 +39,7 @@ module.exports = {
         linkedInUrl: "https://www.linkedin.com/in/emily-gong-dev/",
         githubUrl: "https://github.com/EmilyGong111",
         emailAddress: "emily.gong.dev@gmail.com",
+        priority: 1,
       },
       {
         name: "Steven Liu",
@@ -48,6 +49,7 @@ module.exports = {
         linkedInUrl: "https://www.linkedin.com/in/steven-liu-dev/",
         githubUrl: "https://github.com/stevenliu986",
         emailAddress: "stevenliu986@gmail.com",
+        priority: 1,
       },
       {
         name: "Korn Zhou",
@@ -57,6 +59,7 @@ module.exports = {
         linkedInUrl: "https://www.linkedin.com/in/korn-zhou/",
         githubUrl: "https://github.com/Kornzk",
         emailAddress: "zk930602@gmail.com",
+        priority: 1,
       },
       {
         name: "Arina Ke",
@@ -66,6 +69,7 @@ module.exports = {
         linkedInUrl: "https://www.linkedin.com/in/arina-ke/",
         githubUrl: "https://github.com/stkwn",
         emailAddress: "arina.ke@gmail.com",
+        priority: 1,
       },
       {
         name: "John Jiao",
@@ -75,6 +79,7 @@ module.exports = {
         linkedInUrl: "https://www.linkedin.com/in/johnjiao/",
         githubUrl: "https://github.com/Jzeva",
         emailAddress: "jzeva1213@gmail.com",
+        priority: 1,
       },
       {
         name: "Jin Tai",
@@ -84,6 +89,7 @@ module.exports = {
         linkedInUrl: "https://www.linkedin.com/in/jin-tai/",
         githubUrl: "https://github.com/Fuchih",
         emailAddress: "t19887348@hotmail.com",
+        priority: 1,
       },
       {
         name: "Bowen Li",
@@ -93,6 +99,7 @@ module.exports = {
         linkedInUrl: "https://www.linkedin.com/in/bowen-bowenli/",
         githubUrl: "https://github.com/BowenLi61",
         emailAddress: "bowenlixxx61@gmail.com",
+        priority: 1,
       },
       {
         name: "Olivia Xu",
@@ -101,6 +108,7 @@ module.exports = {
         role: "Developer",
         linkedInUrl: "https://www.linkedin.com/in/olivia-xu-devops",
         emailAddress: "oliviaxu.devops@gmail.com",
+        priority: 1,
       },
       {
         name: "Kiki Pang",
@@ -167,6 +175,7 @@ module.exports = {
         role: "Business Analyst",
         linkedInUrl: "https://www.linkedin.com/in/heath-chen-7611a0150/",
         emailAddress: "joechen95315@gmail.com",
+        priority: 1,
       },
       {
         name: "Jie Wei",
@@ -174,6 +183,7 @@ module.exports = {
           "https://courtcanva-image-node.s3.ap-southeast-2.amazonaws.com/team-page-image/7t0YLc4rw_xXTlfdFsBZzjie-wei.jpg",
         role: "UI/UX Designer",
         linkedInUrl: "https://www.linkedin.com/in/jie-wei-987b841aa/",
+        priority: 1,
       },
     ]);
   },
