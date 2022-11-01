@@ -1,3 +1,4 @@
+import { Optional } from "@nestjs/common";
 import { Type } from "class-transformer";
 import { IsArray, IsNotEmpty, IsObject, IsString } from "class-validator";
 
@@ -35,7 +36,8 @@ export class DesignDto {
     lineBorderWidth: number;
   };
 
-  @IsString()
-  @IsNotEmpty()
+  // @IsString()
+  // @IsNotEmpty()
+  @Optional()
   readonly image: string;
 }
