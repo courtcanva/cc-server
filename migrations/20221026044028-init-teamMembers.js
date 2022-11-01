@@ -139,7 +139,6 @@ module.exports = {
         isDeleted: false,
         createdAt: "2022-10-20T04:28:50.578Z",
         updatedAt: "2022-10-20T04:57:44.165Z",
-        __v: 0,
       },
       {
         name: "Olivia Xu",
@@ -152,7 +151,6 @@ module.exports = {
         isDeleted: false,
         createdAt: "2022-10-21T04:28:50.578Z",
         updatedAt: "2022-10-21T04:57:44.165Z",
-        __v: 0,
       },
       {
         name: "Kiki Pang",
@@ -166,7 +164,6 @@ module.exports = {
         isDeleted: false,
         createdAt: "2022-10-22T04:28:50.578Z",
         updatedAt: "2022-10-22T04:57:44.165Z",
-        __v: 0,
       },
       {
         name: "Sunny Lin",
@@ -180,7 +177,6 @@ module.exports = {
         isDeleted: false,
         createdAt: "2022-10-23T04:28:50.578Z",
         updatedAt: "2022-10-23T04:57:44.165Z",
-        __v: 0,
       },
       {
         name: "Kylie Wang",
@@ -193,7 +189,6 @@ module.exports = {
         isDeleted: false,
         createdAt: "2022-10-24T04:28:50.578Z",
         updatedAt: "2022-10-24T04:57:44.165Z",
-        __v: 0,
       },
       {
         name: "Sunny Yang",
@@ -207,7 +202,6 @@ module.exports = {
         isDeleted: false,
         createdAt: "2022-10-25T04:28:50.578Z",
         updatedAt: "2022-10-25T04:57:44.165Z",
-        __v: 0,
       },
       {
         name: "Timmy Lin",
@@ -221,7 +215,6 @@ module.exports = {
         isDeleted: false,
         createdAt: "2022-10-26T04:28:50.578Z",
         updatedAt: "2022-10-26T04:57:44.165Z",
-        __v: 0,
       },
       {
         name: "Eden Wang",
@@ -234,7 +227,6 @@ module.exports = {
         isDeleted: false,
         createdAt: "2022-10-27T04:28:50.578Z",
         updatedAt: "2022-10-27T04:57:44.165Z",
-        __v: 0,
       },
       {
         name: "Heath Chen",
@@ -247,7 +239,6 @@ module.exports = {
         isDeleted: false,
         createdAt: "2022-10-28T04:28:50.578Z",
         updatedAt: "2022-10-28T04:57:44.165Z",
-        __v: 0,
       },
       {
         name: "Jie Wei",
@@ -259,7 +250,6 @@ module.exports = {
         isDeleted: false,
         createdAt: "2022-10-29T04:28:50.578Z",
         updatedAt: "2022-10-29T04:57:44.165Z",
-        __v: 0,
       },
     ]);
   },
