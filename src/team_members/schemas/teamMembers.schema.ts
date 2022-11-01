@@ -7,7 +7,7 @@ export enum RoleType {
   BUSINESS_ANALYST = "Business Analyst",
   UIUX_DESINGER = "UI/UX Designer",
   TUTOR = "Tutor",
-  PROJECT_OWNER = "PO",
+  PROJECT_OWNER = "Project Owner",
 }
 
 @Schema({ timestamps: true })
