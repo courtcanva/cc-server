@@ -1,25 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { PartialType } from "@nestjs/mapped-types";
+import { CreateAdminDto } from "./create-admin.dto";
 
-export class UpdateAdminDto {
-  @IsNotEmpty()
-  @IsEmail()
-  readonly email: string;
-
-  readonly password: string;
-
-  readonly hashedRefreshToken: string;
-
-  readonly createdAt: Date;
-
-  readonly updatedAt: Date;
-
-  @IsNotEmpty()
-  @IsString()
-  readonly permission: string;
-
-  readonly isDeleted: boolean;
-
-  @IsNotEmpty()
-  @IsString()
-  readonly name: string;
-}
+export class UpdateAdminDto extends PartialType(CreateAdminDto) {}

@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
 import { LoginAdminDto } from "./dto/login-admin.dto";
@@ -27,13 +32,18 @@ export class AdminService {
       password: hashedPassword,
       permission: adminDto.permission,
     };
-
-    const newAdmin = await this.adminModel.create(newAdminInfo);
-
-    const tokens = await this.getTokens(newAdmin._id, newAdmin.email);
-
-    await this.updateRtHash(newAdmin._id, tokens.refreshToken);
-    return tokens;
+    //fetch all users
+    const allUsersEmails = await this.adminModel.find().exec();
+    const allUsersEmailsResult = allUsersEmails.map((userEmail) => userEmail.email);
+    const prepareToCheckEmail = adminDto.email;
+    if (allUsersEmailsResult.includes(prepareToCheckEmail)) {
+      throw new ConflictException("email is already in use");
+    } else {
+      const newAdmin = await this.adminModel.create(newAdminInfo);
+      const tokens = await this.getTokens(newAdmin._id, newAdmin.email);
+      await this.updateRtHash(newAdmin._id, tokens.refreshToken);
+      return tokens;
+    }
   }
 
   async adminLogin(adminDto: LoginAdminDto): Promise<Tokens> {
@@ -112,7 +122,7 @@ export class AdminService {
       .exec();
   }
 
-  async findAll(paginationQuery: PaginationQueryDto) {
+  async findAll(paginationQuery: PaginationQueryDto): Promise<Admin[]> {
     const { limit, offset } = paginationQuery;
     return await this.adminModel.find().sort({ createdAt: -1 }).skip(offset).limit(limit).exec();
   }

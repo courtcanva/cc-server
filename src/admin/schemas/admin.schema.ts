@@ -1,6 +1,11 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
+export enum permissionType {
+  SUPER = "Super",
+  NORMAL = "Normal",
+}
+
 @Schema({ timestamps: true })
 export class Admin extends Document {
   @Prop({ unique: true })
@@ -15,7 +20,7 @@ export class Admin extends Document {
   @Prop({ default: false })
   isDeleted: boolean;
 
-  @Prop()
+  @Prop({ type: String, enum: permissionType, default: permissionType.NORMAL })
   permission: string;
 
   @Prop()

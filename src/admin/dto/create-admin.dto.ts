@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString, IsEnum } from "class-validator";
+import { permissionType } from "../schemas/admin.schema";
 
 export class CreateAdminDto {
   @IsNotEmpty()
@@ -11,14 +12,9 @@ export class CreateAdminDto {
 
   readonly hashedRefreshToken: string;
 
-  readonly createdAt: Date;
-
-  readonly updatedAt: Date;
-
   @IsNotEmpty()
+  @IsEnum(permissionType)
   readonly permission: string;
-
-  readonly isDeleted: boolean;
 
   @IsNotEmpty()
   @IsString()

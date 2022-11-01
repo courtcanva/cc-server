@@ -28,7 +28,7 @@ export class AdminController {
   constructor(private adminService: AdminService) {}
 
   @Get()
-  async findAllAdmin(@Query() paginationQuery: PaginationQueryDto) {
+  async findAllAdmin(@Query() paginationQuery: PaginationQueryDto): Promise<Admin[]> {
     // const { limit, offset } = paginationQuery;
     return await this.adminService.findAll(paginationQuery);
   }
