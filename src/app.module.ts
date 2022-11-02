@@ -12,6 +12,7 @@ import { DesignModule } from "./designs/design.module";
 import { CartItemModule } from "./cart_items/cartItem.module";
 import { TemplateItemsModule } from "./template_items/templateItem.module";
 import { OrderModule } from "./orders/order.module";
+import { StripeModule } from "./stripe/stripe.module";
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { OrderModule } from "./orders/order.module";
     CartItemModule,
     TemplateItemsModule,
     OrderModule,
+    StripeModule,
   ],
 })
 export class AppModule {}
