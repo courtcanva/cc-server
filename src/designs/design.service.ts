@@ -15,9 +15,6 @@ export class DesignService {
   }
 
   async create(createDesign: DesignDto): Promise<Design> {
-    console.log("service start create");
-    console.log(createDesign);
-    console.log("service end create");
     const design = await this.designModel.create(createDesign);
     return design;
   }

@@ -15,9 +15,6 @@ export class DesignController {
 
   @Post()
   async create(@Body() createDesignDto: DesignDto): Promise<Design> {
-    console.log("controller design start");
-    console.log(createDesignDto);
-    console.log(" controller create design end");
     return await this.designService.create(createDesignDto);
   }
 

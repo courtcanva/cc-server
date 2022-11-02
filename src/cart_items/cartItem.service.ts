@@ -60,9 +60,6 @@ export class CartItemService {
     }
     */
     const cartItem = await this.cartItemModel.create(createCartItemDto);
-    console.log("create item");
-    console.log(cartItem);
-    console.log("end of the creation");
     return cartItem;
   }
 
@@ -73,7 +70,6 @@ export class CartItemService {
     if (!cartItem) {
       throw new NotFoundException(`Cart Item #${id} not found`);
     }
-    console.log("update item");
     return cartItem;
   }
 
@@ -82,7 +78,6 @@ export class CartItemService {
       { _id: id, isDeleted: false },
       { $set: { isDeleted: true } },
     );
-    console.log("remove item");
     if (!response) return false;
     return true;
   }
