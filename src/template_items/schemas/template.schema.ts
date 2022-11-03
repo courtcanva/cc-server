@@ -5,7 +5,7 @@ export type TemplateDocument = TemplateItem & Document;
 
 export enum StatusType {
   PUBLISHED = "published",
-  UNAVAILABLE = "unavailable",
+  PRIVATE = "private",
   CENSORING = "censoring",
   ILLEGAL = "illegal",
 }
