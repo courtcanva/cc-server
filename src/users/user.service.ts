@@ -23,9 +23,7 @@ export class UserService {
    * @returns {[]:User}
    */
   async getAllUsers(paginationQueryDto: PaginationQueryDto): Promise<{
-    offset: number;
     total: number;
-    totalPages: number;
     data: User[];
   }> {
     const { limit = 0, offset = 0 } = paginationQueryDto;
@@ -37,11 +35,8 @@ export class UserService {
       .limit(limit)
       .exec();
 
-    const results = await this.userModel.find({ isDeleted: false, ...optionalQuery }).exec();
-    const total = results.filter((item) => !item.isDeleted).length;
-    const totalPages = Math.ceil(total / limit);
-
-    return { data: users, offset, total, totalPages };
+    const total = await this.userModel.countDocuments({ isDeleted: false });
+    return { data: users, total };
   }
 
   /**
