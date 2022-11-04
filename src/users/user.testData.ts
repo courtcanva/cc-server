@@ -69,6 +69,11 @@ export const userArray = [
   },
 ];
 
+export const usersDataObject = {
+  data: userArray,
+  total: 2,
+};
+
 export const unconnectedAccount = {
   googleId: null,
   email: "test@example.com",

@@ -22,10 +22,21 @@ export class UserService {
    * Get all users from database
    * @returns {[]:User}
    */
-  async getAllUsers(paginationQueryDto: PaginationQueryDto): Promise<User[]> {
-    const { limit, offset } = paginationQueryDto;
-    const users = await this.userModel.find().skip(offset).limit(limit).exec();
-    return users.filter((item) => !item.isDeleted);
+  async getAllUsers(paginationQueryDto: PaginationQueryDto): Promise<{
+    total: number;
+    data: User[];
+  }> {
+    const { limit = 0, offset = 0 } = paginationQueryDto;
+    const optionalQuery: { [key: string]: any } = {};
+    const users = await this.userModel
+      .find({ isDeleted: false, ...optionalQuery })
+      .sort({ createdAt: 1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+
+    const total = await this.userModel.countDocuments({ isDeleted: false });
+    return { data: users, total };
   }
 
   /**
