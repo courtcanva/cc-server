@@ -8,10 +8,9 @@ import {
   RawBodyMiddleware,
 } from "@golevelup/nestjs-webhooks";
 import { MongooseModule } from "@nestjs/mongoose";
-import { Order, OrderSchema } from "src/orders/schemas/order.schema";
-import { User, UserSchema } from "src/users/schemas/user.schema";
 import { OrderModule } from "src/orders/order.module";
 import { UserModule } from "src/users/user.module";
+import { PaymentInfo, PaymentInfoSchema } from "./schemas/payment-information.schema";
 
 @Module({
   imports: [
@@ -23,16 +22,12 @@ import { UserModule } from "src/users/user.module";
         stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET_KEY,
       },
     }),
-    // MongooseModule.forFeature([
-    //   {
-    //     name: Order.name,
-    //     schema: OrderSchema,
-    //   },
-    //   {
-    //     name: User.name,
-    //     schema: UserSchema,
-    //   },
-    // ]),
+    MongooseModule.forFeature([
+      {
+        name: PaymentInfo.name,
+        schema: PaymentInfoSchema,
+      },
+    ]),
     OrderModule,
     UserModule,
   ],
