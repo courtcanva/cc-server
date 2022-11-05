@@ -30,8 +30,10 @@ export class UserController {
   }
 
   @Get()
-  async getAllUsers(@Query() paginationQuery: PaginationQueryDto): Promise<User[]> {
-    const { limit, offset } = paginationQuery;
+  async listAllUsers(@Query() paginationQuery: PaginationQueryDto): Promise<{
+    total: number;
+    data: User[];
+  }> {
     return await this.userService.getAllUsers(paginationQuery);
   }
 

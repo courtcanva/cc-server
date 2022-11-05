@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
-export class AdminDto {
+export class LoginAdminDto {
   @IsNotEmpty()
   @IsEmail()
   readonly email: string;
@@ -10,4 +10,10 @@ export class AdminDto {
   readonly password: string;
 
   readonly hashedRefreshToken: string;
+
+  readonly permission: string;
+
+  readonly isDeleted: boolean;
+
+  readonly name: string;
 }

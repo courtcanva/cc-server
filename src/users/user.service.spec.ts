@@ -9,6 +9,7 @@ import {
   updatedUser,
   user,
   userArray,
+  usersDataObject,
 } from "./user.testData";
 import { User } from "./schemas/user.schema";
 import { UserService } from "./user.service";
@@ -36,6 +37,7 @@ describe("UserService", () => {
             create: jest.fn(),
             findByIdAndUpdate: jest.fn(),
             exec: jest.fn(),
+            countDocuments: jest.fn(),
           },
         },
       ],
@@ -49,15 +51,18 @@ describe("UserService", () => {
     expect(service).toBeDefined();
   });
 
-  it("should return all users", async () => {
+  it("should return users", async () => {
     jest.spyOn(model, "find").mockReturnValue({
-      skip: jest.fn().mockReturnValue({
-        limit: jest.fn().mockReturnValue({ exec: jest.fn().mockResolvedValueOnce(userArray) }),
+      sort: jest.fn().mockReturnValue({
+        skip: jest.fn().mockReturnValue({
+          limit: jest.fn().mockReturnValue({ exec: jest.fn().mockResolvedValueOnce(userArray) }),
+        }),
       }),
     } as any);
+    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(2);
     const paginationQuery = { limit: 10, offset: 0 };
     const users = await service.getAllUsers(paginationQuery);
-    expect(users).toEqual(userArray);
+    expect(users).toEqual(usersDataObject);
   });
 
   it("should get user by id", async () => {
