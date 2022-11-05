@@ -36,8 +36,8 @@ export class DesignDto {
     lineBorderWidth: number;
   };
 
-  // @IsString()
-  // @IsNotEmpty()
-  @Optional()
+  @IsString()
+  @IsNotEmpty()
+  // @Optional()
   readonly image: string;
 }
