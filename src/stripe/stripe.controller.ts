@@ -54,8 +54,9 @@ export class StripeController {
         price_data: {
           currency: "aud",
           // TO DO: use price id instead of real number to calculate the total amount
-          unit_amount:
-            Math.round(Number(item.quotation) * 100) * createCheckoutSession.depositRatio,
+          unit_amount: Math.round(
+            Number(item.quotation) * 100 * createCheckoutSession.depositRatio,
+          ),
           product_data: {
             name: item.design.designName,
             description: `Court type: ${item.design.courtSize.name};  Size: ${
