@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsNotEmpty, IsObject, IsPhoneNumber, IsString, ValidateNested } from "class-validator";
+import { IsNotEmpty, IsObject, IsString, ValidateNested } from "class-validator";
 
 export class Address {
   @IsString()
@@ -24,45 +24,44 @@ export class Address {
   state: string;
 }
 
-export class createPaymentInfoDto {
+export class CreatePaymentInfoDto {
   @IsString()
   @IsNotEmpty()
-  orderId: string;
+  readonly orderId: string;
 
   @IsString()
   @IsNotEmpty()
-  email: string;
+  readonly email: string;
 
   @IsString()
   @IsNotEmpty()
-  name: string;
+  readonly name: string;
 
   @IsString()
   @IsNotEmpty()
-  @IsPhoneNumber("AU")
-  phone: string;
+  readonly phone: string;
 
   @IsString()
   @IsNotEmpty()
-  currency: string;
+  readonly currency: string;
 
   @IsString()
   @IsNotEmpty()
-  sessionId: string;
+  readonly sessionId: string;
 
   @IsString()
   @IsNotEmpty()
-  amountTotal: string;
+  readonly amountTotal: string;
 
   @IsObject()
   @IsNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => Address)
-  billingAddress: Address;
+  readonly billingAddress: Address;
 
   @IsObject()
   @IsNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => Address)
-  constructionAddress: Address;
+  readonly constructionAddress: Address;
 }

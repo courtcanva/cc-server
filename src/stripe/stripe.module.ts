@@ -1,12 +1,8 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { StripeController } from "./stripe.controller";
 import { StripeService } from "./stripe.service";
 import { StripeModule as Stripe } from "@golevelup/nestjs-stripe";
-import {
-  applyRawBodyOnlyTo,
-  JsonBodyMiddleware,
-  RawBodyMiddleware,
-} from "@golevelup/nestjs-webhooks";
+import { JsonBodyMiddleware, RawBodyMiddleware } from "@golevelup/nestjs-webhooks";
 import { MongooseModule } from "@nestjs/mongoose";
 import { OrderModule } from "src/orders/order.module";
 import { UserModule } from "src/users/user.module";
@@ -20,6 +16,8 @@ import { PaymentInfo, PaymentInfoSchema } from "./schemas/payment-information.sc
       apiKey: process.env.STRIPE_SECRET_KEY,
       webhookConfig: {
         stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET_KEY,
+        // use property: "controllerPrefix" to customise path for webhook listening,
+        // default is "stripe/webhook"
       },
     }),
     MongooseModule.forFeature([
@@ -34,11 +32,4 @@ import { PaymentInfo, PaymentInfoSchema } from "./schemas/payment-information.sc
   controllers: [StripeController],
   providers: [StripeService],
 })
-export class StripeModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    applyRawBodyOnlyTo(consumer, {
-      method: RequestMethod.ALL,
-      path: "stripe/webhook",
-    });
-  }
-}
+export class StripeModule {}

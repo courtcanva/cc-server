@@ -1,13 +1,23 @@
-import { Controller, Get, Query, Post, Body, HttpException, HttpStatus } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Query,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+  Param,
+} from "@nestjs/common";
 import { Stripe } from "stripe";
 import { InjectStripeClient } from "@golevelup/nestjs-stripe";
 import { CheckoutSessionDto } from "./dto/checkout-session.dto";
 import { OrderService } from "src/orders/order.service";
 import { StripeService } from "./stripe.service";
-import { ObjectId } from "mongoose";
-import { UserService } from "src/users/user.service";
-import { CheckoutSessionUrlDto } from "./dto/checkout-session-url.dto";
+import { CheckoutSessionResponseDto } from "./dto/checkout-session-response.dto";
 import { CreateCheckoutSessionDto } from "./dto/create-checkout-session.dto";
+import { ObjectId } from "mongoose";
+import { Order } from "src/orders/schemas/order.schema";
+import { PaymentInfo } from "./schemas/payment-information.schema";
 
 @Controller("stripe")
 export class StripeController {
@@ -37,14 +47,15 @@ export class StripeController {
   @Post("create-checkout-session")
   async createCheckoutSession(
     @Body() createCheckoutSession: CreateCheckoutSessionDto,
-  ): Promise<CheckoutSessionUrlDto> {
+  ): Promise<CheckoutSessionResponseDto> {
     const line_items = createCheckoutSession.items.map((item) => {
       return {
         quantity: 1,
         price_data: {
           currency: "aud",
           // TO DO: use price id instead of real number to calculate the total amount
-          unit_amount: Math.round(Number(item.quotation) * 100),
+          unit_amount:
+            Math.round(Number(item.quotation) * 100) * createCheckoutSession.depositRatio,
           product_data: {
             name: item.design.designName,
             description: `Court type: ${item.design.courtSize.name};  Size: ${
@@ -59,12 +70,10 @@ export class StripeController {
       const session = await this.stripeClient.checkout.sessions.create({
         line_items,
         metadata: { orderId: createCheckoutSession.order_Id },
-        payment_method_types: ["card", "au_becs_debit"],
+        payment_method_types: ["card"],
         mode: "payment",
-        success_url: `${process.env.DOMAIN}/payment-success`,
-        cancel_url: `${process.env.DOMAIN}/cancel`,
-        // success_url: `${process.env.DOMAIN}/success?order=${createCheckoutSession.order_Id}`,
-        // cancel_url: `${process.env.DOMAIN}/cancel?order=${createCheckoutSession.order_Id}`,
+        success_url: `${process.env.DOMAIN}/success?orderId=${createCheckoutSession.order_Id}`,
+        cancel_url: `${process.env.DOMAIN}/cancel?orderId=${createCheckoutSession.order_Id}`,
         billing_address_collection: "required",
         shipping_address_collection: { allowed_countries: ["AU"] },
         phone_number_collection: { enabled: true },
@@ -76,6 +85,10 @@ export class StripeController {
     }
   }
 
-  // @Post("webhook")
-  // listenToWebHook() {}
+  @Get("paymentInfo/:id")
+  async getPaymentInfoAndOrderById(
+    @Param(":id") id: ObjectId,
+  ): Promise<{ paymentInfo: PaymentInfo; order: Order }> {
+    return await this.stripeService.findPaymentInfoById(id);
+  }
 }
