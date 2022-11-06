@@ -4,7 +4,6 @@ import { StripeService } from "./stripe.service";
 import { StripeModule as Stripe } from "@golevelup/nestjs-stripe";
 import { MongooseModule } from "@nestjs/mongoose";
 import { OrderModule } from "src/orders/order.module";
-import { UserModule } from "src/users/user.module";
 import { PaymentInfo, PaymentInfoSchema } from "./schemas/payment-information.schema";
 
 @Module({
@@ -24,7 +23,6 @@ import { PaymentInfo, PaymentInfoSchema } from "./schemas/payment-information.sc
       },
     ]),
     OrderModule,
-    UserModule,
   ],
   controllers: [StripeController],
   providers: [StripeService],

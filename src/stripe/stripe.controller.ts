@@ -1,17 +1,6 @@
-import {
-  Controller,
-  Get,
-  Query,
-  Post,
-  Body,
-  HttpException,
-  HttpStatus,
-  Param,
-} from "@nestjs/common";
+import { Controller, Get, Post, Body, HttpException, HttpStatus, Param } from "@nestjs/common";
 import { Stripe } from "stripe";
 import { InjectStripeClient } from "@golevelup/nestjs-stripe";
-import { CheckoutSessionDto } from "./dto/checkout-session.dto";
-import { OrderService } from "src/orders/order.service";
 import { StripeService } from "./stripe.service";
 import { CheckoutSessionResponseDto } from "./dto/checkout-session-response.dto";
 import { CreateCheckoutSessionDto } from "./dto/create-checkout-session.dto";
@@ -25,18 +14,6 @@ export class StripeController {
     @InjectStripeClient() private readonly stripeClient: Stripe,
     private readonly stripeService: StripeService,
   ) {}
-
-  /**
-   * Fetch the Checkout Session to display the JSON result on the success page
-   * @param sessionId the id of the checkout session, the type must be string
-   * @returns the stripe checkout session (object)
-   */
-  @Get("checkout-session")
-  async getCheckoutSession(
-    @Query() { sessionId }: CheckoutSessionDto,
-  ): Promise<Stripe.Response<Stripe.Checkout.Session>> {
-    return await this.stripeClient.checkout.sessions.retrieve(sessionId);
-  }
 
   /**
    * Create new Checkout Session for the order and return the session id
@@ -72,8 +49,8 @@ export class StripeController {
         metadata: { orderId: createCheckoutSession.order_Id },
         payment_method_types: ["card"],
         mode: "payment",
-        success_url: `${process.env.DOMAIN}/payment/status=success&orderId=${createCheckoutSession.order_Id}`,
-        cancel_url: `${process.env.DOMAIN}/payment/status=failure&orderId=${createCheckoutSession.order_Id}`,
+        success_url: `${process.env.DOMAIN}/payment?status=success&orderId=${createCheckoutSession.order_Id}`,
+        cancel_url: `${process.env.DOMAIN}/payment?status=failure&orderId=${createCheckoutSession.order_Id}`,
         billing_address_collection: "required",
         shipping_address_collection: { allowed_countries: ["AU"] },
         phone_number_collection: { enabled: true },
