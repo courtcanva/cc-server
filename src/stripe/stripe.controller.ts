@@ -24,33 +24,36 @@ export class StripeController {
   async createCheckoutSession(
     @Body() createCheckoutSession: CreateCheckoutSessionDto,
   ): Promise<CheckoutSessionResponseDto> {
-    const line_items = createCheckoutSession.items.map((item) => {
+    const { items, depositRatio, order_Id } = createCheckoutSession;
+
+    const line_items = items.map((item) => {
+      const { quotation, design, image } = item;
+
       return {
         quantity: 1,
         price_data: {
           currency: "aud",
           // TO DO: use price id instead of real number to calculate the total amount
-          unit_amount: Math.round(
-            Number(item.quotation) * 100 * createCheckoutSession.depositRatio,
-          ),
+          unit_amount: Math.round(Number(quotation) * depositRatio * 100),
           product_data: {
-            name: item.design.designName,
-            description: `Court type: ${item.design.courtSize.name};  Size: ${
-              item.design.courtSize.length / 1000
-            }m x ${item.design.courtSize.width / 1000}m.`,
-            images: [item.image],
+            name: design.designName,
+            description: `Court type: ${design.courtSize.name};  Size: ${
+              design.courtSize.length / 1000
+            }m x ${design.courtSize.width / 1000}m.`,
+            images: [image],
           },
         },
       };
     });
+
     try {
       const session = await this.stripeClient.checkout.sessions.create({
         line_items,
-        metadata: { orderId: createCheckoutSession.order_Id },
+        metadata: { orderId: order_Id },
         payment_method_types: ["card"],
         mode: "payment",
-        success_url: `${process.env.DOMAIN}/payment?status=success&orderId=${createCheckoutSession.order_Id}`,
-        cancel_url: `${process.env.DOMAIN}/payment?status=failure&orderId=${createCheckoutSession.order_Id}`,
+        success_url: `${process.env.DOMAIN}/payment?status=success&orderId=${order_Id}`,
+        cancel_url: `${process.env.DOMAIN}/payment?status=failure&orderId=${order_Id}`,
         billing_address_collection: "required",
         shipping_address_collection: { allowed_countries: ["AU"] },
         phone_number_collection: { enabled: true },
