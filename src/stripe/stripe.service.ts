@@ -82,9 +82,9 @@ export class StripeService {
    * @param id paymentInfo Id
    * @returns an object contains documents of paymentInfo and order
    */
-  async findPaymentInfoById(id: ObjectId): Promise<{ paymentInfo: PaymentInfo; order: Order }> {
-    const paymentInfo = await this.paymentInfoModel.findOne({ _id: id }).exec();
-    const order = await this.orderService.findOne(paymentInfo.orderId);
+  async findPaymentInfoById(id: ObjectId): Promise<{ paymentInfo?: PaymentInfo; order?: Order }> {
+    const order = await this.orderService.findOne(id);
+    const paymentInfo = await this.paymentInfoModel.findOne({ orderId: id }).exec();
     return {
       paymentInfo,
       order,

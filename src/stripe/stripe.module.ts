@@ -2,7 +2,6 @@ import { Module } from "@nestjs/common";
 import { StripeController } from "./stripe.controller";
 import { StripeService } from "./stripe.service";
 import { StripeModule as Stripe } from "@golevelup/nestjs-stripe";
-import { JsonBodyMiddleware, RawBodyMiddleware } from "@golevelup/nestjs-webhooks";
 import { MongooseModule } from "@nestjs/mongoose";
 import { OrderModule } from "src/orders/order.module";
 import { UserModule } from "src/users/user.module";
@@ -10,8 +9,6 @@ import { PaymentInfo, PaymentInfoSchema } from "./schemas/payment-information.sc
 
 @Module({
   imports: [
-    JsonBodyMiddleware,
-    RawBodyMiddleware,
     Stripe.forRoot(Stripe, {
       apiKey: process.env.STRIPE_SECRET_KEY,
       webhookConfig: {

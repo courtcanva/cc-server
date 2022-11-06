@@ -23,8 +23,7 @@ import { PaymentInfo } from "./schemas/payment-information.schema";
 export class StripeController {
   constructor(
     @InjectStripeClient() private readonly stripeClient: Stripe,
-    private readonly orderService: OrderService,
-    private readonly stripeService: StripeService, // private readonly userService: UserService,
+    private readonly stripeService: StripeService,
   ) {}
 
   /**
@@ -73,23 +72,22 @@ export class StripeController {
         metadata: { orderId: createCheckoutSession.order_Id },
         payment_method_types: ["card"],
         mode: "payment",
-        success_url: `${process.env.DOMAIN}/success?orderId=${createCheckoutSession.order_Id}`,
-        cancel_url: `${process.env.DOMAIN}/cancel?orderId=${createCheckoutSession.order_Id}`,
+        success_url: `${process.env.DOMAIN}/payment/status=success&orderId=${createCheckoutSession.order_Id}`,
+        cancel_url: `${process.env.DOMAIN}/payment/status=failure&orderId=${createCheckoutSession.order_Id}`,
         billing_address_collection: "required",
         shipping_address_collection: { allowed_countries: ["AU"] },
         phone_number_collection: { enabled: true },
       });
       return { sessionUrl: session.url };
     } catch (error) {
-      console.log(error);
       throw new HttpException(error, HttpStatus.BAD_GATEWAY);
     }
   }
 
   @Get("paymentInfo/:id")
   async getPaymentInfoAndOrderById(
-    @Param(":id") id: ObjectId,
-  ): Promise<{ paymentInfo: PaymentInfo; order: Order }> {
-    return await this.stripeService.findPaymentInfoById(id);
+    @Param("id") orderId: ObjectId,
+  ): Promise<{ paymentInfo?: PaymentInfo; order?: Order }> {
+    return await this.stripeService.findPaymentInfoById(orderId);
   }
 }

@@ -14,7 +14,11 @@ import { TemplateItemsModule } from "./template_items/templateItem.module";
 import { TeamMemberModule } from "./team_members/teamMember.module";
 import { OrderModule } from "./orders/order.module";
 import { StripeModule } from "./stripe/stripe.module";
-import { applyRawBodyOnlyTo } from "@golevelup/nestjs-webhooks";
+import {
+  applyRawBodyOnlyTo,
+  JsonBodyMiddleware,
+  RawBodyMiddleware,
+} from "@golevelup/nestjs-webhooks";
 
 @Module({
   imports: [
@@ -35,6 +39,8 @@ import { applyRawBodyOnlyTo } from "@golevelup/nestjs-webhooks";
     TeamMemberModule,
     OrderModule,
     StripeModule,
+    JsonBodyMiddleware,
+    RawBodyMiddleware,
   ],
 })
 export class AppModule implements NestModule {

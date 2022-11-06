@@ -49,6 +49,9 @@ export class Order extends Document {
       quotationDetails: [{ color: string; quantity: number }];
     },
   ];
+
+  @Prop({ type: Number, required: true })
+  depositRatio: number;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
