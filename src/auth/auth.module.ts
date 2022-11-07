@@ -7,7 +7,6 @@ import { Admin, AdminSchema } from "src/admin/schemas/admin.schema";
 import { JwtModule } from "@nestjs/jwt";
 import { AccessTokenStrategy, RefreshTokenStrategy } from "./strategies";
 import { UserModule } from "../users/user.module";
-import { PermissionsGuard } from "./permission.guard";
 
 @Module({
   imports: [
