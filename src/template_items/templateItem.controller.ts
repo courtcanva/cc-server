@@ -5,13 +5,16 @@ import { ObjectId } from "mongoose";
 import { TemplateItemDto } from "./dto/template.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Controller("templates")
 export class TemplateItemController {
   constructor(private readonly templateItemsService: TemplateItemService) {}
 
   @Get()
-  async getAllTemplates(@Query() getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
+  async getAllTemplates(
+    @Query() getAllTemplates: PaginationQueryDto & GetAllTemplatesDto,
+  ): Promise<{ total: number; data: TemplateItem[] }> {
     return await this.templateItemsService.getAllTemplates(getAllTemplates);
   }
 

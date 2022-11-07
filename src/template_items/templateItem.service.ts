@@ -7,6 +7,7 @@ import { TemplateItemDto } from "./dto/template.dto";
 import { ObjectId } from "mongoose";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Injectable()
 export class TemplateItemService {
@@ -15,13 +16,15 @@ export class TemplateItemService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async getAllTemplates(getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
+  async getAllTemplates(
+    getAllTemplates: PaginationQueryDto & GetAllTemplatesDto,
+  ): Promise<{ data: TemplateItem[]; total: number }> {
     const { user_id, limit = 0, offset = 0 } = getAllTemplates;
     const optionalQuery: { [key: string]: any } = {};
 
     if (user_id) optionalQuery.user_id = user_id;
 
-    const response = await this.TemplateModel.find({
+    const templates = await this.TemplateModel.find({
       isDeleted: false,
       ...optionalQuery,
     })
@@ -29,10 +32,33 @@ export class TemplateItemService {
       .skip(offset)
       .limit(limit)
       .exec();
+
+    const total = await this.TemplateModel.countDocuments({
+      isDeleted: false,
+    });
+
+    const totalPunished = await this.TemplateModel.countDocuments({
+      isDeleted: false,
+      status: "published",
+    });
+
+    const totalIllegal = await this.TemplateModel.countDocuments({
+      isDeleted: false,
+      status: "illegal",
+    });
+
+    const totalNonIllegal = total - totalIllegal;
+    console.log(typeof totalNonIllegal);
     if (user_id) {
-      return response.filter((res) => res.status !== StatusType.ILLEGAL);
+      return {
+        data: templates.filter((res) => res.status !== StatusType.ILLEGAL),
+        total: totalNonIllegal,
+      };
     } else {
-      return response.filter((res) => res.status === StatusType.PUBLISHED);
+      return {
+        data: templates.filter((res) => res.status === StatusType.PUBLISHED),
+        total: totalPunished,
+      };
     }
   }
 
