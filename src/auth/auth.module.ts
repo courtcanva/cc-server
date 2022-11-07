@@ -26,6 +26,6 @@ import { PermissionsGuard } from "./permission.guard";
   ],
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
   controllers: [AuthController],
-  exports: [AuthService, PermissionsGuard],
+  exports: [AuthService],
 })
 export class AuthModule {}
