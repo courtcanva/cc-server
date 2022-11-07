@@ -22,6 +22,11 @@ import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { LoginAdminDto } from "./dto/login-admin.dto";
 import { PaginationQueryDto } from "../utils/PaginationDto/pagination-query.dto";
+import { SetAdminPermissionDto } from "./dto/set-admin-permission.dto";
+import { AuthGuard } from "@nestjs/passport";
+import { HasPermissions } from "src/auth/hasPermission.decorator";
+import { permissionType } from "src/admin/schemas/admin.schema";
+import { PermissionsGuard } from "src/auth/permission.guard";
 
 @Controller("admin")
 export class AdminController {
@@ -46,11 +51,25 @@ export class AdminController {
     return await this.adminService.update(adminId, updateAdminDto);
   }
 
+  @HasPermissions(permissionType.SUPER)
+  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
+  @Patch(":adminId/setPermission")
+  async setAdminPermissionById(
+    @Param("adminId", ParseObjectIdPipe) adminId: ObjectId,
+    @Body() setAdminPermissionDto: SetAdminPermissionDto,
+  ): Promise<boolean> {
+    return await this.adminService.setPermission(adminId, setAdminPermissionDto);
+  }
+
+  @HasPermissions(permissionType.SUPER)
+  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
   @Delete(":adminId")
   async deleteAdminById(@Param("adminId", ParseObjectIdPipe) adminId: ObjectId): Promise<boolean> {
     return await this.adminService.remove(adminId);
   }
 
+  @HasPermissions(permissionType.SUPER)
+  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
   @Patch(":adminId/restore")
   async restoreAdminById(@Param("adminId", ParseObjectIdPipe) adminId: ObjectId): Promise<boolean> {
     return await this.adminService.restore(adminId);

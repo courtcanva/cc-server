@@ -10,8 +10,8 @@ import { TeamMember } from "./schemas/teamMembers.schema";
 export class TeamMemberService {
   constructor(@InjectModel(TeamMember.name) private readonly TeamMemberModel: Model<TeamMember>) {}
 
-  async listTeamMembers(getAllTeamMembers: ListTeamMembersDto): Promise<any> {
-    const { isGrouped = "false", limit = 0, offset = 0 } = getAllTeamMembers;
+  async listTeamMembers(listTeamMembers: ListTeamMembersDto): Promise<any> {
+    const { isGrouped = "false", limit = 0, offset = 0 } = listTeamMembers;
     const optionalQuery: { [key: string]: any } = {};
 
     const teamMembers = await this.TeamMemberModel.find({
