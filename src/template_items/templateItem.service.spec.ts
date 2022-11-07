@@ -54,25 +54,25 @@ describe("TemplateItemService", () => {
     expect(service).toBeDefined();
   });
 
-  // it("should return template items in one userId, within given pagination", async () => {
-  //   jest.spyOn(model, "find").mockReturnValue({
-  //     sort: jest.fn().mockReturnValue({
-  //       skip: jest.fn().mockReturnValue({
-  //         limit: jest.fn().mockReturnValue({
-  //           exec: jest.fn().mockResolvedValueOnce(mockTemplateItemArray),
-  //         }),
-  //       }),
-  //     }),
-  //   } as any);
+  it("should return template items in one userId, within given pagination", async () => {
+    jest.spyOn(model, "find").mockReturnValue({
+      sort: jest.fn().mockReturnValue({
+        skip: jest.fn().mockReturnValue({
+          limit: jest.fn().mockReturnValue({
+            exec: jest.fn().mockResolvedValueOnce(mockTemplateItemArray),
+          }),
+        }),
+      }),
+    } as any);
 
-  //   const user_id = "123456";
-  //   jest.spyOn(model, "countDocuments").mockResolvedValueOnce(3);
-  //   jest.spyOn(model, "countDocuments").mockResolvedValueOnce(3);
-  //   jest.spyOn(model, "countDocuments").mockResolvedValueOnce(0);
+    const user_id = "123456";
+    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(3);
+    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(3);
+    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(0);
 
-  //   const templates = await service.getAllTemplates({ user_id, limit: 5, offset: 0 });
-  //   expect(templates).toEqual(mockTemplateItemObj);
-  // });
+    const templates = await service.getAllTemplates({ user_id, limit: 5, offset: 0 });
+    expect(templates).toEqual(mockTemplateItemObj);
+  });
 
   it("should return a template Items in given Object ID", async () => {
     jest.spyOn(model, "findOne").mockReturnValue(

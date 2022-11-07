@@ -321,5 +321,5 @@ export const mockTemplateItemInDatabase = {
 
 export const mockTemplateItemObj = {
   data: mockTemplateItemArray,
-  total: 2,
+  total: 3,
 };
