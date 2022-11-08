@@ -23,40 +23,43 @@ export class TemplateItemService {
     const optionalQuery: { [key: string]: any } = {};
 
     if (user_id) optionalQuery.user_id = user_id;
-
-    const templates = await this.TemplateModel.find({
-      isDeleted: false,
-      ...optionalQuery,
-    })
-      .sort({ createdAt: -1 })
-      .skip(offset)
-      .limit(limit)
-      .exec();
-
     const total = await this.TemplateModel.countDocuments({
       isDeleted: false,
+      status: ["published", "censoring", "private"],
     });
-
     const totalPunished = await this.TemplateModel.countDocuments({
       isDeleted: false,
       status: "published",
     });
 
-    const totalIllegal = await this.TemplateModel.countDocuments({
-      isDeleted: false,
-      status: "illegal",
-    });
-
-    const totalNonIllegal = total - totalIllegal;
-
     if (user_id) {
+      const templates = await this.TemplateModel.find({
+        isDeleted: false,
+        ...optionalQuery,
+        status: ["published", "censoring", "private"],
+      })
+        .sort({ createdAt: -1 })
+        .skip(offset)
+        .limit(limit)
+        .exec();
+
       return {
-        data: templates.filter((res) => res.status !== StatusType.ILLEGAL),
-        total: totalNonIllegal,
+        data: templates,
+        total,
       };
     } else {
+      const templates = await this.TemplateModel.find({
+        isDeleted: false,
+        ...optionalQuery,
+        status: "published",
+      })
+        .sort({ createdAt: -1 })
+        .skip(offset)
+        .limit(limit)
+        .exec();
+
       return {
-        data: templates.filter((res) => res.status === StatusType.PUBLISHED),
+        data: templates,
         total: totalPunished,
       };
     }
