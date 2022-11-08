@@ -2,12 +2,7 @@ import { STRIPE_CLIENT_TOKEN } from "@golevelup/nestjs-stripe";
 import { Test, TestingModule } from "@nestjs/testing";
 import { StripeController } from "./stripe.controller";
 import { StripeService } from "./stripe.service";
-import {
-  mockCreateCheckoutSession,
-  mockPaymentInfo,
-  mockUpdatePaymentInfo,
-  mockPaymentOrderData,
-} from "./stripe.testData";
+import { mockPaymentInfo, mockUpdatePaymentInfo, mockPaymentOrderData } from "./stripe.testData";
 
 describe("StripeController", () => {
   let controller: StripeController;
@@ -17,10 +12,6 @@ describe("StripeController", () => {
       .fn()
       .mockImplementation(() => Promise.resolve(mockPaymentOrderData)),
     updatePaymentInfo: jest.fn().mockImplementation(() => Promise.resolve(mockPaymentInfo)),
-  };
-
-  const mockStripeClient = {
-    create: jest.fn().mockImplementation(() => Promise.resolve({ sessionUrl: "111" })),
   };
 
   beforeEach(async () => {
@@ -33,7 +24,7 @@ describe("StripeController", () => {
         },
         {
           provide: STRIPE_CLIENT_TOKEN,
-          useValue: mockStripeClient,
+          useValue: {},
         },
       ],
     }).compile();
@@ -44,12 +35,6 @@ describe("StripeController", () => {
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
-
-  // it("should return the session url", async () => {
-  //   expect(await controller.createCheckoutSession(mockCreateCheckoutSession)).toEqual({
-  //     sessionUrl: "111",
-  //   });
-  // });
 
   it("should return the paymentInfo and Order documents", async () => {
     expect(await controller.getPaymentInfoAndOrderByOrderId(Object("1"))).toEqual(
