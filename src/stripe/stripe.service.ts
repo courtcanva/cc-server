@@ -24,7 +24,6 @@ export class StripeService {
   @StripeWebhookHandler("checkout.session.completed")
   stripeWebhookHandler(event: Stripe.Event) {
     const dataObject = event.data.object as Stripe.Checkout.Session;
-    console.log(`order:${dataObject.metadata.orderId} payment completed`);
     this.completeOrderInformation(dataObject);
   }
 
