@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, HttpException, HttpStatus, Param } from "@nestjs/common";
+import { Controller, Get, Post, Body, HttpException, HttpStatus, Param, Put } from "@nestjs/common";
 import { Stripe } from "stripe";
 import { InjectStripeClient } from "@golevelup/nestjs-stripe";
 import { StripeService } from "./stripe.service";
@@ -51,7 +51,7 @@ export class StripeController {
       const session = await this.stripeClient.checkout.sessions.create({
         line_items,
         metadata: { orderId: order_Id },
-        payment_method_types: ["card"],
+        payment_method_types: ["card", "afterpay_clearpay"],
         mode: "payment",
         success_url: `${process.env.DOMAIN}/payment?status=success&orderId=${order_Id}`,
         cancel_url: `${process.env.DOMAIN}/payment?status=failure&orderId=${order_Id}`,
@@ -72,7 +72,7 @@ export class StripeController {
     return await this.stripeService.findPaymentInfoByOrderId(orderId);
   }
 
-  @Post("paymentInfo/:orderId")
+  @Put("paymentInfo/:orderId")
   async updatePaymentInfo(
     @Param("orderId") orderId: ObjectId,
     @Body() updatePaymentInfo: UpdatePaymentInfoDto,

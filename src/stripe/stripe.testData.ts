@@ -1,5 +1,3 @@
-import { Stripe } from "stripe";
-
 export const mockPaymentOrderData = {
   paymentInfo: {
     orderId: Object(1),
@@ -138,7 +136,7 @@ export const mockPaymentInfo = {
     state: "QLD",
   },
   currency: "aud",
-  amountTotal: "11451419.19",
+  amountTotal: 11451419.19,
   sessionId: "111",
 };
 

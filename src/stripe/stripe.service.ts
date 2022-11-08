@@ -6,7 +6,7 @@ import { OrderService } from "src/orders/order.service";
 import { Model, ObjectId } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { PaymentInfo, PaymentInfoDocument } from "./schemas/payment-information.schema";
-import { Order } from "src/orders/schemas/order.schema";
+import { Order, StatusType } from "src/orders/schemas/order.schema";
 import mongoose from "mongoose";
 import { UpdatePaymentInfoDto } from "./dto/update-payment-information.dto";
 
@@ -35,7 +35,7 @@ export class StripeService {
    */
   async completeOrderInformation(data: Stripe.Checkout.Session) {
     const orderId = new mongoose.Types.ObjectId(data.metadata.orderId) as unknown as ObjectId;
-    const updateOrderStatus = await this.orderService.update(orderId, { status: "completed" });
+    const updateOrderStatus = await this.orderService.updateStatus(orderId, StatusType.COMPLETED);
     if (!updateOrderStatus)
       throw new NotFoundException(`Order: ${data.metadata.orderId} does not exist.`);
 
@@ -46,7 +46,7 @@ export class StripeService {
       phone: data.customer_details.phone,
       currency: data.currency,
       sessionId: data.id,
-      amountTotal: data.amount_total.toString(),
+      amountTotal: data.amount_total,
       constructionAddress: {
         city: data.shipping_details.address.city,
         country: data.shipping_details.address.country,

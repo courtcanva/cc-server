@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Order } from "./schemas/order.schema";
+import { Order, StatusType } from "./schemas/order.schema";
 import { Model, ObjectId } from "mongoose";
 import { FindAllOrderDto } from "./dto/findAllOrder.dto";
 import { CreateOrderDto } from "./dto/createOrder.dto";
@@ -51,12 +51,24 @@ export class OrderService {
     return order;
   }
 
+  async updateStatus(id: ObjectId, status: StatusType): Promise<Order> {
+    const order = await this.orderModel
+      .findByIdAndUpdate({ _id: id }, { $set: { status } }, { new: true })
+      .exec();
+    if (!order) {
+      throw new NotFoundException(`Order #${id} not found`);
+    }
+    return order;
+  }
+
   async remove(id: ObjectId): Promise<boolean> {
-    try {
-      await this.orderModel.findOneAndUpdate({ _id: id }, { $set: { status: "cancelled" } });
-      return true;
-    } catch {
+    const order = await this.orderModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { status: "cancelled" } },
+    );
+    if (!order) {
       return false;
     }
+    return true;
   }
 }

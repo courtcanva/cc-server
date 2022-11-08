@@ -81,10 +81,10 @@ export class PaymentInfo {
   currency: string;
 
   @Prop({
-    type: String,
+    type: Number,
     required: true,
   })
-  amountTotal: string;
+  amountTotal: number;
 
   @Prop({
     type: String,
