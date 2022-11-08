@@ -34,4 +34,8 @@ export class DesignDto {
     sideBorderWidth: number;
     lineBorderWidth: number;
   };
+
+  @IsString()
+  @IsNotEmpty()
+  readonly image: string;
 }

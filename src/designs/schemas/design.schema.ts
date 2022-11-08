@@ -29,6 +29,9 @@ export class Design extends Document {
 
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;
+
+  @Prop({ type: String })
+  image: string;
 }
 
 export const DesignSchema = SchemaFactory.createForClass(Design);
