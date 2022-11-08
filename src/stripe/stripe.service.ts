@@ -8,6 +8,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { PaymentInfo, PaymentInfoDocument } from "./schemas/payment-information.schema";
 import { Order } from "src/orders/schemas/order.schema";
 import mongoose from "mongoose";
+import { UpdatePaymentInfoDto } from "./dto/update-payment-information.dto";
 
 @Injectable()
 export class StripeService {
@@ -79,15 +80,36 @@ export class StripeService {
 
   /**
    * Find a payment information document and its relative order document.
-   * @param id paymentInfo Id
+   * @param id order Id, not paymentInfp id
    * @returns an object contains documents of paymentInfo and order
    */
-  async findPaymentInfoById(id: ObjectId): Promise<{ paymentInfo?: PaymentInfo; order?: Order }> {
+  async findPaymentInfoByOrderId(
+    id: ObjectId,
+  ): Promise<{ paymentInfo?: PaymentInfo; order: Order }> {
     const order = await this.orderService.findOne(id);
     const paymentInfo = await this.paymentInfoModel.findOne({ orderId: id }).exec();
+    if (!order) throw new NotFoundException(`order #${id} not found`);
     return {
       paymentInfo,
       order,
     };
+  }
+
+  /**
+   * Return an object of updated payment information.
+   * @param orderId order id
+   * @param updatePaymentInfo updated infomation
+   * @returns updated paymentInfo document
+   */
+  async updatePaymentInfo(
+    orderId: ObjectId,
+    updatePaymentInfo: UpdatePaymentInfoDto,
+  ): Promise<PaymentInfo> {
+    const paymentInfo = await this.paymentInfoModel
+      .findOneAndUpdate({ orderId }, { $set: updatePaymentInfo }, { new: true })
+      .exec();
+    if (!paymentInfo)
+      throw new NotFoundException(`Payment information of order #${orderId} not found`);
+    return paymentInfo;
   }
 }

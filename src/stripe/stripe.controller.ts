@@ -7,6 +7,7 @@ import { CreateCheckoutSessionDto } from "./dto/create-checkout-session.dto";
 import { ObjectId } from "mongoose";
 import { Order } from "src/orders/schemas/order.schema";
 import { PaymentInfo } from "./schemas/payment-information.schema";
+import { UpdatePaymentInfoDto } from "./dto/update-payment-information.dto";
 
 @Controller("stripe")
 export class StripeController {
@@ -16,7 +17,7 @@ export class StripeController {
   ) {}
 
   /**
-   * Create new Checkout Session for the order and return the session id
+   * Create new Checkout Session for the order and return the session url
    * @param createCheckoutSession an object which contains the order details
    * @returns session url (string) of the new order
    */
@@ -64,10 +65,20 @@ export class StripeController {
     }
   }
 
-  @Get("paymentInfo/:id")
-  async getPaymentInfoAndOrderById(
-    @Param("id") orderId: ObjectId,
-  ): Promise<{ paymentInfo?: PaymentInfo; order?: Order }> {
-    return await this.stripeService.findPaymentInfoById(orderId);
+  @Get("paymentInfo/:orderId")
+  async getPaymentInfoAndOrderByOrderId(
+    @Param("orderId") orderId: ObjectId,
+  ): Promise<{ paymentInfo?: PaymentInfo; order: Order }> {
+    return await this.stripeService.findPaymentInfoByOrderId(orderId);
   }
+
+  @Post("paymentInfo/:orderId")
+  async updatePaymentInfo(
+    @Param("orderId") orderId: ObjectId,
+    @Body() updatePaymentInfo: UpdatePaymentInfoDto,
+  ): Promise<PaymentInfo> {
+    return await this.stripeService.updatePaymentInfo(orderId, updatePaymentInfo);
+  }
+
+  // TO DO: get all paymentInfo+Order with pagination
 }
