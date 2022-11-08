@@ -48,7 +48,7 @@ export class TemplateItemService {
     });
 
     const totalNonIllegal = total - totalIllegal;
-    console.log(typeof totalNonIllegal);
+
     if (user_id) {
       return {
         data: templates.filter((res) => res.status !== StatusType.ILLEGAL),
