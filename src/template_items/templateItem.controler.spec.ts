@@ -50,6 +50,7 @@ describe("TemplateItemController", () => {
         user_id: user_id,
         limit: 3,
         offset: 2,
+        filterTag: "ProFullCourt",
       };
       expect(controller.getAllTemplates(getAllTemplatesDto)).resolves.toEqual([mockTemplateItem]);
     });

@@ -201,7 +201,7 @@ export const mockTemplateItemArray = [
     image: "www.tennis.com",
     description: "Basketball Full Court Small Family first choice",
     tags: {
-      CourtCategory: "full court",
+      CourtCategory: "ProFullCourt",
       CourtType: "basketball",
     },
     isOfficial: false,
@@ -257,7 +257,7 @@ export const mockNewTemplateItem = {
   image: "url123",
   description: "Basketball Full Court",
   tags: {
-    CourtCategory: "full pro court",
+    CourtCategory: "ProFullCourt",
     CourtType: "tennis",
   },
 };
@@ -308,7 +308,7 @@ export const mockTemplateItemInDatabase = {
   image: "www.tennis.com",
   description: "Basketball Full Court Big Family first choice",
   tags: {
-    CourtCategory: "full pro court",
+    CourtCategory: "ProFullCourt",
     CourtSize: "tennis",
   },
   isOfficial: false,

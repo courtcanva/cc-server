@@ -70,7 +70,12 @@ describe("TemplateItemService", () => {
     jest.spyOn(model, "countDocuments").mockResolvedValueOnce(3);
     jest.spyOn(model, "countDocuments").mockResolvedValueOnce(0);
 
-    const templates = await service.getAllTemplates({ user_id, limit: 5, offset: 0 });
+    const templates = await service.getAllTemplates({
+      user_id,
+      limit: 5,
+      offset: 0,
+      filterTag: "ProFullCourt",
+    });
     expect(templates).toEqual(mockTemplateItemObj);
   });
 

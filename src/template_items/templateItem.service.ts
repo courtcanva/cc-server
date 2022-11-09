@@ -19,24 +19,38 @@ export class TemplateItemService {
   async getAllTemplates(
     getAllTemplates: PaginationQueryDto & GetAllTemplatesDto,
   ): Promise<{ data: TemplateItem[]; total: number }> {
-    const { user_id, limit = 0, offset = 0 } = getAllTemplates;
+    const { user_id, limit = 0, offset = 0, filterTag } = getAllTemplates;
     const optionalQuery: { [key: string]: any } = {};
 
     if (user_id) optionalQuery.user_id = user_id;
+
+    if (filterTag) optionalQuery.filterTag = filterTag;
+
+    const courts = [
+      "ProFullCourt",
+      "FullCourt",
+      "HalfCourt",
+      "SmallCourt",
+      "ProHalfCourt",
+      "MediumCourt",
+    ];
+
     const total = await this.TemplateModel.countDocuments({
       isDeleted: false,
       status: ["published", "censoring", "private"],
+      "tags.CourtCategory": optionalQuery.filterTag ? optionalQuery.filterTag : courts,
     });
     const totalPunished = await this.TemplateModel.countDocuments({
       isDeleted: false,
       status: "published",
+      "tags.CourtCategory": optionalQuery.filterTag ? optionalQuery.filterTag : courts,
     });
 
     if (user_id) {
       const templates = await this.TemplateModel.find({
         isDeleted: false,
         ...optionalQuery,
-        status: ["published", "censoring", "private"],
+        "tags.CourtCategory": optionalQuery.filterTag ? optionalQuery.filterTag : courts,
       })
         .sort({ createdAt: -1 })
         .skip(offset)
@@ -51,6 +65,8 @@ export class TemplateItemService {
       const templates = await this.TemplateModel.find({
         isDeleted: false,
         ...optionalQuery,
+        "tags.CourtCategory": optionalQuery.filterTag ? optionalQuery.filterTag : courts,
+
         status: "published",
       })
         .sort({ createdAt: -1 })

@@ -4,4 +4,9 @@ export class GetAllTemplatesDto {
   @IsNotEmpty()
   @IsOptional()
   user_id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  filterTag: string;
 }
