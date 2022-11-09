@@ -33,11 +33,6 @@ export class StripeService {
    * @param data payment information from webhook event
    */
   async completeOrderInformation(data: Stripe.Checkout.Session) {
-    const orderId = new mongoose.Types.ObjectId(data.metadata.orderId) as unknown as ObjectId;
-    const updateOrderStatus = await this.orderService.updateStatus(orderId, StatusType.COMPLETED);
-    if (!updateOrderStatus)
-      throw new NotFoundException(`Order: ${data.metadata.orderId} does not exist.`);
-
     const paymentInfo: CreatePaymentInfoDto = {
       orderId: data.metadata.orderId,
       email: data.customer_details.email,
@@ -63,8 +58,20 @@ export class StripeService {
         postalCode: data.customer_details.address.postal_code,
       },
     };
+
     const newPayment = await this.createPaymentInfo(paymentInfo);
     if (!newPayment) throw new Error("fail to create payment information for order!");
+
+    const orderId = new mongoose.Types.ObjectId(data.metadata.orderId) as unknown as ObjectId;
+    const { _id: newPaymentInfoId } = await this.paymentInfoModel.findOne({ orderId }).exec();
+    if (!newPaymentInfoId) throw new Error("fail to create payment information for order!");
+
+    const updateOrderStatus = await this.orderService.updatePayment(orderId, {
+      status: StatusType.COMPLETED,
+      paymentInfo: newPaymentInfoId,
+    });
+    if (!updateOrderStatus)
+      throw new NotFoundException(`Order: ${data.metadata.orderId} does not exist.`);
   }
 
   /**

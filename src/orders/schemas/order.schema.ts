@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Schema as MongooseSchema, Document } from "mongoose";
+import { PaymentInfo } from "src/stripe/schemas/payment-information.schema";
 
 export enum StatusType {
   UNPAID = "unpaid",
@@ -52,6 +53,9 @@ export class Order extends Document {
 
   @Prop({ type: Number, required: true })
   depositRatio: number;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: PaymentInfo.name })
+  paymentInfo: PaymentInfo;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

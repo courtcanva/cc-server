@@ -79,6 +79,4 @@ export class StripeController {
   ): Promise<PaymentInfo> {
     return await this.stripeService.updatePaymentInfo(orderId, updatePaymentInfo);
   }
-
-  // TO DO: get all paymentInfo+Order with pagination
 }
