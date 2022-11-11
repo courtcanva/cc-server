@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, SortOrder } from "mongoose";
 import { CartItem } from "./schemas/cartItem.schema";
 import { CreateCartItemDto } from "./dto/create-cartItem.dto";
 import { UpdateCartItemDto } from "./dto/update-cartItem.dto";
-import { FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
+import { FindAllCartItemByAdminDto, FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
 import { User } from "../users/schemas/user.schema";
 import { ObjectId } from "mongoose";
 
@@ -29,6 +29,33 @@ export class CartItemService {
       .skip(offset)
       .limit(limit)
       .exec();
+  }
+
+  async findAllByAdmin(findAllCartItem: FindAllCartItemByAdminDto): Promise<{
+    data: CartItem[];
+    total: number;
+  }> {
+    const { limit = 0, offset = 0, user_id, sort, desc } = findAllCartItem;
+
+    const optionalQuery = {};
+    if (user_id) {
+      optionalQuery["user_id"] = user_id;
+    }
+    const sorting = sort ? { [sort]: desc } : { createdAt: -1 };
+    const cartItems = await this.cartItemModel
+      .find({
+        $and: [{ isDeleted: false }],
+        $or: [optionalQuery],
+      })
+      .sort(sorting as { [key: string]: SortOrder | { $meta: "textScore" } })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+    const total = await this.cartItemModel.countDocuments({
+      $and: [{ isDeleted: false }],
+      $or: [optionalQuery],
+    });
+    return { data: cartItems, total };
   }
 
   async findOne(id: ObjectId): Promise<CartItem> {

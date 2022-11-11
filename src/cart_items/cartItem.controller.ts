@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { CartItemService } from "./cartItem.service";
 import { CreateCartItemDto } from "./dto/create-cartItem.dto";
-import { FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
+import { FindAllCartItemByAdminDto, FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
 import { UpdateCartItemDto } from "./dto/update-cartItem.dto";
 import { CartItem } from "./schemas/cartItem.schema";
 import { ObjectId } from "mongoose";
@@ -12,6 +12,14 @@ export class CartItemController {
   @Get()
   async findAll(@Query() findAllCartItem: FindAllCartItemDto): Promise<CartItem[]> {
     return await this.cartItemService.findAll(findAllCartItem);
+  }
+
+  @Get("/admin")
+  async findAllByAdmin(@Query() findAllCartItem: FindAllCartItemByAdminDto): Promise<{
+    data: CartItem[];
+    total: number;
+  }> {
+    return await this.cartItemService.findAllByAdmin(findAllCartItem);
   }
 
   @Get(":id")
