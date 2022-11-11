@@ -20,7 +20,7 @@ export class Admin extends Document {
   @Prop({ default: false })
   isDeleted: boolean;
 
-  @Prop({ type: String, enum: permissionType })
+  @Prop({ type: String, enum: permissionType, default: "normal" })
   permission: string;
 
   @Prop()

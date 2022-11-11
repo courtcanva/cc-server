@@ -4,7 +4,7 @@ import { AdminService } from "./admin.service";
 import { createMock } from "@golevelup/ts-jest";
 import { Admin } from "./schemas/admin.schema";
 import { getModelToken } from "@nestjs/mongoose";
-import { mockAdminData } from "./admin.testData";
+import { mockAdminData, mockAdminDataWithPermission } from "./admin.testData";
 import { JwtService } from "@nestjs/jwt";
 
 describe("AdminService", () => {
@@ -117,5 +117,18 @@ describe("AdminService", () => {
       }) as any,
     );
     expect(await service.restore(Object("6352457649dfd4dd6e7bb31c"))).toEqual(true);
+  });
+
+  it("should set an admin permission", async () => {
+    const id = Object("634818ff801e2c37130565f3");
+    const spy1 = jest.spyOn(model, "findById").mockReturnValue({
+      exec: jest.fn().mockResolvedValue(mockAdminDataWithPermission),
+    } as any);
+    const spy2 = jest.spyOn(model, "findByIdAndUpdate").mockReturnValue({
+      exec: jest.fn().mockResolvedValue(mockAdminDataWithPermission),
+    } as any);
+    await service.update(id, { permission: "super" });
+    expect(spy1).toBeCalled();
+    expect(spy2).toBeCalled();
   });
 });
