@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { Connection, Model, Query } from "mongoose";
 import { OrderService } from "./order.service";
 import { createMock } from "@golevelup/ts-jest";
-import { Order } from "./schemas/order.schema";
+import { Order, StatusType } from "./schemas/order.schema";
 import { getModelToken } from "@nestjs/mongoose";
 import { mockOrder, mockOrderArray, mockOrderInDatabase } from "./order.testData";
 import { User } from "src/users/schemas/user.schema";
@@ -33,6 +33,7 @@ describe("OrderService", () => {
             limit: jest.fn(),
             save: jest.fn(),
             exec: jest.fn(),
+            populate: jest.fn,
           },
         },
         {
@@ -54,10 +55,12 @@ describe("OrderService", () => {
 
   it("should return orders in one user ID, within given pagination", async () => {
     jest.spyOn(model, "find").mockReturnValue({
-      sort: jest.fn().mockReturnValue({
-        skip: jest.fn().mockReturnValue({
-          limit: jest.fn().mockReturnValue({
-            exec: jest.fn().mockResolvedValueOnce(mockOrderArray),
+      populate: jest.fn().mockReturnValue({
+        sort: jest.fn().mockReturnValue({
+          skip: jest.fn().mockReturnValue({
+            limit: jest.fn().mockReturnValue({
+              exec: jest.fn().mockResolvedValueOnce(mockOrderArray),
+            }),
           }),
         }),
       }),
@@ -86,7 +89,7 @@ describe("OrderService", () => {
     expect(await service.create(mockOrder)).toEqual(mockOrder);
   });
 
-  it("should update a cart item", async () => {
+  it("should update a order item", async () => {
     const updateOrder = {
       ...mockOrder,
       isPaid: true,
@@ -97,6 +100,23 @@ describe("OrderService", () => {
       }) as any,
     );
     const updatedOrder = await service.update(Object("632336d9529f634ce9bd0833"), updateOrder);
+    expect(updatedOrder).toEqual(updateOrder);
+  });
+
+  it("should update a order's status", async () => {
+    const updateOrder = {
+      ...mockOrder,
+      isPaid: true,
+      status: "completed",
+    };
+    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(updateOrder),
+      }) as any,
+    );
+    const updatedOrder = await service.updatePayment(Object("632336d9529f634ce9bd0833"), {
+      status: StatusType.COMPLETED,
+    });
     expect(updatedOrder).toEqual(updateOrder);
   });
 

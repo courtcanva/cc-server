@@ -1,5 +1,5 @@
-import { Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { HealthModule } from "./health/health.module";
 import { CourtSpecModule } from "./court_spec/courtSpec.module";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -13,6 +13,12 @@ import { CartItemModule } from "./cart_items/cartItem.module";
 import { TemplateItemsModule } from "./template_items/templateItem.module";
 import { TeamMemberModule } from "./team_members/teamMember.module";
 import { OrderModule } from "./orders/order.module";
+import { StripeModule } from "./stripe/stripe.module";
+import {
+  applyRawBodyOnlyTo,
+  JsonBodyMiddleware,
+  RawBodyMiddleware,
+} from "@golevelup/nestjs-webhooks";
 
 @Module({
   imports: [
@@ -32,6 +38,20 @@ import { OrderModule } from "./orders/order.module";
     TemplateItemsModule,
     TeamMemberModule,
     OrderModule,
+    StripeModule,
+    JsonBodyMiddleware,
+    RawBodyMiddleware,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  // Apply raw body parsing to the routes with path "stripe/webhook",
+  // and then to automatically apply JSON body parsing to all other routes
+  // with the exclusion of the raw routes.
+  configure(consumer: MiddlewareConsumer) {
+    applyRawBodyOnlyTo(consumer, {
+      method: RequestMethod.ALL,
+      // path should be the same as webhookConfig controllerPrefix (settled in stripe module)
+      path: "stripe/webhook",
+    });
+  }
+}
