@@ -14,7 +14,7 @@ export class TemplateItemController {
   @Get()
   async getAllTemplates(
     @Query() getAllTemplates: PaginationQueryDto & GetAllTemplatesDto,
-  ): Promise<{ total: number; data: TemplateItem[] }> {
+  ): Promise<TemplateItem[]> {
     return await this.templateItemsService.getAllTemplates(getAllTemplates);
   }
 

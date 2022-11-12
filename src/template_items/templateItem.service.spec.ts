@@ -34,7 +34,6 @@ describe("TemplateItemService", () => {
             findOneAndUpdate: jest.fn(),
             update: jest.fn(),
             remove: jest.fn(),
-            countDocuments: jest.fn(),
           },
         },
         {
@@ -66,9 +65,6 @@ describe("TemplateItemService", () => {
     } as any);
 
     const user_id = "123456";
-    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(3);
-    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(3);
-    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(0);
 
     const templates = await service.getAllTemplates({
       user_id,
@@ -76,7 +72,7 @@ describe("TemplateItemService", () => {
       offset: 0,
       filterTag: "ProFullCourt",
     });
-    expect(templates).toEqual(mockTemplateItemObj);
+    expect(templates).toEqual(mockTemplateItemArray);
   });
 
   it("should return a template Items in given Object ID", async () => {

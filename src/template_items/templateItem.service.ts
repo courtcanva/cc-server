@@ -8,6 +8,7 @@ import { ObjectId } from "mongoose";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { COURT_lISTS } from "src/constants/courtLists";
 
 @Injectable()
 export class TemplateItemService {
@@ -18,33 +19,14 @@ export class TemplateItemService {
 
   async getAllTemplates(
     getAllTemplates: PaginationQueryDto & GetAllTemplatesDto,
-  ): Promise<{ data: TemplateItem[]; total: number }> {
+  ): Promise<TemplateItem[]> {
     const { user_id, limit = 0, offset = 0, filterTag } = getAllTemplates;
     const optionalQuery: { [key: string]: any } = {};
+    const courts = COURT_lISTS;
 
     if (user_id) optionalQuery.user_id = user_id;
 
     if (filterTag) optionalQuery.filterTag = filterTag;
-
-    const courts = [
-      "ProFullCourt",
-      "FullCourt",
-      "HalfCourt",
-      "SmallCourt",
-      "ProHalfCourt",
-      "MediumCourt",
-    ];
-
-    const total = await this.TemplateModel.countDocuments({
-      isDeleted: false,
-      status: ["published", "censoring", "private"],
-      "tags.CourtCategory": optionalQuery.filterTag ? optionalQuery.filterTag : courts,
-    });
-    const totalPunished = await this.TemplateModel.countDocuments({
-      isDeleted: false,
-      status: "published",
-      "tags.CourtCategory": optionalQuery.filterTag ? optionalQuery.filterTag : courts,
-    });
 
     if (user_id) {
       const templates = await this.TemplateModel.find({
@@ -57,10 +39,7 @@ export class TemplateItemService {
         .limit(limit)
         .exec();
 
-      return {
-        data: templates,
-        total,
-      };
+      return templates;
     } else {
       const templates = await this.TemplateModel.find({
         isDeleted: false,
@@ -74,10 +53,7 @@ export class TemplateItemService {
         .limit(limit)
         .exec();
 
-      return {
-        data: templates,
-        total: totalPunished,
-      };
+      return templates;
     }
   }
 
