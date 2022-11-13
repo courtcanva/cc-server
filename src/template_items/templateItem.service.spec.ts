@@ -9,7 +9,6 @@ import {
   mockTemplateItemArray,
   mockNewTemplateItem,
   mockTemplateItemInDatabase,
-  mockTemplateItemObj,
 } from "./templateItem.testData";
 import { User } from "src/users/schemas/user.schema";
 
@@ -65,7 +64,6 @@ describe("TemplateItemService", () => {
     } as any);
 
     const user_id = "123456";
-
     const templates = await service.getAllTemplates({
       user_id,
       limit: 5,

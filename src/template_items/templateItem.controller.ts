@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, Put, UseFilters } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Query, Put } from "@nestjs/common";
 import { TemplateItemService } from "./templateItem.service";
 import { TemplateItem } from "./schemas/template.schema";
 import { ObjectId } from "mongoose";
