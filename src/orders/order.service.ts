@@ -10,7 +10,7 @@ import { UpdateOrderDto } from "./dto/updateOrder.dto";
 export class OrderService {
   constructor(@InjectModel(Order.name) private readonly orderModel: Model<Order>) {}
 
-  async findAll(findAllOrder: FindAllOrderDto): Promise<Order[]> {
+  async findAll(findAllOrder: FindAllOrderDto): Promise<{ data: Order[]; total: number }> {
     const { user_id, limit = 0, offset = 0 } = findAllOrder;
     if (user_id === "") {
       throw new NotFoundException("userId cannot be empty string");
@@ -18,13 +18,19 @@ export class OrderService {
     const optionalQuery: { [key: string]: any } = {};
     if (user_id) optionalQuery.user_id = user_id;
 
-    return await this.orderModel
+    const ordersData = await this.orderModel
       .find({ ...optionalQuery })
       .populate("paymentInfo")
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .exec();
+
+    const total = await this.orderModel.countDocuments();
+    return {
+      data: ordersData,
+      total,
+    };
   }
 
   async findOne(id: ObjectId): Promise<Order> {
