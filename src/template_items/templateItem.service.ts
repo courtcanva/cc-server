@@ -8,7 +8,7 @@ import { ObjectId } from "mongoose";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
-import { COURT_lISTS } from "src/constants/courtLists";
+import { COURT_LISTS } from "src/constants/courtLists";
 
 @Injectable()
 export class TemplateItemService {
@@ -22,7 +22,7 @@ export class TemplateItemService {
   ): Promise<TemplateItem[]> {
     const { user_id, limit = 0, offset = 0, filterTag } = getAllTemplates;
     const optionalQuery: { [key: string]: any } = {};
-    const courts = COURT_lISTS;
+    const courts = COURT_LISTS;
 
     if (user_id) optionalQuery.user_id = user_id;
 

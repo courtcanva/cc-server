@@ -1,4 +1,4 @@
-export const COURT_lISTS = [
+export const COURT_LISTS = [
   "ProFullCourt",
   "FullCourt",
   "HalfCourt",
