@@ -34,6 +34,7 @@ describe("OrderService", () => {
             save: jest.fn(),
             exec: jest.fn(),
             populate: jest.fn,
+            countDocuments: jest.fn(),
           },
         },
         {
@@ -65,10 +66,12 @@ describe("OrderService", () => {
         }),
       }),
     } as any);
+    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(mockOrderArray.length);
     const user_Id = "user123";
-    expect(await service.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual(
-      mockOrderArray,
-    );
+    expect(await service.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual({
+      data: mockOrderArray,
+      total: mockOrderArray.length,
+    });
   });
 
   it("should return a order in given object ID", async () => {
