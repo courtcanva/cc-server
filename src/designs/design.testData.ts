@@ -1,6 +1,7 @@
 export const mockDesign = {
   user_id: "user123",
   designName: "CourtCanvas1",
+  courtType: "basketball",
   tileColor: [
     {
       location: "threePoint",
@@ -47,6 +48,7 @@ export const mockDesignArray = [
   {
     user_id: "user123",
     designName: "CourtCanvas1",
+    courtType: "basketball",
     tileColor: [
       {
         location: "threePoint",
@@ -91,6 +93,7 @@ export const mockDesignArray = [
   {
     user_id: "user123",
     designName: "CourtCanvas2",
+    courtType: "basketball",
     tileColor: [
       {
         location: "threePoint",
