@@ -1,9 +1,12 @@
 import { IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { PaginationQueryDto } from "../../utils/PaginationDto/pagination-query.dto";
-
-export class GetAllTemplatesDto extends PaginationQueryDto {
+export class GetAllTemplatesDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
   user_id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  filterTag: string;
 }
