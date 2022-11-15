@@ -4,9 +4,10 @@ import { Model, SortOrder } from "mongoose";
 import { CartItem } from "./schemas/cartItem.schema";
 import { CreateCartItemDto } from "./dto/create-cartItem.dto";
 import { UpdateCartItemDto } from "./dto/update-cartItem.dto";
-import { FindAllCartItemByAdminDto, FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
+import { FindCartItemListByAdminDto, FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
 import { User } from "../users/schemas/user.schema";
 import { ObjectId } from "mongoose";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Injectable()
 export class CartItemService {
@@ -31,11 +32,13 @@ export class CartItemService {
       .exec();
   }
 
-  async findAllByAdmin(findAllCartItem: FindAllCartItemByAdminDto): Promise<{
+  async findCartItemListByAdmin(
+    findCartItemListByAdmin: PaginationQueryDto & FindCartItemListByAdminDto,
+  ): Promise<{
     data: CartItem[];
     total: number;
   }> {
-    const { limit = 0, offset = 0, user_id, sort, desc } = findAllCartItem;
+    const { limit = 0, offset = 0, user_id, sort, desc } = findCartItemListByAdmin;
 
     const optionalQuery = {};
     if (user_id) {

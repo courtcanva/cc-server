@@ -4,7 +4,8 @@ import { CartItemService } from "./cartItem.service";
 import { mockCartItem } from "./cartItem.testData";
 import { CreateCartItemDto } from "./dto/create-cartItem.dto";
 import { UpdateCartItemDto } from "./dto/update-cartItem.dto";
-import { FindAllCartItemByAdminDto, FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
+import { FindAllCartItemDto, FindCartItemListByAdminDto } from "./dto/findAll-cartItem.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 describe("ShoppingCartController", () => {
   let controller: CartItemController;
@@ -17,7 +18,9 @@ describe("ShoppingCartController", () => {
           provide: CartItemService,
           useValue: {
             findAll: jest.fn().mockImplementation(() => Promise.resolve([mockCartItem])),
-            findAllByAdmin: jest.fn().mockImplementation(() => Promise.resolve([mockCartItem])),
+            findCartItemListByAdmin: jest
+              .fn()
+              .mockImplementation(() => Promise.resolve([mockCartItem])),
             findOne: jest.fn().mockImplementation(() => Promise.resolve(mockCartItem)),
             create: jest
               .fn()
@@ -50,17 +53,19 @@ describe("ShoppingCartController", () => {
     });
   });
 
-  describe("findAllByAdmin", () => {
-    it("should get all cart items with pagination by admin", () => {
+  describe("findCartItemListByAdmin", () => {
+    it("should get cart items list with pagination by admin", () => {
       const user_Id = "user123";
-      const findAllCartItemByAdminDto: FindAllCartItemByAdminDto = {
+      const findCartItemListByAdmin: PaginationQueryDto & FindCartItemListByAdminDto = {
         user_id: user_Id,
         limit: 3,
         offset: 1,
         sort: "",
         desc: 1,
       };
-      expect(controller.findAllByAdmin(findAllCartItemByAdminDto)).resolves.toEqual([mockCartItem]);
+      expect(controller.findCartItemListByAdmin(findCartItemListByAdmin)).resolves.toEqual([
+        mockCartItem,
+      ]);
     });
   });
 

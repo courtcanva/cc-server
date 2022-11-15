@@ -7,7 +7,7 @@ export class FindAllCartItemDto extends PaginationQueryDto {
   user_id: string;
 }
 
-export class FindAllCartItemByAdminDto extends PaginationQueryDto {
+export class FindCartItemListByAdminDto {
   @IsString()
   @IsOptional()
   user_id: string;

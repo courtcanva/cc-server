@@ -74,7 +74,7 @@ describe("CartItemService", () => {
     );
   });
 
-  it("should return cart items within given pagination by admin", async () => {
+  it("should return cart items list within given pagination by admin", async () => {
     jest.spyOn(model, "find").mockReturnValue({
       sort: jest.fn().mockReturnValue({
         skip: jest.fn().mockReturnValue({
@@ -88,7 +88,13 @@ describe("CartItemService", () => {
 
     const user_Id = "user123";
     expect(
-      await service.findAllByAdmin({ user_id: user_Id, limit: 3, offset: 1, sort: "", desc: 1 }),
+      await service.findCartItemListByAdmin({
+        user_id: user_Id,
+        limit: 3,
+        offset: 1,
+        sort: "",
+        desc: 1,
+      }),
     ).toEqual({ data: mockCartItemArray, total: mockCartItemArray.length });
   });
 
