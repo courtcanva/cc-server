@@ -19,6 +19,7 @@ import {
   JsonBodyMiddleware,
   RawBodyMiddleware,
 } from "@golevelup/nestjs-webhooks";
+import { DepositModule } from "./deposit/deposit.module";
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import {
     StripeModule,
     JsonBodyMiddleware,
     RawBodyMiddleware,
+    DepositModule,
   ],
 })
 export class AppModule implements NestModule {
