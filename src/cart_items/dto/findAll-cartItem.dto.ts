@@ -6,3 +6,16 @@ export class FindAllCartItemDto extends PaginationQueryDto {
   @IsOptional()
   user_id: string;
 }
+
+export class FindCartItemListByAdminDto {
+  @IsString()
+  @IsOptional()
+  user_id: string;
+
+  @IsString()
+  @IsOptional()
+  sort: string;
+
+  @IsOptional()
+  desc: number;
+}
