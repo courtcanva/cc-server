@@ -8,6 +8,7 @@ export const mockOrder = {
       constructionDrawing: "test",
       design: {
         designName: "Court Canva 1",
+        courtType: "basketball",
         tileColor: [
           {
             location: "threePoint",

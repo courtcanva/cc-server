@@ -64,6 +64,10 @@ export class Design {
   @IsNotEmpty()
   readonly designName: string;
 
+  @IsString()
+  @IsNotEmpty()
+  readonly courtType: string;
+
   @IsArray()
   @IsNotEmpty()
   @ArrayMinSize(1)

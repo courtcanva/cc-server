@@ -5,6 +5,7 @@ import { mockTemplateItem } from "./templateItem.testData";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { TemplateItemDto } from "./dto/template.dto";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 describe("TemplateItemController", () => {
   let controller: TemplateItemController;
@@ -45,10 +46,11 @@ describe("TemplateItemController", () => {
   describe("getAllTemplates", () => {
     it("should get all template items in a given user id with pagination", () => {
       const user_id = "123456";
-      const getAllTemplatesDto: GetAllTemplatesDto = {
+      const getAllTemplatesDto: GetAllTemplatesDto & PaginationQueryDto = {
         user_id: user_id,
         limit: 3,
         offset: 2,
+        filterTag: "ProFullCourt",
       };
       expect(controller.getAllTemplates(getAllTemplatesDto)).resolves.toEqual([mockTemplateItem]);
     });

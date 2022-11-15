@@ -1,6 +1,10 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
+export enum CourtType {
+  BASKETBALL = "basketball",
+  TENNIS = "tennis",
+}
 @Schema({ timestamps: true })
 export class Design extends Document {
   @Prop({ required: true })
@@ -8,6 +12,8 @@ export class Design extends Document {
 
   @Prop({ required: true })
   designName: string;
+  @Prop({ type: String })
+  courtType: CourtType;
 
   @Prop({ type: Array, required: true })
   tileColor: [{ location: string; color: string }];

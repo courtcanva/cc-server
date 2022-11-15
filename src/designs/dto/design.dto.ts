@@ -14,6 +14,10 @@ export class DesignDto {
   @IsNotEmpty()
   readonly designName: string;
 
+  @IsString()
+  @IsNotEmpty()
+  readonly courtType: string;
+
   @IsArray()
   @IsNotEmpty()
   @Type(() => Color)

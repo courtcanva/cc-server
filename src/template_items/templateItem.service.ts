@@ -7,6 +7,8 @@ import { TemplateItemDto } from "./dto/template.dto";
 import { ObjectId } from "mongoose";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { COURT_LISTS } from "src/constants/courtLists";
 
 @Injectable()
 export class TemplateItemService {
@@ -15,24 +17,43 @@ export class TemplateItemService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async getAllTemplates(getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
-    const { user_id, limit = 0, offset = 0 } = getAllTemplates;
+  async getAllTemplates(
+    getAllTemplates: PaginationQueryDto & GetAllTemplatesDto,
+  ): Promise<TemplateItem[]> {
+    const { user_id, limit = 0, offset = 0, filterTag } = getAllTemplates;
     const optionalQuery: { [key: string]: any } = {};
+    const courts = COURT_LISTS;
 
     if (user_id) optionalQuery.user_id = user_id;
 
-    const response = await this.TemplateModel.find({
-      isDeleted: false,
-      ...optionalQuery,
-    })
-      .sort({ createdAt: -1 })
-      .skip(offset)
-      .limit(limit)
-      .exec();
+    if (filterTag) optionalQuery.filterTag = filterTag;
+
     if (user_id) {
-      return response.filter((res) => res.status !== StatusType.ILLEGAL);
+      const templates = await this.TemplateModel.find({
+        isDeleted: false,
+        ...optionalQuery,
+        "tags.CourtCategory": optionalQuery.filterTag ? optionalQuery.filterTag : courts,
+      })
+        .sort({ createdAt: -1 })
+        .skip(offset)
+        .limit(limit)
+        .exec();
+
+      return templates;
     } else {
-      return response.filter((res) => res.status === StatusType.PUBLISHED);
+      const templates = await this.TemplateModel.find({
+        isDeleted: false,
+        ...optionalQuery,
+        "tags.CourtCategory": optionalQuery.filterTag ? optionalQuery.filterTag : courts,
+
+        status: "published",
+      })
+        .sort({ createdAt: -1 })
+        .skip(offset)
+        .limit(limit)
+        .exec();
+
+      return templates;
     }
   }
 

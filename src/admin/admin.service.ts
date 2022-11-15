@@ -9,6 +9,7 @@ import { Model, ObjectId } from "mongoose";
 import { LoginAdminDto } from "./dto/login-admin.dto";
 import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
+import { SetAdminPermissionDto } from "./dto/set-admin-permission.dto";
 import { Admin } from "./schemas/admin.schema";
 import { JwtService } from "@nestjs/jwt";
 import { Tokens } from "./types";
@@ -30,7 +31,6 @@ export class AdminService {
       name: adminDto.name,
       email: adminDto.email,
       password: hashedPassword,
-      permission: adminDto.permission,
     };
     //fetch all users
     const allUsersEmails = await this.adminModel.find().exec();
@@ -169,6 +169,22 @@ export class AdminService {
     }
     await this.adminModel.findByIdAndUpdate(adminId, {
       isDeleted: false,
+      updatedAt: new Date(),
+    });
+    return true;
+  }
+
+  async setPermission(
+    adminId: ObjectId,
+    setAdminPermissionDto: SetAdminPermissionDto,
+  ): Promise<boolean> {
+    const admin = await this.adminModel.findById(adminId).exec();
+
+    if (!admin || admin.isDeleted) {
+      throw new NotFoundException("Admin not found");
+    }
+    await this.adminModel.findByIdAndUpdate(adminId, {
+      permission: setAdminPermissionDto.permission,
       updatedAt: new Date(),
     });
     return true;

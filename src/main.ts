@@ -5,7 +5,9 @@ import { AppModule } from "./app.module";
 import { MongoExceptionFilter } from "./common/filters/mongoose-exception.filter";
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bodyParser: false,
+  });
   app.enableCors();
   app.set("trust proxy", 1);
   app.useGlobalPipes(

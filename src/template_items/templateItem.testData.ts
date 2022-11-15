@@ -88,15 +88,16 @@ export const mockTemplateItemArray = [
         lengthOfCorner: 1575,
         lineBorderWidth: 200,
       },
-      image: "www.youtube.com",
-      description: "Basketball Full Court Small Family first choice",
-      tags: {
-        CourtCategory: "full pro court",
-        CourtSize: "basketball",
-      },
-      isOfficial: true,
-      status: "punished",
     },
+    image: "www.youtube.com",
+    description: "Basketball Full Court Small Family first choice",
+    tags: {
+      CourtCategory: "full court",
+      CourtType: "basketball",
+    },
+    isOfficial: true,
+    status: "published",
+    isDeleted: false,
   },
   {
     user_id: "123456",
@@ -149,6 +150,9 @@ export const mockTemplateItemArray = [
       CourtCategory: "full court",
       CourtType: "basketball",
     },
+    isOfficial: false,
+    status: "published",
+    isDeleted: false,
   },
   {
     user_id: "123456",
@@ -192,17 +196,17 @@ export const mockTemplateItemArray = [
         sideBorderWidth: 0,
         lengthOfCorner: 1575,
         lineBorderWidth: 200,
-        designName: "Court Canva 1",
       },
     },
     image: "www.tennis.com",
     description: "Basketball Full Court Small Family first choice",
     tags: {
-      CourtCategory: "full pro court",
-      CourtSize: "tennis",
+      CourtCategory: "ProFullCourt",
+      CourtType: "basketball",
     },
     isOfficial: false,
-    status: "punished",
+    status: "published",
+    isDeleted: false,
   },
 ];
 
@@ -253,7 +257,7 @@ export const mockNewTemplateItem = {
   image: "url123",
   description: "Basketball Full Court",
   tags: {
-    CourtCategory: "full pro court",
+    CourtCategory: "ProFullCourt",
     CourtType: "tennis",
   },
 };
@@ -304,7 +308,7 @@ export const mockTemplateItemInDatabase = {
   image: "www.tennis.com",
   description: "Basketball Full Court Big Family first choice",
   tags: {
-    CourtCategory: "full pro court",
+    CourtCategory: "ProFullCourt",
     CourtSize: "tennis",
   },
   isOfficial: false,
@@ -313,4 +317,9 @@ export const mockTemplateItemInDatabase = {
   updatedAt: "2022-10-11T04:27:36.677+00:00",
   isDeleted: false,
   __v: 0,
+};
+
+export const mockTemplateItemObj = {
+  data: mockTemplateItemArray,
+  total: 3,
 };

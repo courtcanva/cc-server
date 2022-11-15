@@ -1,17 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, Put, UseFilters } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Query, Put } from "@nestjs/common";
 import { TemplateItemService } from "./templateItem.service";
 import { TemplateItem } from "./schemas/template.schema";
 import { ObjectId } from "mongoose";
 import { TemplateItemDto } from "./dto/template.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Controller("templates")
 export class TemplateItemController {
   constructor(private readonly templateItemsService: TemplateItemService) {}
 
   @Get()
-  async getAllTemplates(@Query() getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
+  async getAllTemplates(
+    @Query() getAllTemplates: PaginationQueryDto & GetAllTemplatesDto,
+  ): Promise<TemplateItem[]> {
     return await this.templateItemsService.getAllTemplates(getAllTemplates);
   }
 
