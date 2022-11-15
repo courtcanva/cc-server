@@ -38,6 +38,7 @@ describe("CartItemService", () => {
             limit: jest.fn(),
             save: jest.fn(),
             exec: jest.fn(),
+            countDocuments: jest.fn(),
           },
         },
         {
@@ -71,6 +72,30 @@ describe("CartItemService", () => {
     expect(await service.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual(
       mockCartItemArray,
     );
+  });
+
+  it("should return cart items list within given pagination by admin", async () => {
+    jest.spyOn(model, "find").mockReturnValue({
+      sort: jest.fn().mockReturnValue({
+        skip: jest.fn().mockReturnValue({
+          limit: jest.fn().mockReturnValue({
+            exec: jest.fn().mockResolvedValueOnce(mockCartItemArray),
+          }),
+        }),
+      }),
+    } as any);
+    jest.spyOn(model, "countDocuments").mockResolvedValue(mockCartItemArray.length);
+
+    const user_Id = "user123";
+    expect(
+      await service.findCartItemListByAdmin({
+        user_id: user_Id,
+        limit: 3,
+        offset: 1,
+        sort: "",
+        desc: 1,
+      }),
+    ).toEqual({ data: mockCartItemArray, total: mockCartItemArray.length });
   });
 
   it("should return a cart items in given object ID", async () => {
