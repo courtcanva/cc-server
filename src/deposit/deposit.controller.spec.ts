@@ -1,4 +1,6 @@
+import { getModelToken } from "@nestjs/mongoose";
 import { Test, TestingModule } from "@nestjs/testing";
+import { Admin } from "src/admin/schemas/admin.schema";
 import { DepositController } from "./deposit.controller";
 import { DepositService } from "./deposit.service";
 
@@ -17,6 +19,10 @@ describe("DepositController", () => {
         {
           provide: DepositService,
           useValue: mockDepositService,
+        },
+        {
+          provide: getModelToken(Admin.name),
+          useValue: {},
         },
       ],
     }).compile();
