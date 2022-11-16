@@ -9,4 +9,9 @@ export class GetAllTemplatesDto {
   @IsNotEmpty()
   @IsOptional()
   filterTag: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  status?: string;
 }
