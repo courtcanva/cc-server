@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { isEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 export class GetAllTemplatesDto {
   @IsString()
   @IsNotEmpty()
@@ -9,4 +9,9 @@ export class GetAllTemplatesDto {
   @IsNotEmpty()
   @IsOptional()
   filterTag: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  status?: string;
 }
