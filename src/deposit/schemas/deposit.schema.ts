@@ -2,7 +2,9 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 export type DepositDocument = Deposit & Document;
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class Deposit {
   @Prop({
     type: Number,
