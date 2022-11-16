@@ -7,6 +7,9 @@ export class User extends Document {
   @Prop()
   googleId: string;
 
+  @Prop()
+  user_Id: string;
+
   @Prop({ unique: true })
   email: string;
 

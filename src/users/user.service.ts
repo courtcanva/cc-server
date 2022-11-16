@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, ObjectId } from "mongoose";
+import mongoose, { Model, ObjectId, SortOrder } from "mongoose";
 import { CheckEmailDto } from "./dto/checkEmail.dto";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
@@ -10,6 +10,7 @@ import { ConnectAccountDto } from "./dto/connectAccount.dto";
 import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 import { AuthService } from "src/auth/auth.service";
 import * as argon from "argon2";
+import { SearchUserDto } from "./dto/searchUser.dto";
 
 @Injectable()
 export class UserService {
@@ -39,6 +40,47 @@ export class UserService {
     return { data: users, total };
   }
 
+  async getUserBySearch(searchUserDto: SearchUserDto): Promise<{ data: User[]; total: number }> {
+    let users = [];
+    let optionalQuery = {};
+    let splitName: string[];
+    let qFirstName, qLastName, qName: RegExp;
+    const { user_id, email, name, limit = 0, offset = 0, sort, desc } = searchUserDto;
+    const sorting = sort ? { [sort]: desc } : { createdAt: -1 };
+    if (name) {
+      qName = new RegExp(`.*${name}.*`, "i");
+      if (name.includes(" ")) {
+        splitName = name.split(" ");
+        qFirstName = new RegExp(`.*${splitName[0]}.*`, "i");
+        qLastName = new RegExp(`.*${splitName[1]}.*`, "i");
+        optionalQuery = {
+          $and: [{ firstName: qFirstName }, { lastName: qLastName }],
+        };
+      } else if (!email && !user_id) {
+        optionalQuery = {
+          $or: [{ firstName: qName }, { lastName: qName }],
+        };
+      } else {
+        optionalQuery = {
+          $or: [{ firstName: qName }, { lastName: qName }, { _id: user_id }, { email: email }],
+        };
+      }
+    }
+    if (user_id && !email && !name) {
+      optionalQuery = { _id: user_id };
+    }
+    if (email && !user_id && !name) {
+      optionalQuery = { email: email };
+    }
+    users = await this.userModel
+      .find(optionalQuery, { isDeleted: false })
+      .sort(sorting as { [key: string]: SortOrder | { $meta: "textScore" } })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+    const total = users.length;
+    return { data: users, total };
+  }
   /**
    * Get the corresponding user according to id
    * @param {ObjectId} id

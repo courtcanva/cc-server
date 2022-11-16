@@ -7,6 +7,7 @@ import { UserService } from "./user.service";
 import { ConnectAccountDto } from "./dto/connectAccount.dto";
 import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 import { UpdateUserDto } from "./dto/updateUser.dto";
+import { SearchUserDto } from "./dto/searchUser.dto";
 
 @Controller("user")
 export class UserController {
@@ -28,14 +29,20 @@ export class UserController {
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return await this.userService.create(createUserDto);
   }
-
   @Get()
-  async listAllUsers(@Query() paginationQuery: PaginationQueryDto): Promise<{
-    total: number;
-    data: User[];
-  }> {
-    return await this.userService.getAllUsers(paginationQuery);
+  async listUsersByAdmin(
+    @Query() searchUserDto: SearchUserDto,
+  ): Promise<{ data: User[]; total: number }> {
+    console.log(searchUserDto);
+    return await this.userService.getUserBySearch(searchUserDto);
   }
+  // @Get()
+  // async listAllUsers(@Query() paginationQuery: PaginationQueryDto): Promise<{
+  //   total: number;
+  //   data: User[];
+  // }> {
+  //   return await this.userService.getAllUsers(paginationQuery);
+  // }
 
   @Put()
   async updateUserById(@Body() updateUserDto: UpdateUserDto): Promise<User> {
