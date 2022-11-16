@@ -7,9 +7,11 @@ import { Admin, AdminSchema } from "src/admin/schemas/admin.schema";
 import { JwtModule } from "@nestjs/jwt";
 import { AccessTokenStrategy, RefreshTokenStrategy } from "./strategies";
 import { UserModule } from "../users/user.module";
+import { DepositModule } from "src/deposit/deposit.module";
 
 @Module({
   imports: [
+    DepositModule,
     MongooseModule.forFeature([
       {
         name: User.name,
