@@ -10,7 +10,7 @@ export class Deposit {
     type: Number,
     required: true,
   })
-  depositRatio: number;
+  depositRate: number;
 }
 
 export const DepositSchema = SchemaFactory.createForClass(Deposit);

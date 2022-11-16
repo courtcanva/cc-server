@@ -44,7 +44,7 @@ describe("DepositService", () => {
 
   it("should return deposit", async () => {
     const findOneSpy: jest.SpyInstance = jest.spyOn(model, "findOneAndUpdate");
-    const deposit: Deposit = await service.update({ depositRatio: 0.2 });
+    const deposit: Deposit = await service.update({ depositRate: 0.2 });
     expect(findOneSpy).toHaveBeenCalled();
     expect(deposit).toEqual({ depositRatio: 0.2 });
   });
