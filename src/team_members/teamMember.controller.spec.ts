@@ -54,7 +54,7 @@ describe("Team Member Controller", () => {
     expect(controller).toBeDefined();
   });
 
-  describe("getAllTeamMembers", () => {
+  describe("listTeamMembers", () => {
     it("should get all team members", async () => {
       const listTeamMembersDto: ListTeamMembersDto = { isGrouped: "true", limit: 0, offset: 0 };
       expect(controller.listTeamMembers(listTeamMembersDto)).resolves.toEqual(

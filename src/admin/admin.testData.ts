@@ -33,3 +33,16 @@ export const mockAdminData = [
     isDeleted: true,
   },
 ];
+
+export const mockAdminDataWithPermission = {
+  id: "634818ff801e2c37130565f5",
+  email: "admin@gmail.com",
+  permission: "normal",
+  password:
+    "$argon2id$v=19$m=4096,t=3,p=1$qtjGrhycYWpLKboGKdHBhQ$GxfV6BXljUQmyjdWp278o1WOQpVpoBpXe3V4mcfh2ZE",
+  hashedRefreshToken:
+    "$argon2id$v=19$m=4096,t=3,p=1$EGlzfBvesXfKyVQlXtxC+w$eNo5EYb9WNJbZF9UlNsuwI9L6x3fKXMQnrmVnPvabLo",
+  createdAt: "2022-10-12T06:08:47.952Z",
+  updatedAt: "2022-10-12T13:52:54.929Z",
+  isDeleted: false,
+};

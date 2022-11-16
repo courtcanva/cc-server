@@ -1,10 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { CartItemService } from "./cartItem.service";
 import { CreateCartItemDto } from "./dto/create-cartItem.dto";
-import { FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
+import { FindCartItemListByAdminDto, FindAllCartItemDto } from "./dto/findAll-cartItem.dto";
 import { UpdateCartItemDto } from "./dto/update-cartItem.dto";
 import { CartItem } from "./schemas/cartItem.schema";
 import { ObjectId } from "mongoose";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Controller("shopping-cart")
 export class CartItemController {
@@ -12,6 +13,16 @@ export class CartItemController {
   @Get()
   async findAll(@Query() findAllCartItem: FindAllCartItemDto): Promise<CartItem[]> {
     return await this.cartItemService.findAll(findAllCartItem);
+  }
+
+  @Get("/admin")
+  async findCartItemListByAdmin(
+    @Query() findCartItemListByAdmin: PaginationQueryDto & FindCartItemListByAdminDto,
+  ): Promise<{
+    data: CartItem[];
+    total: number;
+  }> {
+    return await this.cartItemService.findCartItemListByAdmin(findCartItemListByAdmin);
   }
 
   @Get(":id")

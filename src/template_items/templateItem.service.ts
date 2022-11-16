@@ -7,6 +7,7 @@ import { TemplateItemDto } from "./dto/template.dto";
 import { ObjectId } from "mongoose";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Injectable()
 export class TemplateItemService {
@@ -15,13 +16,23 @@ export class TemplateItemService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async getAllTemplates(getAllTemplates: GetAllTemplatesDto): Promise<TemplateItem[]> {
-    const { user_id, limit = 0, offset = 0 } = getAllTemplates;
+  async getAllTemplates(
+    getAllTemplates: PaginationQueryDto & GetAllTemplatesDto,
+  ): Promise<TemplateItem[]> {
+    const { user_id, limit = 0, offset = 0, filterTag, status = "published" } = getAllTemplates;
     const optionalQuery: { [key: string]: any } = {};
 
     if (user_id) optionalQuery.user_id = user_id;
 
-    const response = await this.TemplateModel.find({
+    if (status !== "all") {
+      optionalQuery.status = status;
+    } else {
+      optionalQuery.status = ["published", "private", "censoring", "illegal"];
+    }
+
+    if (filterTag) optionalQuery["tags.CourtCategory"] = filterTag;
+
+    const templates = await this.TemplateModel.find({
       isDeleted: false,
       ...optionalQuery,
     })
@@ -29,11 +40,8 @@ export class TemplateItemService {
       .skip(offset)
       .limit(limit)
       .exec();
-    if (user_id) {
-      return response.filter((res) => res.status !== StatusType.ILLEGAL);
-    } else {
-      return response.filter((res) => res.status === StatusType.PUBLISHED);
-    }
+
+    return templates;
   }
 
   async findOne(item_id: ObjectId): Promise<TemplateItem> {

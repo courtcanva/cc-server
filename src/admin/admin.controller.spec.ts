@@ -5,7 +5,9 @@ import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { AdminController } from "./admin.controller";
 import { AdminService } from "./admin.service";
 import { mockAdminData } from "./admin.testData";
-// import { Admin } from "./schemas/admin.schema";
+import { getModelToken } from "@nestjs/mongoose";
+import { Admin } from "./schemas/admin.schema";
+import { SetAdminPermissionDto } from "./dto/set-admin-permission.dto";
 // import { BadRequestException, NotFoundException } from "@nestjs/common";
 
 describe("AdminController", () => {
@@ -31,7 +33,12 @@ describe("AdminController", () => {
               ),
             remove: jest.fn().mockResolvedValue({ isDeleted: true }),
             restore: jest.fn().mockResolvedValue({ isDeleted: false }),
+            setPermission: jest.fn().mockResolvedValue({ permission: "super" }),
           },
+        },
+        {
+          provide: getModelToken(Admin.name),
+          useValue: jest.fn(),
         },
       ],
     }).compile();
@@ -80,6 +87,15 @@ describe("AdminController", () => {
   it("remove should restore a deleted admin", () => {
     expect(controller.restoreAdminById(Object("634818ff801e2c3713056222"))).resolves.toEqual({
       isDeleted: false,
+    });
+  });
+
+  it("should set a permission state for admin", () => {
+    const setAdminPermissionDto: SetAdminPermissionDto = { permission: "super" };
+    expect(
+      controller.setAdminPermissionById(Object("634818ff801e2c3713056222"), setAdminPermissionDto),
+    ).resolves.toEqual({
+      permission: "super",
     });
   });
 });

@@ -62,10 +62,15 @@ describe("TemplateItemService", () => {
         }),
       }),
     } as any);
+
     const user_id = "123456";
-    expect(await service.getAllTemplates({ user_id: user_id, limit: 0, offset: 1 })).toEqual(
-      mockTemplateItemArray,
-    );
+    const templates = await service.getAllTemplates({
+      user_id,
+      limit: 5,
+      offset: 0,
+      filterTag: "ProFullCourt",
+    });
+    expect(templates).toEqual(mockTemplateItemArray);
   });
 
   it("should return a template Items in given Object ID", async () => {
