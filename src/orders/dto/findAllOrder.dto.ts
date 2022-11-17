@@ -6,3 +6,13 @@ export class FindAllOrderDto extends PaginationQueryDto {
   @IsOptional()
   user_id: string;
 }
+
+export class FindAllOrderDtoByAdmin {
+  @IsString()
+  @IsOptional()
+  user_id: string;
+
+  @IsString()
+  @IsOptional()
+  status: string;
+}

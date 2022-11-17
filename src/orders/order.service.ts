@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Order, StatusType } from "./schemas/order.schema";
 import { Model, ObjectId, Types } from "mongoose";
-import { FindAllOrderDto } from "./dto/findAllOrder.dto";
+import { FindAllOrderDto, FindAllOrderDtoByAdmin } from "./dto/findAllOrder.dto";
 import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 
@@ -10,23 +10,35 @@ import { UpdateOrderDto } from "./dto/updateOrder.dto";
 export class OrderService {
   constructor(@InjectModel(Order.name) private readonly orderModel: Model<Order>) {}
 
-  async findAll(findAllOrder: FindAllOrderDto): Promise<{ data: Order[]; total: number }> {
-    const { user_id, limit = 0, offset = 0 } = findAllOrder;
+  async findAll(
+    findAllOrder: FindAllOrderDto & FindAllOrderDtoByAdmin,
+  ): Promise<{ data: Order[]; total: number }> {
+    const { user_id, limit = 0, offset = 0, status } = findAllOrder;
     if (user_id === "") {
       throw new NotFoundException("userId cannot be empty string");
     }
     const optionalQuery: { [key: string]: any } = {};
+    const searchQuery: { [key: string]: any } = {};
     if (user_id) optionalQuery.user_id = user_id;
 
+    if (user_id) searchQuery.user_id = user_id;
+    if (status) optionalQuery.status = status;
+
+    const qRegExp = new RegExp(`.*${searchQuery}.*`, "i");
     const ordersData = await this.orderModel
-      .find({ ...optionalQuery })
+      .find({
+        $and: [{ $or: [optionalQuery] }, { user_id: qRegExp }],
+      })
       .populate("paymentInfo")
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .exec();
 
-    const total = await this.orderModel.countDocuments();
+    const total = await this.orderModel.countDocuments({
+      $or: [optionalQuery],
+    });
+
     return {
       data: ordersData,
       total,

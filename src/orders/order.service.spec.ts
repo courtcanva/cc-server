@@ -68,7 +68,7 @@ describe("OrderService", () => {
     } as any);
     jest.spyOn(model, "countDocuments").mockResolvedValueOnce(mockOrderArray.length);
     const user_Id = "user123";
-    expect(await service.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual({
+    expect(await service.findAll({ user_id: user_Id, limit: 3, offset: 1, status: "" })).toEqual({
       data: mockOrderArray,
       total: mockOrderArray.length,
     });
