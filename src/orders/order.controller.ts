@@ -11,7 +11,7 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Get()
-  async findAll(@Query() findAllOrder: FindAllOrderDto): Promise<Order[]> {
+  async findAll(@Query() findAllOrder: FindAllOrderDto): Promise<{ data: Order[]; total: number }> {
     return await this.orderService.findAll(findAllOrder);
   }
 

@@ -8,7 +8,6 @@ import { ObjectId } from "mongoose";
 import { UpdateTemplateDto } from "./dto/updateTemplate.dto";
 import { GetAllTemplatesDto } from "./dto/getAllTemplate.dto";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
-import { COURT_LISTS } from "src/constants/courtLists";
 
 @Injectable()
 export class TemplateItemService {
@@ -20,41 +19,29 @@ export class TemplateItemService {
   async getAllTemplates(
     getAllTemplates: PaginationQueryDto & GetAllTemplatesDto,
   ): Promise<TemplateItem[]> {
-    const { user_id, limit = 0, offset = 0, filterTag } = getAllTemplates;
+    const { user_id, limit = 0, offset = 0, filterTag, status = "published" } = getAllTemplates;
     const optionalQuery: { [key: string]: any } = {};
-    const courts = COURT_LISTS;
 
     if (user_id) optionalQuery.user_id = user_id;
 
-    if (filterTag) optionalQuery.filterTag = filterTag;
-
-    if (user_id) {
-      const templates = await this.TemplateModel.find({
-        isDeleted: false,
-        ...optionalQuery,
-        "tags.CourtCategory": optionalQuery.filterTag ? optionalQuery.filterTag : courts,
-      })
-        .sort({ createdAt: -1 })
-        .skip(offset)
-        .limit(limit)
-        .exec();
-
-      return templates;
+    if (status !== "all") {
+      optionalQuery.status = status;
     } else {
-      const templates = await this.TemplateModel.find({
-        isDeleted: false,
-        ...optionalQuery,
-        "tags.CourtCategory": optionalQuery.filterTag ? optionalQuery.filterTag : courts,
-
-        status: "published",
-      })
-        .sort({ createdAt: -1 })
-        .skip(offset)
-        .limit(limit)
-        .exec();
-
-      return templates;
+      optionalQuery.status = ["published", "private", "censoring", "illegal"];
     }
+
+    if (filterTag) optionalQuery["tags.CourtCategory"] = filterTag;
+
+    const templates = await this.TemplateModel.find({
+      isDeleted: false,
+      ...optionalQuery,
+    })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+
+    return templates;
   }
 
   async findOne(item_id: ObjectId): Promise<TemplateItem> {

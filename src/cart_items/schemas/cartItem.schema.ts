@@ -2,12 +2,19 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 import { ExpireDaySchema } from "../../expire_day/schemas/expireDay.schema";
 
+export enum CourtType {
+  BASKETBALL = "basketball",
+  TENNIS = "tennis",
+}
 export class Design extends Document {
   @Prop({ type: String })
   designer: string;
 
   @Prop({ required: true })
   designName: string;
+
+  @Prop({ type: String })
+  courtType: CourtType;
 
   @Prop({ type: Array, required: true })
   tileColor: [{ location: string; color: string }];

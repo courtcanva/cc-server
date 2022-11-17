@@ -2,6 +2,7 @@ export const mockCartItem = {
   user_id: "user123",
   design: {
     designName: "Court Canva 1",
+    courtType: "basketball",
     tileColor: [
       {
         location: "threePoint",
@@ -73,6 +74,7 @@ export const mockCartItemArray = [
     user_id: "user123",
     design: {
       designName: "Court Canva 1",
+      courtType: "basketball",
       tileColor: [
         {
           location: "threePoint",
@@ -142,6 +144,7 @@ export const mockCartItemArray = [
     user_id: "user123",
     design: {
       designName: "Court Canva 2",
+      courtType: "basketball",
       tileColor: [
         {
           location: "threePoint",
@@ -211,6 +214,7 @@ export const mockCartItemArray = [
     user_id: "user123",
     design: {
       designName: "Court Canva 3",
+      courtType: "basketball",
       tileColor: [
         {
           location: "threePoint",
@@ -282,6 +286,7 @@ export const mockNewCartItem = {
   user_id: "user123",
   design: {
     designName: "Court Canva 1",
+    courtType: "basketball",
     tileColor: [
       {
         location: "threePoint",
@@ -356,6 +361,7 @@ export const mockCartItemInDatabase = {
   _id: "6320bd57f3dee2ee6deeecf2",
   user_id: "user123",
   designName: "CourtCanvas1.a",
+  courtType: "basketball",
   tileColor: [
     {
       location: "threePoint",
