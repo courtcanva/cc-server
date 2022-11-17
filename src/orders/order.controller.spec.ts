@@ -4,7 +4,7 @@ import { OrderService } from "./order.service";
 import { mockOrder } from "./order.testData";
 import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
-import { FindAllOrderDto } from "./dto/findAllOrder.dto";
+import { FindAllOrderDto, FindAllOrderDtoByAdmin } from "./dto/findAllOrder.dto";
 
 describe("OrderController", () => {
   let controller: OrderController;
@@ -44,7 +44,12 @@ describe("OrderController", () => {
   describe("findAll", () => {
     it("should get all orders in a given user id with pagination", () => {
       const user_Id = "user123";
-      const findAllOrderDto: FindAllOrderDto = { user_id: user_Id, limit: 3, offset: 1 };
+      const findAllOrderDto: FindAllOrderDto & FindAllOrderDtoByAdmin = {
+        user_id: user_Id,
+        limit: 3,
+        offset: 1,
+        status: "",
+      };
       expect(controller.findAll(findAllOrderDto)).resolves.toEqual([mockOrder]);
     });
   });
