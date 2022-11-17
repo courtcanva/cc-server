@@ -23,12 +23,23 @@ export class CartItemService {
     const optionalQuery: { [key: string]: any } = {};
     if (user_id) optionalQuery.user_id = user_id;
 
+    // let ret=
     return await this.cartItemModel
       .find({ isDeleted: false, ...optionalQuery })
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .exec();
+    // ret.map(()=>{})
+    // const comparedDate= new Date(today);
+    // const expired =()=>{if((comparedDate-item.createdAt)>expireDay){ret[i]["isExpired"] = true;}}
+    // for (let i = 0; i < ret.length; i++) {
+    //   console.log("---------------------------------");
+    //   console.log(ret[i]);
+    //   ret[i]["isExpired"] = true;
+    // }
+
+    // return ret;
   }
 
   async findOne(id: ObjectId): Promise<CartItem> {
@@ -49,7 +60,6 @@ export class CartItemService {
     after I register in front-end, which prevents me from adding the item to the shopping cart 
     (due to this restriction codes). So I temporarily disabled this restriction until this bug is fixed.
     */
-    /*
     const { user_id } = createCartItemDto;
     try {
       await this.userModel.find({ isDeleted: false, _id: user_id });
@@ -58,10 +68,21 @@ export class CartItemService {
         `Cannot add item to shopping cart, because user #${user_id} not found.`,
       );
     }
-    */
+    // const dateToday = new Date();
     const cartItem = await this.cartItemModel.create(createCartItemDto);
+
+    // if (Math.abs(dateToday - createdAt) > 7) {cartItem.isExpired=true};
+    // }
     return cartItem;
   }
+
+  // async create(createNewTemplate: TemplateItemDto): Promise<TemplateItem> {
+  //   const newTemplate = await this.TemplateModel.create(createNewTemplate);
+  //   if (!newTemplate) {
+  //     throw new NotFoundException(`Fail to create new template`);
+  //   }
+  //   return newTemplate;
+  // }
 
   async update(id: ObjectId, updateCartItemDto: UpdateCartItemDto): Promise<CartItem> {
     const cartItem = await this.cartItemModel

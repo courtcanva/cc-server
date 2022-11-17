@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
+import { ExpireDaySchema } from "../../expire_day/schemas/expireDay.schema";
 
 export class Design extends Document {
   @Prop({ type: String })
@@ -49,6 +50,15 @@ export class CartItem extends Document {
 
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;
+
+  @Prop({ type: Number, default: 7 })
+  expireDay: number;
 }
 
 export const CartItemSchema = SchemaFactory.createForClass(CartItem);
+
+// CartItemSchema.method("checkExpired", function () {
+//   if (Math.abs(dateToday - this.createdAt) > this.expireDay) {
+//     return (this.isExpired = true);
+//   }
+// });
