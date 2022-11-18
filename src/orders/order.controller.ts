@@ -5,6 +5,7 @@ import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 import { Order } from "./schemas/order.schema";
 import { ObjectId } from "mongoose";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Controller("orders")
 export class OrderController {
@@ -12,7 +13,7 @@ export class OrderController {
 
   @Get()
   async findAll(
-    @Query() findAllOrder: FindAllOrderDto & FindAllOrderDtoByAdmin,
+    @Query() findAllOrder: FindAllOrderDto & FindAllOrderDtoByAdmin & PaginationQueryDto,
   ): Promise<{ data: Order[]; total: number }> {
     return await this.orderService.findAll(findAllOrder);
   }
