@@ -9,9 +9,8 @@ export class ExpireDay {
   @Prop({
     type: Number,
     required: true,
-    default: 7,
   })
-  expireDay: number;
+  expireDays: number;
 }
 
 export const ExpireDaySchema = SchemaFactory.createForClass(ExpireDay);

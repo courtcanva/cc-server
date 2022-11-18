@@ -7,7 +7,7 @@ import { ExpireDayService } from "./expireDay.service";
 import { ExpireDayDto } from "./dto/expireDay.dto";
 import { ExpireDay } from "./schemas/expireDay.schema";
 
-@Controller("expireDay")
+@Controller("expire-day")
 export class ExpireDayController {
   constructor(private readonly expireDayService: ExpireDayService) {}
 

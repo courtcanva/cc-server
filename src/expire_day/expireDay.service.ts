@@ -9,7 +9,7 @@ export class ExpireDayService {
   constructor(@InjectModel(ExpireDay.name) private readonly expireDayModel: Model<ExpireDay>) {}
 
   async findOne(): Promise<ExpireDay> {
-    const response = await this.expireDayModel.findOne().exec();
+    const response = await this.expireDayModel.findOne({}).exec();
     if (!response) throw new NotFoundException("fail to find expireDay");
     return response;
   }

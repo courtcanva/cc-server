@@ -4,5 +4,5 @@ export class ExpireDayDto {
   @IsNotEmpty()
   @IsPositive()
   @Min(1)
-  readonly expireDay: number;
+  readonly expireDays: number;
 }

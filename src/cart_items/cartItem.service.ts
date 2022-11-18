@@ -8,12 +8,14 @@ import { FindCartItemListByAdminDto, FindAllCartItemDto } from "./dto/findAll-ca
 import { User } from "../users/schemas/user.schema";
 import { ObjectId } from "mongoose";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { ExpireDay } from "../expire_day/schemas/expireDay.schema";
 
 @Injectable()
 export class CartItemService {
   constructor(
     @InjectModel(CartItem.name) private readonly cartItemModel: Model<CartItem>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(ExpireDay.name) private readonly ExpireDayModel: Model<ExpireDay>,
   ) {}
 
   async findAll(findAllCartItem: FindAllCartItemDto): Promise<CartItem[]> {
@@ -23,24 +25,23 @@ export class CartItemService {
     }
     const optionalQuery: { [key: string]: any } = {};
     if (user_id) optionalQuery.user_id = user_id;
-
-    // let ret=
-    return await this.cartItemModel
+    const cartItem = await this.cartItemModel
       .find({ isDeleted: false, ...optionalQuery })
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .exec();
-    // ret.map(()=>{})
-    // const comparedDate= new Date(today);
-    // const expired =()=>{if((comparedDate-item.createdAt)>expireDay){ret[i]["isExpired"] = true;}}
-    // for (let i = 0; i < ret.length; i++) {
-    //   console.log("---------------------------------");
-    //   console.log(ret[i]);
-    //   ret[i]["isExpired"] = true;
-    // }
 
-    // return ret;
+    for (let i = 0; i < cartItem.length; i++) {
+      const dateNow = new Date().getTime();
+      const createDate = cartItem[i]["createdAt"].getTime();
+      const expireTime = cartItem[i].expireDay * 24 * 3600 * 1000;
+      const hasExpired = createDate + expireTime - dateNow;
+      if (hasExpired < 0) {
+        cartItem[i]["isExpired"] = true;
+      }
+    }
+    return cartItem;
   }
 
   async findCartItemListByAdmin(
@@ -98,21 +99,13 @@ export class CartItemService {
         `Cannot add item to shopping cart, because user #${user_id} not found.`,
       );
     }
-    // const dateToday = new Date();
-    const cartItem = await this.cartItemModel.create(createCartItemDto);
-
-    // if (Math.abs(dateToday - createdAt) > 7) {cartItem.isExpired=true};
-    // }
+    const expireDay = await this.ExpireDayModel.findOne({}).exec();
+    const cartItem = await this.cartItemModel.create({
+      ...createCartItemDto,
+      expireDay: expireDay.expireDays,
+    });
     return cartItem;
   }
-
-  // async create(createNewTemplate: TemplateItemDto): Promise<TemplateItem> {
-  //   const newTemplate = await this.TemplateModel.create(createNewTemplate);
-  //   if (!newTemplate) {
-  //     throw new NotFoundException(`Fail to create new template`);
-  //   }
-  //   return newTemplate;
-  // }
 
   async update(id: ObjectId, updateCartItemDto: UpdateCartItemDto): Promise<CartItem> {
     const cartItem = await this.cartItemModel

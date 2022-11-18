@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
-import { ExpireDaySchema } from "../../expire_day/schemas/expireDay.schema";
 
 export enum CourtType {
   BASKETBALL = "basketball",
@@ -58,7 +57,7 @@ export class CartItem extends Document {
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;
 
-  @Prop({ type: Number, default: 7 })
+  @Prop({ type: Number })
   expireDay: number;
 }
 
