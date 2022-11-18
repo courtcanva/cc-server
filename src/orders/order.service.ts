@@ -5,15 +5,16 @@ import { Model, ObjectId, Types } from "mongoose";
 import { FindAllOrderDto, FindAllOrderDtoByAdmin } from "./dto/findAllOrder.dto";
 import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
+import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Injectable()
 export class OrderService {
   constructor(@InjectModel(Order.name) private readonly orderModel: Model<Order>) {}
 
   async findAll(
-    findAllOrder: FindAllOrderDto & FindAllOrderDtoByAdmin,
+    findAllOrder: FindAllOrderDto & FindAllOrderDtoByAdmin & PaginationQueryDto,
   ): Promise<{ data: Order[]; total: number }> {
-    const { user_id, limit = 0, offset = 0, status } = findAllOrder;
+    const { user_id, status, limit = 0, offset = 0 } = findAllOrder;
     if (user_id === "") {
       throw new NotFoundException("userId cannot be empty string");
     }
