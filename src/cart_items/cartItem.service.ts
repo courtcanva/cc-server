@@ -32,15 +32,18 @@ export class CartItemService {
       .limit(limit)
       .exec();
 
-    for (let i = 0; i < cartItem.length; i++) {
+    cartItem.map((item) => {
       const dateNow = new Date().getTime();
-      const createDate = cartItem[i]["createdAt"].getTime();
-      const expireTime = cartItem[i].expireDay * 24 * 3600 * 1000;
+      const createDate = item["createdAt"].getTime();
+      const expireTime = item.expireDay * 24 * 3600 * 1000;
       const hasExpired = createDate + expireTime - dateNow;
       if (hasExpired < 0) {
-        cartItem[i]["isExpired"] = true;
+        item["isExpired"] = true;
+      } else {
+        item["isExpired"] = false;
       }
-    }
+    });
+
     return cartItem;
   }
 
