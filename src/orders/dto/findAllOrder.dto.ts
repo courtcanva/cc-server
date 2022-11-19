@@ -7,12 +7,11 @@ export class FindAllOrderDto extends PaginationQueryDto {
   user_id: string;
 }
 
-export class FindAllOrderDtoByAdmin {
+export class GetOrdersFilterDto extends PaginationQueryDto {
   @IsString()
   @IsOptional()
   user_id: string;
 
-  @IsString()
   @IsOptional()
   status: string;
 }
