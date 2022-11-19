@@ -1,21 +1,27 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { OrderService } from "./order.service";
-import { FindAllOrderDto, FindAllOrderDtoByAdmin } from "./dto/findAllOrder.dto";
+import { FindAllOrderDto, GetOrdersFilterDto } from "./dto/findAllOrder.dto";
 import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 import { Order } from "./schemas/order.schema";
 import { ObjectId } from "mongoose";
-import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 
 @Controller("orders")
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
-
+  //this route is used by cc-app
   @Get()
-  async findAll(
-    @Query() findAllOrder: FindAllOrderDto & FindAllOrderDtoByAdmin & PaginationQueryDto,
-  ): Promise<{ data: Order[]; total: number }> {
+  async findAll(@Query() findAllOrder: FindAllOrderDto): Promise<Order[]> {
     return await this.orderService.findAll(findAllOrder);
+  }
+
+  //this route is used by app-admin
+  @Get("/admin")
+  async findAllByFilters(
+    @Query() filterDto: GetOrdersFilterDto,
+  ): Promise<{ data: Order[]; total: number }> {
+    console.log(filterDto);
+    return await this.orderService.findAllByFilters(filterDto);
   }
 
   @Get(":id")

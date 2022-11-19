@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Order, StatusType } from "./schemas/order.schema";
 import { Model, ObjectId, Types } from "mongoose";
-import { FindAllOrderDto, FindAllOrderDtoByAdmin } from "./dto/findAllOrder.dto";
+import { FindAllOrderDto, GetOrdersFilterDto } from "./dto/findAllOrder.dto";
 import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
@@ -10,25 +10,40 @@ import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto
 @Injectable()
 export class OrderService {
   constructor(@InjectModel(Order.name) private readonly orderModel: Model<Order>) {}
-
-  async findAll(
-    findAllOrder: FindAllOrderDto & FindAllOrderDtoByAdmin & PaginationQueryDto,
-  ): Promise<{ data: Order[]; total: number }> {
-    const { user_id, status, limit = 0, offset = 0 } = findAllOrder;
+  //findAll is for cc-app order, need exact search
+  async findAll(findAllOrder: FindAllOrderDto): Promise<Order[]> {
+    const { user_id, limit = 0, offset = 0 } = findAllOrder;
     if (user_id === "") {
       throw new NotFoundException("userId cannot be empty string");
     }
     const optionalQuery: { [key: string]: any } = {};
-    const searchQuery: { [key: string]: any } = {};
     if (user_id) optionalQuery.user_id = user_id;
 
-    if (user_id) searchQuery.user_id = user_id;
-    if (status) optionalQuery.status = status;
+    return await this.orderModel
+      .find({ ...optionalQuery })
+      .populate("paymentInfo")
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+  }
 
+  //find is for admin only
+  async findAllByFilters(filterDto: GetOrdersFilterDto): Promise<{ data: Order[]; total: number }> {
+    const { user_id, status, limit = 0, offset = 0 } = filterDto;
+    const statusQuery: { [key: string]: any } = {};
+    const searchQuery: { [key: string]: any } = {};
+
+    if (user_id) searchQuery.user_id = user_id;
+    if (user_id) statusQuery.user_id = user_id;
+    if (status) statusQuery.status = status;
+    console.log("searchQuer", searchQuery);
+    console.log("statusQuery", statusQuery);
     const qRegExp = new RegExp(`.*${searchQuery}.*`, "i");
+    //console.log("qRegExp",qRegExp)
     const ordersData = await this.orderModel
       .find({
-        $and: [{ $or: [optionalQuery] }, { user_id: qRegExp }],
+        $and: [{ $or: [statusQuery] }, { user_id: qRegExp }],
       })
       .populate("paymentInfo")
       .sort({ createdAt: -1 })
@@ -37,7 +52,7 @@ export class OrderService {
       .exec();
 
     const total = await this.orderModel.countDocuments({
-      $or: [optionalQuery],
+      $and: [{ $or: [statusQuery] }, { searchQuery }],
     });
 
     return {
