@@ -18,6 +18,7 @@ describe("OrderController", () => {
           provide: OrderService,
           useValue: {
             findAll: jest.fn().mockImplementation(() => Promise.resolve([mockOrder])),
+            findAllByFilters: jest.fn().mockImplementation(() => Promise.resolve([mockOrder])),
             findOne: jest.fn().mockImplementation(() => Promise.resolve(mockOrder)),
             create: jest
               .fn()
@@ -45,12 +46,27 @@ describe("OrderController", () => {
   describe("findAll", () => {
     it("should get all orders in a given user id with pagination", () => {
       const user_Id = "user123";
-      const findAllOrderDto: FindAllOrderDto = {
+      const findAllOrderDto: FindAllOrderDto & PaginationQueryDto = {
         user_id: user_Id,
         limit: 3,
         offset: 1,
       };
       expect(controller.findAll(findAllOrderDto)).resolves.toEqual([mockOrder]);
+    });
+  });
+
+  // admin filter get all
+  describe("findAll", () => {
+    it("should get all orders in a given user id, status and pagination", () => {
+      const user_Id = "user123";
+      const status = "unpaid";
+      const GetOrdersFilterDto: GetOrdersFilterDto & PaginationQueryDto = {
+        user_id: user_Id,
+        status: status,
+        limit: 3,
+        offset: 1,
+      };
+      expect(controller.findAllByFilters(GetOrdersFilterDto)).resolves.toEqual([mockOrder]);
     });
   });
 

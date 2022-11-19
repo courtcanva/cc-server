@@ -86,3 +86,8 @@ export const mockOrderInDatabase = {
   updatedAt: "2022-09-14T10:39:11.476Z",
   __v: 0,
 };
+
+export const mockOrderArrayWithTotal = {
+  data: [{ ...mockOrder }, { ...mockOrder }, { ...mockOrder }],
+  total: 3,
+};
