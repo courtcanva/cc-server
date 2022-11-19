@@ -5,23 +5,23 @@ import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 import { Order } from "./schemas/order.schema";
 import { ObjectId } from "mongoose";
+import { PaginationQueryDto } from "../utils/PaginationDto/pagination-query.dto";
 
 @Controller("orders")
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
   //this route is used by cc-app
   @Get()
-  async findAll(@Query() findAllOrder: FindAllOrderDto): Promise<Order[]> {
+  async findAll(@Query() findAllOrder: FindAllOrderDto & PaginationQueryDto): Promise<Order[]> {
     return await this.orderService.findAll(findAllOrder);
   }
 
   //this route is used by app-admin
   @Get("/admin")
   async findAllByFilters(
-    @Query() filterDto: GetOrdersFilterDto,
+    @Query() findAllByfilterDto: GetOrdersFilterDto & PaginationQueryDto,
   ): Promise<{ data: Order[]; total: number }> {
-    console.log(filterDto);
-    return await this.orderService.findAllByFilters(filterDto);
+    return await this.orderService.findAllByFilters(findAllByfilterDto);
   }
 
   @Get(":id")

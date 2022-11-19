@@ -11,7 +11,7 @@ import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto
 export class OrderService {
   constructor(@InjectModel(Order.name) private readonly orderModel: Model<Order>) {}
   //findAll is for cc-app order, need exact search
-  async findAll(findAllOrder: FindAllOrderDto): Promise<Order[]> {
+  async findAll(findAllOrder: FindAllOrderDto & PaginationQueryDto): Promise<Order[]> {
     const { user_id, limit = 0, offset = 0 } = findAllOrder;
     if (user_id === "") {
       throw new NotFoundException("userId cannot be empty string");
@@ -29,19 +29,12 @@ export class OrderService {
   }
 
   //find is for admin only
-  async findAllByFilters(filterDto: GetOrdersFilterDto): Promise<{ data: Order[]; total: number }> {
-    const { user_id, status, limit = 0, offset = 0 } = filterDto;
-    const statusQuery: { [key: string]: any } = {};
-    const searchQuery: { [key: string]: any } = {};
-
-    if (user_id) searchQuery.user_id = user_id;
-    if (user_id) statusQuery.user_id = user_id;
-    if (status) statusQuery.status = status;
-    const qRegExp = new RegExp(`.*${searchQuery}.*`, "i");
+  async findAllByFilters(
+    findAllByfilterDto: GetOrdersFilterDto & PaginationQueryDto,
+  ): Promise<{ data: Order[]; total: number }> {
+    const { user_id = "", status, limit = 0, offset = 0 } = findAllByfilterDto;
     const ordersData = await this.orderModel
-      .find({
-        $and: [{ $or: [statusQuery] }, { user_id: qRegExp }],
-      })
+      .find({ status, user_id: { $regex: user_id, $options: "i" } })
       .populate("paymentInfo")
       .sort({ createdAt: -1 })
       .skip(offset)
@@ -49,7 +42,8 @@ export class OrderService {
       .exec();
 
     const total = await this.orderModel.countDocuments({
-      $and: [{ $or: [statusQuery] }, { user_id: qRegExp }],
+      status,
+      user_id: { $regex: user_id, $options: "i" },
     });
 
     return {
