@@ -37,10 +37,7 @@ export class OrderService {
     if (user_id) searchQuery.user_id = user_id;
     if (user_id) statusQuery.user_id = user_id;
     if (status) statusQuery.status = status;
-    console.log("searchQuer", searchQuery);
-    console.log("statusQuery", statusQuery);
     const qRegExp = new RegExp(`.*${searchQuery}.*`, "i");
-    //console.log("qRegExp",qRegExp)
     const ordersData = await this.orderModel
       .find({
         $and: [{ $or: [statusQuery] }, { user_id: qRegExp }],
@@ -52,7 +49,7 @@ export class OrderService {
       .exec();
 
     const total = await this.orderModel.countDocuments({
-      $and: [{ $or: [statusQuery] }, { searchQuery }],
+      $and: [{ $or: [statusQuery] }, { user_id: qRegExp }],
     });
 
     return {
