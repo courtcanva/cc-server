@@ -5,6 +5,7 @@ import { CartItemController } from "./cartItem.controller";
 import { CartItemService } from "./cartItem.service";
 import { CartItem, CartItemSchema } from "./schemas/cartItem.schema";
 import { ExpireDay, ExpireDaySchema } from "src/expire_day/schemas/expireDay.schema";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { ExpireDay, ExpireDaySchema } from "src/expire_day/schemas/expireDay.sch
     ]),
   ],
   controllers: [CartItemController],
-  providers: [CartItemService],
+  providers: [CartItemService, ExpireDayService],
 })
 export class CartItemModule {}

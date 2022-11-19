@@ -8,14 +8,14 @@ import { FindCartItemListByAdminDto, FindAllCartItemDto } from "./dto/findAll-ca
 import { User } from "../users/schemas/user.schema";
 import { ObjectId } from "mongoose";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
-import { ExpireDay } from "../expire_day/schemas/expireDay.schema";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
 
 @Injectable()
 export class CartItemService {
   constructor(
     @InjectModel(CartItem.name) private readonly cartItemModel: Model<CartItem>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
-    @InjectModel(ExpireDay.name) private readonly ExpireDayModel: Model<ExpireDay>,
+    private readonly expireDayService: ExpireDayService,
   ) {}
 
   async findAll(findAllCartItem: FindAllCartItemDto): Promise<CartItem[]> {
@@ -37,11 +37,7 @@ export class CartItemService {
       const createDate = item["createdAt"].getTime();
       const expireTime = item.expireDay * 24 * 3600 * 1000;
       const hasExpired = createDate + expireTime - dateNow;
-      if (hasExpired < 0) {
-        item["isExpired"] = true;
-      } else {
-        item["isExpired"] = false;
-      }
+      item.isExpired = hasExpired < 0;
     });
 
     return cartItem;
@@ -102,7 +98,7 @@ export class CartItemService {
         `Cannot add item to shopping cart, because user #${user_id} not found.`,
       );
     }
-    const expireDay = await this.ExpireDayModel.findOne({}).exec();
+    const expireDay = await this.expireDayService.findOne();
     const cartItem = await this.cartItemModel.create({
       ...createCartItemDto,
       expireDay: expireDay.expireDays,

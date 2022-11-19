@@ -9,16 +9,21 @@ import {
   mockCartItemArray,
   mockNewCartItem,
   mockCartItemInDatabase,
+  mockExpireDay,
 } from "./cartItem.testData";
 import { User } from "src/users/schemas/user.schema";
+import { ExpireDay } from "src/expire_day/schemas/expireDay.schema";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
 
 describe("CartItemService", () => {
   let service: CartItemService;
   let model: Model<CartItem>;
+  let useExpireDayService: ExpireDayService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        ExpireDayService,
         CartItemService,
         { provide: Connection, useValue: {} },
         {
@@ -47,15 +52,26 @@ describe("CartItemService", () => {
             find: jest.fn(),
           },
         },
+        {
+          provide: getModelToken(ExpireDay.name),
+          useValue: {
+            find: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<CartItemService>(CartItemService);
     model = module.get<Model<CartItem>>(getModelToken(CartItem.name));
+    useExpireDayService = module.get<ExpireDayService>(ExpireDayService);
   });
 
   it("should be defined", () => {
     expect(service).toBeDefined();
+  });
+
+  it("should be defined", () => {
+    expect(useExpireDayService).toBeDefined();
   });
 
   it("should return cart items in one user ID, within given pagination", async () => {
@@ -112,6 +128,11 @@ describe("CartItemService", () => {
   });
 
   it("should return a cart item created", async () => {
+    jest.spyOn(useExpireDayService, "findOne").mockReturnValue(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
+      }) as any,
+    );
     jest.spyOn(model, "create").mockImplementationOnce(() => Promise.resolve(mockCartItem));
     expect(await service.create(mockNewCartItem)).toEqual(mockCartItem);
   });
