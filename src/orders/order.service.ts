@@ -32,19 +32,20 @@ export class OrderService {
   async findAllByFilters(
     findAllByfilterDto: GetOrdersFilterDto & PaginationQueryDto,
   ): Promise<{ data: Order[]; total: number }> {
-    const { user_id = "", status, limit = 0, offset = 0 } = findAllByfilterDto;
+    const { user_id, status, limit = 0, offset = 0 } = findAllByfilterDto;
+    const filterQuery: Record<string, any> = {
+      ...(user_id ? { user_id: { $regex: user_id, $options: "i" } } : {}),
+      ...(status ? { status } : {}),
+    };
     const ordersData = await this.orderModel
-      .find({ status, user_id: { $regex: user_id, $options: "i" } })
+      .find(filterQuery)
       .populate("paymentInfo")
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .exec();
 
-    const total = await this.orderModel.countDocuments({
-      status,
-      user_id: { $regex: user_id, $options: "i" },
-    });
+    const total = await this.orderModel.countDocuments({ filterQuery });
 
     return {
       data: ordersData,

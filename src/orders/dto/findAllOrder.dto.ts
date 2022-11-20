@@ -7,7 +7,7 @@ export class FindAllOrderDto extends PaginationQueryDto {
   user_id: string;
 }
 
-export class GetOrdersFilterDto extends PaginationQueryDto {
+export class GetOrdersFilterDto {
   @IsString()
   @IsOptional()
   user_id: string;
