@@ -62,9 +62,3 @@ export class CartItem extends Document {
 }
 
 export const CartItemSchema = SchemaFactory.createForClass(CartItem);
-
-// CartItemSchema.method("checkExpired", function () {
-//   if (Math.abs(dateToday - this.createdAt) > this.expireDay) {
-//     return (this.isExpired = true);
-//   }
-// });
