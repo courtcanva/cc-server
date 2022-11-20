@@ -69,6 +69,15 @@ export class CartItemService {
       $and: [{ isDeleted: false }],
       $or: [optionalQuery],
     });
+
+    cartItems.map((item) => {
+      const dateNow = new Date().getTime();
+      const createDate = item["createdAt"].getTime();
+      const expireTime = item.expireDay * 24 * 3600 * 1000;
+      const hasExpired = createDate + expireTime - dateNow;
+      item.isExpired = hasExpired < 0;
+    });
+
     return { data: cartItems, total };
   }
 
