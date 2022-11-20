@@ -4,7 +4,12 @@ import { OrderService } from "./order.service";
 import { createMock } from "@golevelup/ts-jest";
 import { Order, StatusType } from "./schemas/order.schema";
 import { getModelToken } from "@nestjs/mongoose";
-import { mockOrder, mockOrderArray, mockOrderInDatabase } from "./order.testData";
+import {
+  mockOrder,
+  mockOrderArray,
+  mockOrderInDatabase,
+  mockOrderArrayWithTotal,
+} from "./order.testData";
 import { User } from "src/users/schemas/user.schema";
 
 describe("OrderService", () => {
@@ -22,6 +27,7 @@ describe("OrderService", () => {
             new: jest.fn().mockResolvedValue(mockOrder),
             constructor: jest.fn().mockResolvedValue(mockOrder),
             findAll: jest.fn(),
+            findAllByFilters: jest.fn(),
             findOne: jest.fn(),
             find: jest.fn(),
             create: jest.fn(),
@@ -33,7 +39,7 @@ describe("OrderService", () => {
             limit: jest.fn(),
             save: jest.fn(),
             exec: jest.fn(),
-            populate: jest.fn,
+            populate: jest.fn(),
             countDocuments: jest.fn(),
           },
         },
@@ -66,12 +72,29 @@ describe("OrderService", () => {
         }),
       }),
     } as any);
-    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(mockOrderArray.length);
     const user_Id = "user123";
-    expect(await service.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual({
-      data: mockOrderArray,
-      total: mockOrderArray.length,
-    });
+    expect(await service.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual(
+      mockOrderArray,
+    );
+  });
+  // admin filter get all
+  it("should return orders within given pagination, status and user_id", async () => {
+    jest.spyOn(model, "find").mockReturnValue({
+      populate: jest.fn().mockReturnValue({
+        sort: jest.fn().mockReturnValue({
+          skip: jest.fn().mockReturnValue({
+            limit: jest.fn().mockReturnValue({
+              exec: jest.fn().mockResolvedValueOnce(mockOrderArray),
+            }),
+          }),
+        }),
+      }),
+    } as any);
+    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(3);
+    const user_Id = "user123";
+    expect(
+      await service.findAllByFilters({ user_id: user_Id, status: "unpaid", limit: 3, offset: 1 }),
+    ).toEqual(mockOrderArrayWithTotal);
   });
 
   it("should return a order in given object ID", async () => {
