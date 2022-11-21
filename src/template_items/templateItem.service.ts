@@ -31,7 +31,6 @@ export class TemplateItemService {
     if (filterTag) optionalQuery["tags.CourtCategory"] = filterTag;
     if (user_id) {
       optionalQuery.user_id = user_id;
-      console.log("123");
       optionalQuery.status = { $in: ["published", "private", "censoring"] };
     }
 
