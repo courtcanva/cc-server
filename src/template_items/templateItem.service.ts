@@ -22,8 +22,6 @@ export class TemplateItemService {
     const { user_id, limit = 0, offset = 0, filterTag, status = "published" } = getAllTemplates;
     const optionalQuery: { [key: string]: any } = {};
 
-    if (user_id) optionalQuery.user_id = user_id;
-
     if (status !== "all") {
       optionalQuery.status = status;
     } else {
@@ -31,6 +29,10 @@ export class TemplateItemService {
     }
 
     if (filterTag) optionalQuery["tags.CourtCategory"] = filterTag;
+    if (user_id) {
+      optionalQuery.user_id = user_id;
+      optionalQuery.status = { $in: ["published", "private", "censoring"] };
+    }
 
     const templates = await this.TemplateModel.find({
       isDeleted: false,
