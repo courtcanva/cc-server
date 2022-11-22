@@ -45,7 +45,7 @@ export class CartItem extends Document {
   @Prop({ type: Array, required: true })
   quotationDetails: [{ color: string; quantity: number }];
 
-  @Prop({ type: Boolean, default: false })
+  @Prop({ type: Boolean })
   isExpired: boolean;
 
   @Prop({ required: true })
