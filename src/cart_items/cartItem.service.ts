@@ -41,7 +41,7 @@ export class CartItemService {
   async updateMany(): Promise<void> {
     const nowDate = new Date();
     await this.cartItemModel.updateMany(
-      { isDeleted: false, expiredAt: { $lt: nowDate } },
+      { isDeleted: false, isExpired: false, expiredAt: { $lt: nowDate } },
       { $set: { isExpired: true } },
     );
   }
