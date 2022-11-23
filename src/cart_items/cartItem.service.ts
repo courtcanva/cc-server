@@ -25,6 +25,9 @@ export class CartItemService {
     }
     const optionalQuery: { [key: string]: any } = {};
     if (user_id) optionalQuery.user_id = user_id;
+
+    await this.updateMany();
+
     const cartItem = await this.cartItemModel
       .find({ isDeleted: false, ...optionalQuery })
       .sort({ createdAt: -1 })
@@ -32,15 +35,15 @@ export class CartItemService {
       .limit(limit)
       .exec();
 
-    cartItem.map((item) => {
-      const dateNow = new Date().getTime();
-      const createDate = item["createdAt"].getTime();
-      const expireTime = item.expireDay * 24 * 3600 * 1000;
-      const hasExpired = createDate + expireTime - dateNow;
-      item.isExpired = hasExpired < 0;
-    });
-
     return cartItem;
+  }
+
+  async updateMany(): Promise<void> {
+    const nowDate = new Date();
+    await this.cartItemModel.updateMany(
+      { isDeleted: false, expiredAt: { $lt: nowDate } },
+      { $set: { isExpired: true } },
+    );
   }
 
   async findCartItemListByAdmin(
@@ -56,6 +59,8 @@ export class CartItemService {
       optionalQuery["user_id"] = user_id;
     }
     const sorting = sort ? { [sort]: desc } : { createdAt: -1 };
+
+    await this.updateMany();
     const cartItems = await this.cartItemModel
       .find({
         $and: [{ isDeleted: false }],
@@ -68,14 +73,6 @@ export class CartItemService {
     const total = await this.cartItemModel.countDocuments({
       $and: [{ isDeleted: false }],
       $or: [optionalQuery],
-    });
-
-    cartItems.map((item) => {
-      const dateNow = new Date().getTime();
-      const createDate = item["createdAt"].getTime();
-      const expireTime = item.expireDay * 24 * 3600 * 1000;
-      const hasExpired = createDate + expireTime - dateNow;
-      item.isExpired = hasExpired < 0;
     });
 
     return { data: cartItems, total };
@@ -111,13 +108,20 @@ export class CartItemService {
     const cartItem = await this.cartItemModel.create({
       ...createCartItemDto,
       expireDay: expireDay.expireDays,
+      expiredAt: new Date().getTime() + expireDay.expireDays * 24 * 3600 * 1000,
     });
     return cartItem;
   }
 
   async update(id: ObjectId, updateCartItemDto: UpdateCartItemDto): Promise<CartItem> {
+    const expireDay = await this.expireDayService.findOne();
+    const newExpiredAt = new Date().getTime() + expireDay.expireDays * 24 * 3600 * 1000;
     const cartItem = await this.cartItemModel
-      .findByIdAndUpdate({ _id: id }, { $set: updateCartItemDto }, { new: true })
+      .findByIdAndUpdate(
+        { _id: id, isExpired: false },
+        { $set: { ...updateCartItemDto, expiredAt: newExpiredAt } },
+        { new: true },
+      )
       .exec();
     if (!cartItem) {
       throw new NotFoundException(`Cart Item #${id} not found`);

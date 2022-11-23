@@ -45,7 +45,7 @@ export class CartItem extends Document {
   @Prop({ type: Array, required: true })
   quotationDetails: [{ color: string; quantity: number }];
 
-  @Prop({ type: Boolean })
+  @Prop({ type: Boolean, default: false })
   isExpired: boolean;
 
   @Prop({ required: true })
@@ -59,6 +59,9 @@ export class CartItem extends Document {
 
   @Prop({ type: Number })
   expireDay: number;
+
+  @Prop({ type: Date })
+  expiredAt: Date;
 }
 
 export const CartItemSchema = SchemaFactory.createForClass(CartItem);

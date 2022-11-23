@@ -75,6 +75,11 @@ describe("CartItemService", () => {
   });
 
   it("should return cart items in one user ID, within given pagination", async () => {
+    jest.spyOn(service, "updateMany").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockCartItem),
+      }) as any,
+    );
     jest.spyOn(model, "find").mockReturnValue({
       sort: jest.fn().mockReturnValue({
         skip: jest.fn().mockReturnValue({
@@ -91,6 +96,11 @@ describe("CartItemService", () => {
   });
 
   it("should return cart items list within given pagination by admin", async () => {
+    jest.spyOn(service, "updateMany").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockCartItem),
+      }) as any,
+    );
     jest.spyOn(model, "find").mockReturnValue({
       sort: jest.fn().mockReturnValue({
         skip: jest.fn().mockReturnValue({
@@ -142,6 +152,11 @@ describe("CartItemService", () => {
       ...mockCartItem,
       quotation: "$AU1111123update",
     };
+    jest.spyOn(useExpireDayService, "findOne").mockReturnValue(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
+      }) as any,
+    );
     jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockCartItem),
