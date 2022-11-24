@@ -139,6 +139,7 @@ export const mockCartItemArray = [
         quantity: 624,
       },
     ],
+    createdAt: new Date("2022-06-18T09:44:29.044+00:00"),
   },
   {
     user_id: "user123",
@@ -209,6 +210,7 @@ export const mockCartItemArray = [
         quantity: 304,
       },
     ],
+    createdAt: new Date("2022-06-18T09:44:29.044+00:00"),
   },
   {
     user_id: "user123",
@@ -279,6 +281,7 @@ export const mockCartItemArray = [
         quantity: 304,
       },
     ],
+    createdAt: new Date("2022-06-18T09:44:29.044+00:00"),
   },
 ];
 
@@ -417,4 +420,10 @@ export const mockCartItemInDatabase = {
     },
   ],
   __v: 0,
+};
+
+export const mockExpireDay = {
+  expireDays: 2,
+  createdAt: "2022-11-18T02:23:47.911Z",
+  updatedAt: "2022-11-18T02:23:47.911Z",
 };

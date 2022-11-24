@@ -56,6 +56,12 @@ export class CartItem extends Document {
 
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;
+
+  @Prop({ type: Number })
+  expireDay: number;
+
+  @Prop({ type: Date })
+  expiredAt: Date;
 }
 
 export const CartItemSchema = SchemaFactory.createForClass(CartItem);
