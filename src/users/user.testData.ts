@@ -6,14 +6,14 @@ export const user = {
   lastName: "testLastName",
   isDeleted: false,
   isActivated: false,
-  password: "password",
+  password:
+    "$argon2id$v=19$m=4096,t=3,p=1$03E7NFOipPDQDJAyXTyofA$Kdl2UUM+Nphs265WGeyBOgk1LAhZI7ooLL987/A/tdA",
   createdAt: new Date(),
   updatedAt: new Date(),
   otp: "",
   otpCreatedAt: null,
   otpExpiresAt: null,
 };
-
 export const userInfo = {
   id: Object("62b83c2e89301b1aecf6af78"),
   googleId: "updateId",

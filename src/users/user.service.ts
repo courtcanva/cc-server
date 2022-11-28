@@ -10,6 +10,7 @@ import { ConnectAccountDto } from "./dto/connectAccount.dto";
 import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 import { AuthService } from "src/auth/auth.service";
 import * as argon from "argon2";
+import { CheckPasswordDto } from "./dto/checkPassword.dto";
 
 @Injectable()
 export class UserService {
@@ -163,5 +164,21 @@ export class UserService {
     return {
       findUser: false,
     };
+  }
+  /**
+   * check password is valid or not
+   * @param CheckPasswordDto
+   * @returns {boolean}
+   */
+
+  async checkPassword(checkPassword: CheckPasswordDto): Promise<boolean> {
+    const id = checkPassword.userId;
+    const user = await this.userModel.findById(id).exec();
+    if (!user || user.isDeleted) {
+      throw new NotFoundException(`User not found`);
+    }
+    const passwordMatches = await argon.verify(user.password, checkPassword.password);
+
+    return passwordMatches;
   }
 }

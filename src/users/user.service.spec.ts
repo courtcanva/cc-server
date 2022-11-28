@@ -140,6 +140,19 @@ describe("UserService", () => {
     expect(status.findUser).toEqual(false);
   });
 
+  it("should verify users' password", async () => {
+    jest.spyOn(model, "findById").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(user),
+      }) as any,
+    );
+    const passwordMatches = await service.checkPassword({
+      userId: user.id,
+      password: "123456",
+    });
+    expect(passwordMatches).toEqual(false);
+  });
+
   it("should update a user's google ID", async () => {
     jest.spyOn(model, "findOne").mockReturnValueOnce(
       createMock<Query<any, any>>({
