@@ -6,8 +6,8 @@ module.exports = {
         profileImgUrl:
           "https://courtcanva-image-node.s3.ap-southeast-2.amazonaws.com/team-page-image/1JucBbnVMxEZRHIp3Hh81WechatIMG94.jpeg",
         role: "Developer",
-        linkedInUrl: "https://github.com/Cecilia0109",
-        githubUrl: "https://github.com/GitHubEason",
+        linkedInUrl: "https://www.linkedin.com/in/cecilia-lei-developer/",
+        githubUrl: "https://github.com/Cecilia0109",
         emailAddress: "qinger.lei0109@gmail.com",
         priority: 4,
         isDeleted: false,
