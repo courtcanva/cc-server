@@ -44,33 +44,47 @@ export class UserService {
     let users = [];
     let optionalQuery = {};
     let splitName: string[];
-    let qFirstName, qLastName, qName: RegExp;
+    let qFirstName, qLastName, qName, qEmail: RegExp;
     const { user_id, email, name, limit = 0, offset = 0, sort, desc } = searchUserDto;
     const sorting = sort ? { [sort]: desc } : { createdAt: -1 };
-    if (name) {
+    // eslint-disable-next-line prefer-const
+    qEmail = new RegExp(`.*${email}.*`, "i");
+    if (name && name.includes(" ")) {
+      console.log("split name");
+      splitName = name.split(" ");
+      qFirstName = new RegExp(`.*${splitName[0]}.*`, "i");
+      qLastName = new RegExp(`.*${splitName[1]}.*`, "i");
+      optionalQuery = {
+        $and: [{ firstName: qFirstName }, { lastName: qLastName }],
+      };
+    }
+    if (name && !name.includes(" ")) {
       qName = new RegExp(`.*${name}.*`, "i");
-      if (name.includes(" ")) {
-        splitName = name.split(" ");
-        qFirstName = new RegExp(`.*${splitName[0]}.*`, "i");
-        qLastName = new RegExp(`.*${splitName[1]}.*`, "i");
-        optionalQuery = {
-          $and: [{ firstName: qFirstName }, { lastName: qLastName }],
-        };
-      } else if (!email && !user_id) {
+      if (!email && !user_id) {
+        console.log("only name");
         optionalQuery = {
           $or: [{ firstName: qName }, { lastName: qName }],
         };
       } else {
-        optionalQuery = {
-          $or: [{ firstName: qName }, { lastName: qName }, { _id: user_id }, { email: email }],
-        };
+        console.log("search all");
+        user_id.match(/^[0-9a-fA-F]{24}$/)
+          ? (optionalQuery = {
+              $or: [{ firstName: qName }, { lastName: qName }, { _id: user_id }, { email: qEmail }],
+            })
+          : (optionalQuery = {
+              $or: [{ firstName: qName }, { lastName: qName }, { email: qEmail }],
+            });
       }
     }
     if (user_id && !email && !name) {
-      optionalQuery = { _id: user_id };
+      console.log("user_id");
+      user_id.match(/^[0-9a-fA-F]{24}$/)
+        ? (optionalQuery = { _id: user_id })
+        : (optionalQuery = { email: user_id + "@wrong" });
     }
     if (email && !user_id && !name) {
-      optionalQuery = { email: email };
+      console.log("email");
+      optionalQuery = { email: qEmail };
     }
     users = await this.userModel
       .find(optionalQuery, { isDeleted: false })
