@@ -17,7 +17,7 @@ module.exports = {
       {
         name: "Zack Chen",
         profileImgUrl:
-          "https://courtcanva-image-node.s3.ap-southeast-2.amazonaws.com/team-page-image/aL4MRY4EyBvn5teJ5BmlOzack.jpg",
+          "https://courtcanva-image-node.s3.ap-southeast-2.amazonaws.com/team-page-image/RJccp6NUfBiD-1Cc3M2GOzhashen.jpg",
         role: "Developer",
         linkedInUrl: "https://www.linkedin.com/in/zhihan-chen-zack",
         githubUrl: "https://github.com/ZhihanChenZack",
