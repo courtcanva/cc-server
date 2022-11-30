@@ -8,12 +8,14 @@ import { FindCartItemListByAdminDto, FindAllCartItemDto } from "./dto/findAll-ca
 import { User } from "../users/schemas/user.schema";
 import { ObjectId } from "mongoose";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
 
 @Injectable()
 export class CartItemService {
   constructor(
     @InjectModel(CartItem.name) private readonly cartItemModel: Model<CartItem>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly expireDayService: ExpireDayService,
   ) {}
 
   async findAll(findAllCartItem: FindAllCartItemDto): Promise<CartItem[]> {
@@ -24,12 +26,24 @@ export class CartItemService {
     const optionalQuery: { [key: string]: any } = {};
     if (user_id) optionalQuery.user_id = user_id;
 
-    return await this.cartItemModel
+    await this.updateMany();
+
+    const cartItem = await this.cartItemModel
       .find({ isDeleted: false, ...optionalQuery })
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .exec();
+
+    return cartItem;
+  }
+
+  async updateMany(): Promise<void> {
+    const nowDate = new Date();
+    await this.cartItemModel.updateMany(
+      { isDeleted: false, isExpired: false, expiredAt: { $lt: nowDate } },
+      { $set: { isExpired: true } },
+    );
   }
 
   async findCartItemListByAdmin(
@@ -45,6 +59,8 @@ export class CartItemService {
       optionalQuery["user_id"] = user_id;
     }
     const sorting = sort ? { [sort]: desc } : { createdAt: -1 };
+
+    await this.updateMany();
     const cartItems = await this.cartItemModel
       .find({
         $and: [{ isDeleted: false }],
@@ -58,6 +74,7 @@ export class CartItemService {
       $and: [{ isDeleted: false }],
       $or: [optionalQuery],
     });
+
     return { data: cartItems, total };
   }
 
@@ -79,7 +96,6 @@ export class CartItemService {
     after I register in front-end, which prevents me from adding the item to the shopping cart 
     (due to this restriction codes). So I temporarily disabled this restriction until this bug is fixed.
     */
-    /*
     const { user_id } = createCartItemDto;
     try {
       await this.userModel.find({ isDeleted: false, _id: user_id });
@@ -88,14 +104,24 @@ export class CartItemService {
         `Cannot add item to shopping cart, because user #${user_id} not found.`,
       );
     }
-    */
-    const cartItem = await this.cartItemModel.create(createCartItemDto);
+    const expireDay = await this.expireDayService.findOne();
+    const cartItem = await this.cartItemModel.create({
+      ...createCartItemDto,
+      expireDay: expireDay.expireDays,
+      expiredAt: new Date().getTime() + expireDay.expireDays * 24 * 3600 * 1000,
+    });
     return cartItem;
   }
 
   async update(id: ObjectId, updateCartItemDto: UpdateCartItemDto): Promise<CartItem> {
+    const expireDay = await this.expireDayService.findOne();
+    const newExpiredAt = new Date().getTime() + expireDay.expireDays * 24 * 3600 * 1000;
     const cartItem = await this.cartItemModel
-      .findByIdAndUpdate({ _id: id }, { $set: updateCartItemDto }, { new: true })
+      .findByIdAndUpdate(
+        { _id: id, isExpired: false },
+        { $set: { ...updateCartItemDto, expiredAt: newExpiredAt } },
+        { new: true },
+      )
       .exec();
     if (!cartItem) {
       throw new NotFoundException(`Cart Item #${id} not found`);

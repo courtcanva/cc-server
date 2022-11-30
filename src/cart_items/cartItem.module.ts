@@ -4,6 +4,8 @@ import { User, UserSchema } from "../users/schemas/user.schema";
 import { CartItemController } from "./cartItem.controller";
 import { CartItemService } from "./cartItem.service";
 import { CartItem, CartItemSchema } from "./schemas/cartItem.schema";
+import { ExpireDay, ExpireDaySchema } from "src/expire_day/schemas/expireDay.schema";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
 
 @Module({
   imports: [
@@ -16,9 +18,13 @@ import { CartItem, CartItemSchema } from "./schemas/cartItem.schema";
         name: User.name,
         schema: UserSchema,
       },
+      {
+        name: ExpireDay.name,
+        schema: ExpireDaySchema,
+      },
     ]),
   ],
   controllers: [CartItemController],
-  providers: [CartItemService],
+  providers: [CartItemService, ExpireDayService],
 })
 export class CartItemModule {}

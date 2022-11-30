@@ -7,6 +7,7 @@ import { UserService } from "./user.service";
 import { ConnectAccountDto } from "./dto/connectAccount.dto";
 import { ReturnUserInfo } from "../auth/ReturnUserInfo";
 import { UpdateUserDto } from "./dto/updateUser.dto";
+import { CheckPasswordDto } from "./dto/checkPassword.dto";
 import { SearchUserDto } from "./dto/searchUser.dto";
 
 @Controller("user")
@@ -52,5 +53,10 @@ export class UserController {
   @Put("connect")
   async connectAccount(@Body() connectAccountDto: ConnectAccountDto): Promise<ReturnUserInfo> {
     return await this.userService.connectAccount(connectAccountDto);
+  }
+
+  @Put("password")
+  async checkPassword(@Body() checkPasswordDto: CheckPasswordDto): Promise<boolean> {
+    return await this.userService.checkPassword(checkPasswordDto);
   }
 }
