@@ -41,7 +41,9 @@ export class UserService {
     return { data: users, total };
   }
 
-  async getUserBySearch(searchUserDto: SearchUserDto): Promise<{ data: User[]; total: number }> {
+  async getUserBySearch(
+    searchUserDto: PaginationQueryDto & SearchUserDto,
+  ): Promise<{ data: User[]; total: number }> {
     let users = [];
     let optionalQuery = {};
     let splitName: string[];
@@ -93,7 +95,10 @@ export class UserService {
       .skip(offset)
       .limit(limit)
       .exec();
-    const total = users.length;
+    const total = await this.userModel.countDocuments({
+      $and: [{ isDeleted: false }],
+      $or: [optionalQuery],
+    });
     return { data: users, total };
   }
   /**
