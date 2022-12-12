@@ -41,7 +41,9 @@ export class UserService {
     return { data: users, total };
   }
 
-  async getUserBySearch(searchUserDto: SearchUserDto): Promise<{ data: User[]; total: number }> {
+  async getUserBySearch(
+    searchUserDto: PaginationQueryDto & SearchUserDto,
+  ): Promise<{ data: User[]; total: number }> {
     let users = [];
     let optionalQuery = {};
     let splitName: string[];
