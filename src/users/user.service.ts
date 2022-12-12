@@ -93,7 +93,10 @@ export class UserService {
       .skip(offset)
       .limit(limit)
       .exec();
-    const total = users.length;
+    const total = await this.userModel.countDocuments({
+      $and: [{ isDeleted: false }],
+      $or: [optionalQuery],
+    });
     return { data: users, total };
   }
   /**
