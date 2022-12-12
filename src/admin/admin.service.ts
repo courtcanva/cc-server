@@ -10,6 +10,7 @@ import { LoginAdminDto } from "./dto/login-admin.dto";
 import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { SetAdminPermissionDto } from "./dto/set-admin-permission.dto";
+import { IadminLoginReponseData } from "../../src/auth/types/tokens.type";
 import { Admin } from "./schemas/admin.schema";
 import { JwtService } from "@nestjs/jwt";
 import { Tokens } from "./types";
@@ -46,12 +47,15 @@ export class AdminService {
     }
   }
 
-  async adminLogin(adminDto: LoginAdminDto): Promise<Tokens> {
+  async adminLogin(adminDto: LoginAdminDto): Promise<IadminLoginReponseData> {
     const admin = await this.adminModel.findOne({ email: adminDto.email }).exec();
     if (!admin) {
       throw new ForbiddenException("Access Denied");
     }
-
+    //these type is deleted by super admins
+    if (admin.isDeleted === true) {
+      throw new ForbiddenException("Access Denied");
+    }
     const passwordMatches = await argon.verify(admin.password, adminDto.password);
     if (!passwordMatches) {
       throw new ForbiddenException("Access Denied");
@@ -59,7 +63,15 @@ export class AdminService {
 
     const tokens = await this.getTokens(admin._id, admin.email);
     await this.updateRtHash(admin._id, tokens.refreshToken);
-    return tokens;
+    return {
+      ...tokens,
+      admin: {
+        id: admin._id,
+        email: admin.email,
+        name: admin.name,
+        permission: admin.permission,
+      },
+    };
   }
 
   async adminLogout(adminId: ObjectId) {

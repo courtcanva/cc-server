@@ -21,6 +21,7 @@ import {
 } from "@golevelup/nestjs-webhooks";
 import { DepositModule } from "./deposit/deposit.module";
 import { ExpireDayModule } from "./expire_day/expireDay.module";
+import { AdminDashboardModule } from "./admin_dashboard/adminDashboard.module";
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ExpireDayModule } from "./expire_day/expireDay.module";
     RawBodyMiddleware,
     DepositModule,
     ExpireDayModule,
+    AdminDashboardModule,
   ],
 })
 export class AppModule implements NestModule {
