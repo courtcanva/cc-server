@@ -30,6 +30,7 @@ export class UserController {
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return await this.userService.create(createUserDto);
   }
+
   @Get()
   async listUsersByAdmin(
     @Query() searchUserDto: SearchUserDto,
@@ -37,13 +38,6 @@ export class UserController {
     console.log(searchUserDto);
     return await this.userService.getUserBySearch(searchUserDto);
   }
-  // @Get()
-  // async listAllUsers(@Query() paginationQuery: PaginationQueryDto): Promise<{
-  //   total: number;
-  //   data: User[];
-  // }> {
-  //   return await this.userService.getAllUsers(paginationQuery);
-  // }
 
   @Put()
   async updateUserById(@Body() updateUserDto: UpdateUserDto): Promise<User> {

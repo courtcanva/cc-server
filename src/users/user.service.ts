@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import mongoose, { Model, ObjectId, SortOrder } from "mongoose";
+import { Model, ObjectId, SortOrder } from "mongoose";
 import { CheckEmailDto } from "./dto/checkEmail.dto";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
@@ -51,7 +51,6 @@ export class UserService {
     // eslint-disable-next-line prefer-const
     qEmail = new RegExp(`.*${email}.*`, "i");
     if (name && name.includes(" ")) {
-      console.log("split name");
       splitName = name.split(" ");
       qFirstName = new RegExp(`.*${splitName[0]}.*`, "i");
       qLastName = new RegExp(`.*${splitName[1]}.*`, "i");
@@ -62,12 +61,10 @@ export class UserService {
     if (name && !name.includes(" ")) {
       qName = new RegExp(`.*${name}.*`, "i");
       if (!email && !user_id) {
-        console.log("only name");
         optionalQuery = {
           $or: [{ firstName: qName }, { lastName: qName }],
         };
       } else {
-        console.log("search all");
         user_id.match(/^[0-9a-fA-F]{24}$/)
           ? (optionalQuery = {
               $or: [{ firstName: qName }, { lastName: qName }, { _id: user_id }, { email: qEmail }],
@@ -78,13 +75,11 @@ export class UserService {
       }
     }
     if (user_id && !email && !name) {
-      console.log("user_id");
       user_id.match(/^[0-9a-fA-F]{24}$/)
         ? (optionalQuery = { _id: user_id })
         : (optionalQuery = { email: user_id + "@wrong" });
     }
     if (email && !user_id && !name) {
-      console.log("email");
       optionalQuery = { email: qEmail };
     }
     users = await this.userModel
