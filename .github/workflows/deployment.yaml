@@ -35,6 +35,7 @@ jobs:
       with:
         role-to-assume: arn:aws:iam::245866473499:role/OIDC-ECS-deployment
         aws-region: ${{ env.AWS_REGION }}
+        
 
     - name: Login to Amazon ECR
       id: login-ecr
