@@ -77,7 +77,7 @@ jobs:
     - name: Deploy Amazon ECS task definition for uat
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def-uat.outputs.task-definition }}
+        task-definition: taskdef-uat.json
         service: ${{ env.ECS_SERVICE_UAT }}
         cluster: ${{ env.ECS_CLUSTER_UAT }}
         wait-for-service-stability: true
@@ -99,7 +99,7 @@ jobs:
     - name: Deploy Amazon ECS task definition for prod
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        task-definition: taskdef-prod.json
         service: ${{ env.ECS_SERVICE_PROD }}
         cluster: ${{ env.ECS_CLUSTER_PROD }}
         wait-for-service-stability: true
