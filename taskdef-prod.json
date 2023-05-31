@@ -3,6 +3,27 @@
     "networkMode": "awsvpc",
     "containerDefinitions": [
         {
+            "essential": true,
+            "image": "grafana/fluent-bit-plugin-loki:main",
+            "name": "log_router",
+            "firelensConfiguration": {
+                "type": "fluentbit",
+                "options": {
+                    "enable-ecs-log-metadata": "true"
+                }
+            },
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "firelens-container-prod",
+                    "awslogs-region": "ap-southeast-2",
+                    "awslogs-create-group": "true",
+                    "awslogs-stream-prefix": "firelens"
+                }
+            },
+            "memoryReservation": 50
+        },
+        {
             "name": "CCS-F-PROD-container",
             "image": "245866473499.dkr.ecr.ap-southeast-2.amazonaws.com/cc-backend-dockerimage-repo:{{imageID}}",
             "portMappings": [
@@ -12,6 +33,17 @@
                     "protocol": "tcp"
                 }
             ],
+            "logConfiguration": {
+                "logDriver": "awsfirelens",
+                "options": {
+                    "Name": "grafana-loki",
+                    "Url": "https://254699:eyJrIjoiNDA4OGJjYmJiNGE2MzliODlkNTdjMDVhYWQ5MzZhOWVmNjRjZTZhMCIsIm4iOiJ0ZXN0IiwiaWQiOjY4MzIzNH0=@logs-prod-004.grafana.net/loki/api/v1/push",
+                    "Labels": "{job=\"prod-logs\"}",
+                    "RemoveKeys": "container_id,ecs_task_arn",
+                    "LabelKeys": "container_name,ecs_task_definition,source,ecs_cluster",
+                    "LineFormat": "key_value"
+                }
+            },
             "environmentFiles": [
                 {
                     "value": "arn:aws:s3:::cc-server-environment-variables/ccs/ccsprod.env",
