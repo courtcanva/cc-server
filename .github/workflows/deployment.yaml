@@ -62,7 +62,10 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Migrate DB
+    - name: Migrate DB to DEV
+      env:
+        DATA_MIGRATION_URL: ${{ secrets.DATA_MIGRATION_URL_DEV }}
+        DATABASE_NAME: DEV
       run: npm run migrate-up
 
     - name: Render Amazon ECS task definition for uat container
@@ -80,6 +83,12 @@ jobs:
         service: ${{ env.ECS_SERVICE_UAT }}
         cluster: ${{ env.ECS_CLUSTER_UAT }}
         wait-for-service-stability: true
+
+    - name: Migrate DB to PROD
+      env:
+        DATA_MIGRATION_URL: ${{ secrets.DATA_MIGRATION_URL_PROD }}
+        DATABASE_NAME: PROD
+      run: npm run migrate-up
 
     - name: Render Amazon ECS task definition for prod container
       id: task-def-prod
