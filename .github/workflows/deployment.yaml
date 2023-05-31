@@ -66,18 +66,10 @@ jobs:
         DATABASE_NAME: DEV
       run: npm run migrate-up
 
-    - name: Render Amazon ECS task definition for uat container
-      id: task-def-uat
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: taskdef-uat.json
-        container-name: ${{ env.CONTAINER_NAME_UAT }}
-        image: ${{ steps.build-image.outputs.image }}
-
     - name: Deploy Amazon ECS task definition for uat
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def-uat.outputs.task-definition }}
+        task-definition: taskdef-uat.json
         service: ${{ env.ECS_SERVICE_UAT }}
         cluster: ${{ env.ECS_CLUSTER_UAT }}
         wait-for-service-stability: true
@@ -88,18 +80,10 @@ jobs:
         DATABASE_NAME: PROD
       run: npm run migrate-up
 
-    - name: Render Amazon ECS task definition for prod container
-      id: task-def-prod
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: taskdef-prod.json
-        container-name: ${{ env.CONTAINER_NAME_PROD}}
-        image: ${{ steps.build-image.outputs.image }}
-
     - name: Deploy Amazon ECS task definition for prod
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def-prod.outputs.task-definition }}
+        task-definition: taskdef-prod.json
         service: ${{ env.ECS_SERVICE_PROD }}
         cluster: ${{ env.ECS_CLUSTER_PROD }}
         wait-for-service-stability: true
