@@ -66,6 +66,11 @@ jobs:
         DATABASE_NAME: DEV
       run: npm run migrate-up
 
+    - name: Replace Image ID
+      env:
+        IMAGE_TAG: ${{ github.sha }}
+      run: sed -i "s|{{imageID}}| $IMAGE_TAG |" taskdef-uat.json
+
     - name: Render Amazon ECS task definition for uat container
       id: task-def-uat
       uses: aws-actions/amazon-ecs-render-task-definition@v1
