@@ -3,7 +3,7 @@
     "networkMode": "awsvpc",
     "containerDefinitions": [
         {
-            "name": "CCS-F-container",
+            "name": "CC-PROD-container",
             "image": "245866473499.dkr.ecr.ap-southeast-2.amazonaws.com/cc-backend-dockerimage-repo:{{imageID}}",
             "portMappings": [
                 {
@@ -14,7 +14,7 @@
             ],
             "environmentFiles": [
                 {
-                    "value": "arn:aws:s3:::cc-server-environment-variables/ccs/ccsprod.env",
+                    "value": "arn:aws:s3:::cc-environment-variables/ccs/ccsprod.env",
                     "type": "s3"
                 }
             ],
@@ -26,5 +26,6 @@
     ],
     "cpu": "1vCPU",
     "memory": "2GB",
-    "executionRoleArn": "arn:aws:iam::497551902879:role/ecsTaskExecutionRole"
+    "taskRoleArn": "arn:aws:iam::245866473499:role/myEcsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::245866473499:role/myEcsTaskExecutionRole"
 }

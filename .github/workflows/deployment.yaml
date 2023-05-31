@@ -16,7 +16,7 @@ env:
   ECS_SERVICE_PROD: CCS-F-PROD-service                 
   ECS_CLUSTER_PROD: CCS-F-PROD-cluster                
   CONTAINER_NAME_UAT: CC-UAT-container
-  CONTAINER_NAME_PROD: CCS-PROD-container
+  CONTAINER_NAME_PROD: CC-PROD-container
 
 jobs:
   deploy:
