@@ -1,9 +1,9 @@
 {
-    "family": "CCS-F-PROD-task",
+    "family": "CC-Server-PROD",
     "networkMode": "awsvpc",
     "containerDefinitions": [
         {
-            "name": "CCS-F-PROD-container",
+            "name": "CCS-F-container",
             "image": "245866473499.dkr.ecr.ap-southeast-2.amazonaws.com/cc-backend-dockerimage-repo:{{imageID}}",
             "portMappings": [
                 {
