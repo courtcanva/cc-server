@@ -17,7 +17,6 @@ env:
   ECS_CLUSTER_PROD: CCS-F-PROD-cluster                
   CONTAINER_NAME_UAT: CC-UAT-container
   CONTAINER_NAME_PROD: log_router
-  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   deploy:
@@ -52,6 +51,7 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-uat.json
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
@@ -66,9 +66,6 @@ jobs:
         DATA_MIGRATION_URL: ${{ secrets.DATA_MIGRATION_URL_DEV }}
         DATABASE_NAME: DEV
       run: npm run migrate-up
-
-    - name: Replace Image ID
-      run: sed -i "s|{{imageID}}| ${{ env.IMAGE_TAG }} |" taskdef-uat.json
 
     - name: Render Amazon ECS task definition for uat container
       id: task-def-uat
