@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+
 permissions:
   id-token: write
   contents: read
@@ -19,9 +20,10 @@ env:
   CONTAINER_NAME_PROD: CC-PROD-container
 
 jobs:
-  build:
-    name: Build
+  deploy-uat:
+    name: Deploy
     runs-on: ubuntu-latest
+    environment: Uat
 
     steps:
     - name: Checkout
@@ -67,35 +69,11 @@ jobs:
         sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-uat.json
         sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-prod.json
 
-
-  deploy-uat:
-    name: Deploy to Uat
-    needs: build
-    environment: Uat
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3  
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 16
-
-    - name: Install dependencies
-      run: npm ci   
-
     - name: Migrate DB to DEV
       env:
         DATA_MIGRATION_URL: ${{ secrets.DATA_MIGRATION_URL_DEV }}
         DATABASE_NAME: DEV
       run: npm run migrate-up
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        role-to-assume: arn:aws:iam::245866473499:role/OIDC-ECS-deployment
-        aws-region: ${{ env.AWS_REGION }}
 
     - name: Render Amazon ECS task definition for uat container
       id: task-def-uat
@@ -103,7 +81,7 @@ jobs:
       with:
         task-definition: taskdef-uat.json
         container-name: ${{ env.CONTAINER_NAME_UAT }}
-        image: ${{ needs.build.build-image.outputs.image }}
+        image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition for uat
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -113,33 +91,29 @@ jobs:
         cluster: ${{ env.ECS_CLUSTER_UAT }}
         wait-for-service-stability: true
 
+
+    
   deploy-prod:
-    name: Deploy to Prod
+    name: Deploy
     needs: deploy-uat
-    environment: Prod
     runs-on: ubuntu-latest
-    steps:  
+    environment: Prod
+
+    steps:
     - name: Checkout
-      uses: actions/checkout@v3    
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 16
-
-    - name: Install dependencies
-      run: npm ci     
-    - name: Migrate DB to PROD
-      env:
-        DATA_MIGRATION_URL: ${{ secrets.DATA_MIGRATION_URL_PROD }}
-        DATABASE_NAME: PROD
-      run: npm run migrate-up
+      uses: actions/checkout@v3
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
         role-to-assume: arn:aws:iam::245866473499:role/OIDC-ECS-deployment
-        aws-region: ${{ env.AWS_REGION }} 
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Migrate DB to PROD
+      env:
+        DATA_MIGRATION_URL: ${{ secrets.DATA_MIGRATION_URL_PROD }}
+        DATABASE_NAME: PROD
+      run: npm run migrate-up
 
     - name: Render Amazon ECS task definition for prod container
       id: task-def-prod
@@ -147,7 +121,7 @@ jobs:
       with:
         task-definition: taskdef-prod.json
         container-name: ${{ env.CONTAINER_NAME_PROD}}
-        image: ${{ needs.build.build-image.outputs.image }}
+        image: ${{ needs.deploy-uat.outputs.images }}
 
     - name: Deploy Amazon ECS task definition for prod
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
