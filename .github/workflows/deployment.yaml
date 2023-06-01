@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+
 permissions:
   id-token: write
   contents: read
@@ -19,10 +20,10 @@ env:
   CONTAINER_NAME_PROD: CC-PROD-container
 
 jobs:
-  deploy:
+  deploy-uat:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: production
+    environment: Uat
 
     steps:
     - name: Checkout
@@ -89,6 +90,34 @@ jobs:
         service: ${{ env.ECS_SERVICE_UAT }}
         cluster: ${{ env.ECS_CLUSTER_UAT }}
         wait-for-service-stability: true
+    
+  deploy-prod:
+    name: Deploy
+    needs: deploy-uat
+    runs-on: ubuntu-latest
+    environment: Prod
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: "Create env file"
+      run: |
+        echo "${{ secrets.ENV_FILE }}" > .env
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16
+
+    - name: Install dependencies
+      run: npm ci   
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::245866473499:role/OIDC-ECS-deployment
+        aws-region: ${{ env.AWS_REGION }}
 
     - name: Migrate DB to PROD
       env:
@@ -102,7 +131,7 @@ jobs:
       with:
         task-definition: taskdef-prod.json
         container-name: ${{ env.CONTAINER_NAME_PROD}}
-        image: ${{ steps.build-image.outputs.image }}
+        image: ${{ needs.deploy-uat.outputs.images }}
 
     - name: Deploy Amazon ECS task definition for prod
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
