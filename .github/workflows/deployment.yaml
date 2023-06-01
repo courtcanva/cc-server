@@ -20,32 +20,40 @@ env:
   CONTAINER_NAME_PROD: CC-PROD-container
 
 jobs:
-  deploy-uat:
-    name: Deploy
+  build:
+    name: build
     runs-on: ubuntu-latest
-    environment: Uat
-
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    
     - name: "Create env file"
       run: |
-        echo "${{ secrets.ENV_FILE }}" > .env
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 16
-
-    - name: Install dependencies
-      run: npm ci   
+        echo "${{ secrets.ENV_FILE }}" > .env  
+    - name: Load & cache dependencies
+      id: cache-dependencies
+      uses: ./.github/actions/cached-dependencies 
 
     - name: Lint code
       run: npm run lint
 
     - name: Test code
       run: npm run test
+
+  deploy-uat:
+    name: Deploy to uat
+    needs: build
+    runs-on: ubuntu-latest
+    environment: Uat
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: "Create env file"
+      run: |
+        echo "${{ secrets.ENV_FILE }}" > .env  
+    - name: Load & cache dependencies
+      id: cache-dependencies
+      uses: ./.github/actions/cached-dependencies
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -67,7 +75,6 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
         sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-uat.json
-        sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-prod.json
 
     - name: Migrate DB to DEV
       env:
@@ -92,7 +99,7 @@ jobs:
         wait-for-service-stability: true
     
   deploy-prod:
-    name: Deploy
+    name: Deploy to prod
     needs: deploy-uat
     runs-on: ubuntu-latest
     environment: Prod
@@ -100,24 +107,33 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
     - name: "Create env file"
       run: |
-        echo "${{ secrets.ENV_FILE }}" > .env
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 16
-
-    - name: Install dependencies
-      run: npm ci   
+        echo "${{ secrets.ENV_FILE }}" > .env    
+    - name: Load & cache dependencies
+      id: cache-dependencies
+      uses: ./.github/actions/cached-dependencies
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
         role-to-assume: arn:aws:iam::245866473499:role/OIDC-ECS-deployment
         aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-prod.json
 
     - name: Migrate DB to PROD
       env:
@@ -131,7 +147,7 @@ jobs:
       with:
         task-definition: taskdef-prod.json
         container-name: ${{ env.CONTAINER_NAME_PROD}}
-        image: ${{ needs.deploy-uat.outputs.images }}
+        image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition for prod
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
