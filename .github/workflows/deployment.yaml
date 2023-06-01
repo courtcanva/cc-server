@@ -37,7 +37,6 @@ jobs:
     - name: Test code
       run: npm run test
 
-
   deploy-uat:
     name: Deploy to uat
     needs: build
