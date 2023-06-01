@@ -3,10 +3,6 @@ description: "Get the dependencies (via npm) and cache them"
 runs:
   using: "composite"
   steps:
-    - name: "Create env file"
-      run: |
-        echo "${{ secrets.ENV_FILE }}" > .env
-      shell: bash
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:

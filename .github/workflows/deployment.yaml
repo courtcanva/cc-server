@@ -47,7 +47,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    
+    - name: "Create env file"
+      run: |
+        echo "${{ secrets.ENV_FILE }}" > .env  
     - name: Load & cache dependencies
       id: cache-dependencies
       uses: ./.github/actions/cached-dependencies
@@ -104,7 +106,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
+    - name: "Create env file"
+      run: |
+        echo "${{ secrets.ENV_FILE }}" > .env    
     - name: Load & cache dependencies
       id: cache-dependencies
       uses: ./.github/actions/cached-dependencies
