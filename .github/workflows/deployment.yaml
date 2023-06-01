@@ -19,10 +19,9 @@ env:
   CONTAINER_NAME_PROD: CC-PROD-container
 
 jobs:
-  deploy:
-    name: Deploy
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
     - name: Checkout
@@ -68,6 +67,15 @@ jobs:
         sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-uat.json
         sed -i "s|{{imageID}}|${IMAGE_TAG}|" taskdef-prod.json
 
+
+  deploy-uat:
+    name: Deploy to Uat
+    needs: build
+    environment: Uat
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3  
     - name: Migrate DB to DEV
       env:
         DATA_MIGRATION_URL: ${{ secrets.DATA_MIGRATION_URL_DEV }}
@@ -80,7 +88,7 @@ jobs:
       with:
         task-definition: taskdef-uat.json
         container-name: ${{ env.CONTAINER_NAME_UAT }}
-        image: ${{ steps.build-image.outputs.image }}
+        image: ${{ needs.build.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition for uat
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -90,6 +98,14 @@ jobs:
         cluster: ${{ env.ECS_CLUSTER_UAT }}
         wait-for-service-stability: true
 
+  deploy-prod:
+    name: Deploy to Prod
+    needs: deploy-uat
+    environment: Prod
+    runs-on: ubuntu-latest
+    steps:  
+    - name: Checkout
+      uses: actions/checkout@v3    
     - name: Migrate DB to PROD
       env:
         DATA_MIGRATION_URL: ${{ secrets.DATA_MIGRATION_URL_PROD }}
@@ -102,7 +118,7 @@ jobs:
       with:
         task-definition: taskdef-prod.json
         container-name: ${{ env.CONTAINER_NAME_PROD}}
-        image: ${{ steps.build-image.outputs.image }}
+        image: ${{ needs.build.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition for prod
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
