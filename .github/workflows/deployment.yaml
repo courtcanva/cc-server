@@ -91,7 +91,6 @@ jobs:
         cluster: ${{ env.ECS_CLUSTER_UAT }}
         wait-for-service-stability: true
 
-
     
   deploy-prod:
     name: Deploy
