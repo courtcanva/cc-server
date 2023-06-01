@@ -21,7 +21,7 @@ env:
 
 jobs:
   deploy-uat:
-    name: Deploy
+    name: Deploy to uat
     runs-on: ubuntu-latest
     environment: Uat
 
@@ -92,7 +92,7 @@ jobs:
         wait-for-service-stability: true
     
   deploy-prod:
-    name: Deploy
+    name: Deploy to prod
     needs: deploy-uat
     runs-on: ubuntu-latest
     environment: Prod
