@@ -1,7 +1,7 @@
 name: Deploy to Amazon ECS
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -40,7 +40,6 @@ jobs:
       run: npm run test
 
   deploy-uat:
-    if: github.event.pull_request.merged == true
     name: Deploy to uat
     needs: build
     runs-on: ubuntu-latest
