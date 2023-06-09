@@ -11,7 +11,15 @@ export class AuthController {
   //User can login with their Google accounts
   @Post("google")
   async googleLogin(@Body() body): Promise<any> {
-    return this.authService.googleLogin(body.code);
+    try {
+      return this.authService.googleLogin(body.code);
+    } catch (error) {
+      const response = {
+        status: "FAILED",
+        message: error.message,
+      };
+      return response;
+    }
   }
 
   @Post("register")
