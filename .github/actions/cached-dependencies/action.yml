@@ -7,15 +7,8 @@ runs:
       uses: actions/setup-node@v2
       with:
         node-version: 16
-    - name: Cache Dependencies
-      id: cache
-      uses: actions/cache@v3
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
     - name: Install Dependencies
       id: install
-      if: steps.cache.outputs.cache-hit != 'true'
       run: |
         npm ci
       shell: bash
