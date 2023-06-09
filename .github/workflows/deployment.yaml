@@ -40,17 +40,17 @@ jobs:
       run: npm run test
 
   deploy-uat:
+    if: github.event.pull_request.merged == true
     name: Deploy to uat
     needs: build
     runs-on: ubuntu-latest
     environment: Uat
-
     steps:
     - name: Checkout
       uses: actions/checkout@v3
     - name: "Create env file"
       run: |
-        echo "${{ secrets.ENV_FILE }}" > .env  
+        echo "${{ secrets.ENV_FILE }}" > .env
     - name: Load & cache dependencies
       id: cache-dependencies
       uses: ./.github/actions/cached-dependencies
