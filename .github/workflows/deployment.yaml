@@ -38,9 +38,7 @@ jobs:
       run: npm run test
 
   deploy-uat:
-    branches:
-      only:
-        - main
+    if: github.ref == 'refs/heads/main'
     name: Deploy to uat
     needs: build
     runs-on: ubuntu-latest
