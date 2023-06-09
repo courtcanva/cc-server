@@ -2,8 +2,6 @@ name: Deploy to Amazon ECS
 
 on:
   push:
-    branches:
-      - main
 
 permissions:
   id-token: write
@@ -40,7 +38,7 @@ jobs:
       run: npm run test
 
   deploy-uat:
-    if: github.event.pull_request.merged == true
+    if: github.ref == 'refs/heads/main'
     name: Deploy to uat
     needs: build
     runs-on: ubuntu-latest
