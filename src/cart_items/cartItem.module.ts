@@ -6,9 +6,11 @@ import { CartItemService } from "./cartItem.service";
 import { CartItem, CartItemSchema } from "./schemas/cartItem.schema";
 import { ExpireDay, ExpireDaySchema } from "src/expire_day/schemas/expireDay.schema";
 import { ExpireDayService } from "src/expire_day/expireDay.service";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
   imports: [
+    JwtModule,
     MongooseModule.forFeature([
       {
         name: CartItem.name,
