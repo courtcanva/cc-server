@@ -42,6 +42,9 @@ export class CartItem extends Document {
   @Prop({ type: String })
   image: string;
 
+  @Prop({ type: String })
+  constructionDrawing: string;
+
   @Prop({ type: Array, required: true })
   quotationDetails: [{ color: string; quantity: number }];
 

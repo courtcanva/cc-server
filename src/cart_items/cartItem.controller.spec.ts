@@ -80,6 +80,7 @@ describe("ShoppingCartController", () => {
       const createCartItemDto: CreateCartItemDto = {
         ...mockCartItem,
         image: "url12345566778aaaaaa",
+        constructionDrawing: "url12345566778bbbbbb",
       };
 
       expect(controller.create(createCartItemDto)).resolves.toEqual({

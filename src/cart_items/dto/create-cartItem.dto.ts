@@ -117,6 +117,10 @@ export class CreateCartItemDto {
   @IsOptional()
   readonly image: string;
 
+  @IsString()
+  @IsOptional()
+  readonly constructionDrawing: string;
+
   @IsObject()
   @IsNotEmpty()
   @ValidateNested({ each: true })

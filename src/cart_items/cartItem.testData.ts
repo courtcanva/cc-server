@@ -357,6 +357,7 @@ export const mockNewCartItem = {
   createdAt: new Date(),
   updatedAt: new Date(),
   image: "url12345566721",
+  constructionDrawing: "url12345566721-1",
 };
 
 export const mockCartItemInDatabase = {
@@ -409,6 +410,7 @@ export const mockCartItemInDatabase = {
   isDeleted: false,
   quotation: "$AU132354123",
   image: "url12345566778aaaaaa",
+  constructionDrawing: "url12345566778bbbbbb",
   quotationDetails: [
     {
       color: "red",
