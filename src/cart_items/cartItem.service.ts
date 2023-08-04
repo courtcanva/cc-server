@@ -86,7 +86,7 @@ export class CartItemService {
     return cartItem;
   }
 
-  async create(createCartItemDto: CreateCartItemDto): Promise<CartItem> {
+  async create(createCartItem: CreateCartItemDto): Promise<CartItem> {
     /* To dos
     It's to validate to verify if user exists in the database. It is logical, but 
     this limitation make it difficult to test related cards later (ie. 
@@ -96,7 +96,7 @@ export class CartItemService {
     after I register in front-end, which prevents me from adding the item to the shopping cart 
     (due to this restriction codes). So I temporarily disabled this restriction until this bug is fixed.
     */
-    const { user_id } = createCartItemDto;
+    const { user_id } = createCartItem;
     try {
       await this.userModel.find({ isDeleted: false, _id: user_id });
     } catch {
@@ -106,7 +106,7 @@ export class CartItemService {
     }
     const expireDay = await this.expireDayService.findOne();
     const cartItem = await this.cartItemModel.create({
-      ...createCartItemDto,
+      ...createCartItem,
       expireDay: expireDay.expireDays,
       expiredAt: new Date().getTime() + expireDay.expireDays * 24 * 3600 * 1000,
     });

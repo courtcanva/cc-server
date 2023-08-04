@@ -40,6 +40,15 @@ export class Order extends Document {
   @Prop({ type: String, enum: StatusType, default: StatusType.UNPAID })
   status: string;
 
+  @Prop({ type: Boolean, default: false })
+  isExpired: boolean;
+
+  @Prop({ type: Date })
+  expiredAt: Date;
+
+  @Prop({ type: Number })
+  expireDay: number;
+
   @Prop({ type: Array, required: true })
   items: [
     {

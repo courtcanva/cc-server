@@ -9,17 +9,34 @@ import {
   mockOrderArray,
   mockOrderInDatabase,
   mockOrderArrayWithTotal,
+  mockExpireDay,
 } from "./order.testData";
 import { User } from "src/users/schemas/user.schema";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
+import { ExpireDay } from "src/expire_day/schemas/expireDay.schema";
 
 describe("OrderService", () => {
   let service: OrderService;
   let model: Model<Order>;
 
+  const mockExpireDayModal = {
+    findOne: jest.fn().mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
+      }) as any,
+    ),
+    update: jest.fn().mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
+      }) as any,
+    ),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         OrderService,
+        ExpireDayService,
         { provide: Connection, useValue: {} },
         {
           provide: getModelToken(Order.name),
@@ -48,6 +65,10 @@ describe("OrderService", () => {
           useValue: {
             find: jest.fn(),
           },
+        },
+        {
+          provide: getModelToken(ExpireDay.name),
+          useValue: mockExpireDayModal,
         },
       ],
     }).compile();

@@ -6,10 +6,14 @@ import { FindAllOrderDto, GetOrdersFilterDto } from "./dto/findAllOrder.dto";
 import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
 
 @Injectable()
 export class OrderService {
-  constructor(@InjectModel(Order.name) private readonly orderModel: Model<Order>) {}
+  constructor(
+    @InjectModel(Order.name) private readonly orderModel: Model<Order>,
+    private readonly expireDayService: ExpireDayService,
+  ) {}
   //findAll is for cc-app order, need exact search
   async findAll(findAllOrder: FindAllOrderDto & PaginationQueryDto): Promise<Order[]> {
     const { user_id, limit = 0, offset = 0 } = findAllOrder;
@@ -26,6 +30,14 @@ export class OrderService {
       .skip(offset)
       .limit(limit)
       .exec();
+  }
+
+  async updateManyIsExpired(): Promise<void> {
+    const nowDate = new Date();
+    await this.orderModel.updateMany(
+      { status: StatusType.UNPAID, isExpired: false, expiredAt: { $lt: nowDate } },
+      { $set: { isExpired: true } },
+    );
   }
 
   //find is for admin only
@@ -62,8 +74,12 @@ export class OrderService {
   }
 
   async create(createOrder: CreateOrderDto): Promise<Order> {
+    const expireDay = await this.expireDayService.findOne();
     const order = await this.orderModel.create({
       ...createOrder,
+      expireDay: expireDay.expireDays,
+      expiredAt: new Date().getTime() + expireDay.expireDays * 24 * 3600 * 1000,
+      isExpired: false,
     });
     return order;
   }

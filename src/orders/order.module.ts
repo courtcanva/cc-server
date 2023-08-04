@@ -3,6 +3,8 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { Order, OrderSchema } from "./schemas/order.schema";
 import { OrderController } from "./order.controller";
 import { OrderService } from "./order.service";
+import { ExpireDay, ExpireDaySchema } from "src/expire_day/schemas/expireDay.schema";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
 
 @Module({
   imports: [
@@ -11,10 +13,14 @@ import { OrderService } from "./order.service";
         name: Order.name,
         schema: OrderSchema,
       },
+      {
+        name: ExpireDay.name,
+        schema: ExpireDaySchema,
+      },
     ]),
   ],
   controllers: [OrderController],
-  providers: [OrderService],
+  providers: [OrderService, ExpireDayService],
   exports: [OrderService],
 })
 export class OrderModule {}
