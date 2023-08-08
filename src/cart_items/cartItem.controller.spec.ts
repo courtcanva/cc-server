@@ -6,6 +6,7 @@ import { CreateCartItemDto } from "./dto/create-cartItem.dto";
 import { UpdateCartItemDto } from "./dto/update-cartItem.dto";
 import { FindAllCartItemDto, FindCartItemListByAdminDto } from "./dto/findAll-cartItem.dto";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { JwtModule } from "@nestjs/jwt";
 
 describe("ShoppingCartController", () => {
   let controller: CartItemController;
@@ -13,6 +14,7 @@ describe("ShoppingCartController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CartItemController],
+      imports: [JwtModule],
       providers: [
         {
           provide: CartItemService,
