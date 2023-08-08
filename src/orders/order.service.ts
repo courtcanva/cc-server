@@ -23,6 +23,8 @@ export class OrderService {
     const optionalQuery: { [key: string]: any } = {};
     if (user_id) optionalQuery.user_id = user_id;
 
+    await this.updateManyIsExpired();
+
     return await this.orderModel
       .find({ ...optionalQuery })
       .populate("paymentInfo")
@@ -36,7 +38,7 @@ export class OrderService {
     const nowDate = new Date();
     await this.orderModel.updateMany(
       { status: StatusType.UNPAID, isExpired: false, expiredAt: { $lt: nowDate } },
-      { $set: { isExpired: true } },
+      { $set: { isExpired: true, status: StatusType.EXPIRED } },
     );
   }
 
@@ -49,6 +51,9 @@ export class OrderService {
       ...(user_id ? { user_id: { $regex: user_id, $options: "i" } } : {}),
       ...(status ? { status } : {}),
     };
+
+    await this.updateManyIsExpired();
+
     const ordersData = await this.orderModel
       .find(filterQuery)
       .populate("paymentInfo")
@@ -85,8 +90,14 @@ export class OrderService {
   }
 
   async update(id: ObjectId, updateOrder: UpdateOrderDto): Promise<Order> {
+    const expireDay = await this.expireDayService.findOne();
+    const newExpiredAt = new Date().getTime() + expireDay.expireDays * 24 * 3600 * 1000;
     const order = await this.orderModel
-      .findByIdAndUpdate({ _id: id }, { $set: updateOrder }, { new: true })
+      .findByIdAndUpdate(
+        { _id: id },
+        { $set: { ...updateOrder, expiredAt: newExpiredAt } },
+        { new: true },
+      )
       .exec();
     if (!order) {
       throw new NotFoundException(`Order #${id} not found`);

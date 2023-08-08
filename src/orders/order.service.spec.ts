@@ -17,7 +17,8 @@ import { ExpireDay } from "src/expire_day/schemas/expireDay.schema";
 
 describe("OrderService", () => {
   let service: OrderService;
-  let model: Model<Order>;
+  let orderModel: Model<Order>;
+  let expireDayModal: Model<ExpireDay>;
 
   const mockExpireDayModal = {
     findOne: jest.fn().mockReturnValueOnce(
@@ -50,6 +51,8 @@ describe("OrderService", () => {
             create: jest.fn(),
             findByIdAndUpdate: jest.fn(),
             findOneAndUpdate: jest.fn(),
+            updateManyIsExpired: jest.fn(),
+            updateMany: jest.fn(),
             remove: jest.fn(),
             sort: jest.fn(),
             skip: jest.fn(),
@@ -74,7 +77,8 @@ describe("OrderService", () => {
     }).compile();
 
     service = module.get<OrderService>(OrderService);
-    model = module.get<Model<Order>>(getModelToken(Order.name));
+    orderModel = module.get<Model<Order>>(getModelToken(Order.name));
+    expireDayModal = module.get<Model<ExpireDay>>(getModelToken(ExpireDay.name));
   });
 
   it("should be defined", () => {
@@ -82,7 +86,7 @@ describe("OrderService", () => {
   });
 
   it("should return orders in one user ID, within given pagination", async () => {
-    jest.spyOn(model, "find").mockReturnValue({
+    jest.spyOn(orderModel, "find").mockReturnValue({
       populate: jest.fn().mockReturnValue({
         sort: jest.fn().mockReturnValue({
           skip: jest.fn().mockReturnValue({
@@ -100,7 +104,7 @@ describe("OrderService", () => {
   });
   // admin filter get all
   it("should return orders within given pagination, status and user_id", async () => {
-    jest.spyOn(model, "find").mockReturnValue({
+    jest.spyOn(orderModel, "find").mockReturnValue({
       populate: jest.fn().mockReturnValue({
         sort: jest.fn().mockReturnValue({
           skip: jest.fn().mockReturnValue({
@@ -111,7 +115,7 @@ describe("OrderService", () => {
         }),
       }),
     } as any);
-    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(3);
+    jest.spyOn(orderModel, "countDocuments").mockResolvedValueOnce(3);
     const user_Id = "user123";
     expect(
       await service.findAllByFilters({ user_id: user_Id, status: "unpaid", limit: 3, offset: 1 }),
@@ -119,7 +123,7 @@ describe("OrderService", () => {
   });
 
   it("should return a order in given object ID", async () => {
-    jest.spyOn(model, "findOne").mockReturnValueOnce(
+    jest.spyOn(orderModel, "findOne").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockOrder),
       }) as any,
@@ -132,7 +136,7 @@ describe("OrderService", () => {
   });
 
   it("should return a order created", async () => {
-    jest.spyOn(model, "create").mockImplementationOnce(() => Promise.resolve(mockOrder));
+    jest.spyOn(orderModel, "create").mockImplementationOnce(() => Promise.resolve(mockOrder));
     expect(await service.create(mockOrder)).toEqual(mockOrder);
   });
 
@@ -141,9 +145,16 @@ describe("OrderService", () => {
       ...mockOrder,
       isPaid: true,
     };
-    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+
+    jest.spyOn(orderModel, "findByIdAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(updateOrder),
+      }) as any,
+    );
+
+    jest.spyOn(expireDayModal, "findOne").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
       }) as any,
     );
     const updatedOrder = await service.update(Object("632336d9529f634ce9bd0833"), updateOrder);
@@ -156,7 +167,7 @@ describe("OrderService", () => {
       isPaid: true,
       status: "completed",
     };
-    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+    jest.spyOn(orderModel, "findByIdAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(updateOrder),
       }) as any,
@@ -168,7 +179,7 @@ describe("OrderService", () => {
   });
 
   it("should cancel a order", async () => {
-    jest.spyOn(model, "findOneAndUpdate").mockResolvedValueOnce(
+    jest.spyOn(orderModel, "findOneAndUpdate").mockResolvedValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockOrderInDatabase),
       }) as any,

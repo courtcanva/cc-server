@@ -7,6 +7,7 @@ export enum StatusType {
   PROCESSING = "processing",
   COMPLETED = "completed",
   CANCELLED = "cancelled",
+  EXPIRED = "expired",
 }
 
 export class Design extends Document {
