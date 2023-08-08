@@ -6,6 +6,7 @@ export type ReturnUserInfo = {
   email: string;
   firstName: string;
   lastName: string;
+  profileImgUrl?: string | null;
   tokens: Tokens;
   needConnection: boolean;
 };
