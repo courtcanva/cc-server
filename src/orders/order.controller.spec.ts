@@ -6,6 +6,7 @@ import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 import { FindAllOrderDto, GetOrdersFilterDto } from "./dto/findAllOrder.dto";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { JwtModule } from "@nestjs/jwt";
 
 describe("OrderController", () => {
   let controller: OrderController;
@@ -13,6 +14,7 @@ describe("OrderController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OrderController],
+      imports: [JwtModule],
       providers: [
         {
           provide: OrderService,

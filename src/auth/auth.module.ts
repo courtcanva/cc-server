@@ -8,6 +8,8 @@ import { JwtModule } from "@nestjs/jwt";
 import { AccessTokenStrategy, RefreshTokenStrategy } from "./strategies";
 import { UserModule } from "../users/user.module";
 import { DepositModule } from "src/deposit/deposit.module";
+import { APP_GUARD } from "@nestjs/core";
+import { AuthGuard } from "./auth.guard";
 
 @Module({
   imports: [
@@ -27,6 +29,6 @@ import { DepositModule } from "src/deposit/deposit.module";
   ],
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
   controllers: [AuthController],
-  exports: [AuthService],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

@@ -5,9 +5,11 @@ import { OrderController } from "./order.controller";
 import { OrderService } from "./order.service";
 import { ExpireDay, ExpireDaySchema } from "src/expire_day/schemas/expireDay.schema";
 import { ExpireDayService } from "src/expire_day/expireDay.service";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
   imports: [
+    JwtModule,
     MongooseModule.forFeature([
       {
         name: Order.name,

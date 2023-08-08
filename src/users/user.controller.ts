@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Get, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
 import { CheckEmailDto } from "./dto/checkEmail.dto";
 import { CreateUserDto } from "./dto/createUser.dto";
@@ -35,6 +35,7 @@ export class UserController {
     total: number;
     data: User[];
   }> {
+    // TODO Data Masking; Admin Permission only
     return await this.userService.getAllUsers(paginationQuery);
   }
 
