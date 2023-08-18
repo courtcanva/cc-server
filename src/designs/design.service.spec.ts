@@ -56,18 +56,12 @@ describe("DesignService", () => {
   });
 
   it("should update a user design successfully", async () => {
-    const updateDesign = {
-      ...mockDesign,
-      designName: mockDesign.designName,
-      tileColor: mockDesign.tileColor,
-      courtSize: mockDesign.courtSize,
-    };
     jest.spyOn(model, "findOneAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockDesign),
       }) as any,
     );
-    const updatedDesign = await service.update(Object("1"), updateDesign);
+    const updatedDesign = await service.update(Object("1"), mockDesign);
     expect(updatedDesign).toEqual(mockDesign);
   });
 

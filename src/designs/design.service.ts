@@ -20,14 +20,8 @@ export class DesignService {
   }
 
   async update(_id: ObjectId, designDto: DesignDto): Promise<Design> {
-    const updateDesign = {
-      ...designDto,
-      designName: designDto.designName,
-      tileColor: designDto.tileColor,
-      courtSize: designDto.courtSize,
-    };
     const existingDesign = await this.designModel
-      .findOneAndUpdate({ _id: _id }, { $set: updateDesign }, { new: true })
+      .findOneAndUpdate({ _id: _id }, { $set: designDto }, { new: true })
       .exec();
     return existingDesign;
   }

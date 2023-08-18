@@ -3,6 +3,7 @@ import { DesignController } from "./design.controller";
 import { DesignService } from "./design.service";
 import { DesignDto } from "./dto/design.dto";
 import { mockDesign } from "./design.testData";
+import { JwtModule } from "@nestjs/jwt";
 
 describe("DesignController", () => {
   let controller: DesignController;
@@ -10,6 +11,7 @@ describe("DesignController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DesignController],
+      imports: [JwtModule],
       providers: [
         {
           provide: DesignService,
@@ -59,16 +61,10 @@ describe("DesignController", () => {
 
   describe("updateDesign", () => {
     it("should update a new Design", () => {
-      const designDto: DesignDto = mockDesign;
-      const updateDesign = {
-        ...designDto,
-        designName: designDto.designName,
-        tileColor: designDto.tileColor,
-        courtSize: designDto.courtSize,
-      };
+      const updateDesign: DesignDto = mockDesign;
       expect(controller.update(Object("1"), updateDesign)).resolves.toEqual({
         _id: "1",
-        ...designDto,
+        ...updateDesign,
       });
     });
   });

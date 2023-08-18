@@ -27,6 +27,8 @@
     "migrate-down": "migrate-mongo down"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity": "^3.391.0",
+    "@aws-sdk/client-s3": "^3.391.0",
     "@aws-sdk/client-ses": "^3.131.0",
     "@golevelup/nestjs-stripe": "^0.5.0",
     "@golevelup/nestjs-webhooks": "^0.2.14",
