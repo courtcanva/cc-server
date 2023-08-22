@@ -16,7 +16,7 @@ import { ExpireDayService } from "src/expire_day/expireDay.service";
 import { ExpireDay } from "src/expire_day/schemas/expireDay.schema";
 
 describe("OrderService", () => {
-  let service: OrderService;
+  let orderService: OrderService;
   let orderModel: Model<Order>;
   let expireDayModal: Model<ExpireDay>;
 
@@ -51,7 +51,7 @@ describe("OrderService", () => {
             create: jest.fn(),
             findByIdAndUpdate: jest.fn(),
             findOneAndUpdate: jest.fn(),
-            updateManyIsExpired: jest.fn(),
+            markExpiredOrders: jest.fn(),
             updateMany: jest.fn(),
             remove: jest.fn(),
             sort: jest.fn(),
@@ -76,13 +76,13 @@ describe("OrderService", () => {
       ],
     }).compile();
 
-    service = module.get<OrderService>(OrderService);
+    orderService = module.get<OrderService>(OrderService);
     orderModel = module.get<Model<Order>>(getModelToken(Order.name));
     expireDayModal = module.get<Model<ExpireDay>>(getModelToken(ExpireDay.name));
   });
 
   it("should be defined", () => {
-    expect(service).toBeDefined();
+    expect(orderService).toBeDefined();
   });
 
   it("should return orders in one user ID, within given pagination", async () => {
@@ -98,7 +98,7 @@ describe("OrderService", () => {
       }),
     } as any);
     const user_Id = "user123";
-    expect(await service.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual(
+    expect(await orderService.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual(
       mockOrderArray,
     );
   });
@@ -118,7 +118,12 @@ describe("OrderService", () => {
     jest.spyOn(orderModel, "countDocuments").mockResolvedValueOnce(3);
     const user_Id = "user123";
     expect(
-      await service.findAllByFilters({ user_id: user_Id, status: "unpaid", limit: 3, offset: 1 }),
+      await orderService.findAllByFilters({
+        user_id: user_Id,
+        status: "unpaid",
+        limit: 3,
+        offset: 1,
+      }),
     ).toEqual(mockOrderArrayWithTotal);
   });
 
@@ -131,13 +136,13 @@ describe("OrderService", () => {
     const id = Object("6321e2b4d65d0ab88eaefb13");
     const expectedOrder = mockOrder;
 
-    const order = await service.findOne(id);
+    const order = await orderService.findOne(id);
     expect(order).toEqual(expectedOrder);
   });
 
   it("should return a order created", async () => {
     jest.spyOn(orderModel, "create").mockImplementationOnce(() => Promise.resolve(mockOrder));
-    expect(await service.create(mockOrder)).toEqual(mockOrder);
+    expect(await orderService.create(mockOrder)).toEqual(mockOrder);
   });
 
   it("should update a order item", async () => {
@@ -157,7 +162,7 @@ describe("OrderService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
       }) as any,
     );
-    const updatedOrder = await service.update(Object("632336d9529f634ce9bd0833"), updateOrder);
+    const updatedOrder = await orderService.update(Object("632336d9529f634ce9bd0833"), updateOrder);
     expect(updatedOrder).toEqual(updateOrder);
   });
 
@@ -172,7 +177,7 @@ describe("OrderService", () => {
         exec: jest.fn().mockResolvedValueOnce(updateOrder),
       }) as any,
     );
-    const updatedOrder = await service.updatePayment(Object("632336d9529f634ce9bd0833"), {
+    const updatedOrder = await orderService.updatePayment(Object("632336d9529f634ce9bd0833"), {
       status: StatusType.COMPLETED,
     });
     expect(updatedOrder).toEqual(updateOrder);
@@ -184,6 +189,22 @@ describe("OrderService", () => {
         exec: jest.fn().mockResolvedValueOnce(mockOrderInDatabase),
       }) as any,
     );
-    expect(await service.remove(Object("6320bd57f3dee2ee6deeecf2"))).toEqual(true);
+    expect(await orderService.remove(Object("6320bd57f3dee2ee6deeecf2"))).toEqual(true);
   });
+
+  // it("should update orders that isExpired and status", async () => {
+  //   const currentDate = new Date();
+  //   const updateOrder = {
+  //     ...mockOrder,
+  //     expiredAt: currentDate.setDate(currentDate.getDate() + 1),
+  //   };
+  //   jest.spyOn(orderModel, "updateMany").mockReturnValueOnce(
+  //     createMock<Query<any, any>>({
+  //       exec: jest.fn().mockResolvedValueOnce(updateOrder),
+  //     }) as any,
+  //   );
+  //   const updatedOrder: Order[] = await orderService.markExpiredOrders();
+  //   expect(updatedOrder[0].isExpired).toEqual(false);
+  //   expect(updatedOrder[0].status).toEqual("expired");
+  // });
 });

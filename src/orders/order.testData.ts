@@ -2,6 +2,9 @@ export const mockOrder = {
   user_id: "user123",
   status: "unpaid",
   depositRatio: 0.02,
+  isExpired: false,
+  expireDay: 7,
+  expiredAt: new Date(),
   items: [
     {
       image: "test",

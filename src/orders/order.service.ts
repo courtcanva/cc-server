@@ -23,7 +23,7 @@ export class OrderService {
     const optionalQuery: { [key: string]: any } = {};
     if (user_id) optionalQuery.user_id = user_id;
 
-    await this.updateManyIsExpired();
+    await this.markExpiredOrders();
 
     return await this.orderModel
       .find({ ...optionalQuery })
@@ -34,12 +34,13 @@ export class OrderService {
       .exec();
   }
 
-  async updateManyIsExpired(): Promise<void> {
+  async markExpiredOrders(): Promise<Order[]> {
     const nowDate = new Date();
     await this.orderModel.updateMany(
       { status: StatusType.UNPAID, isExpired: false, expiredAt: { $lt: nowDate } },
       { $set: { isExpired: true, status: StatusType.EXPIRED } },
     );
+    return await this.orderModel.find({ expiredAt: { $lt: nowDate } });
   }
 
   //find is for admin only
@@ -52,7 +53,7 @@ export class OrderService {
       ...(status ? { status } : {}),
     };
 
-    await this.updateManyIsExpired();
+    await this.markExpiredOrders();
 
     const ordersData = await this.orderModel
       .find(filterQuery)
