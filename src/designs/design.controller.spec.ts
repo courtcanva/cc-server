@@ -3,13 +3,17 @@ import { DesignController } from "./design.controller";
 import { DesignService } from "./design.service";
 import { DesignDto } from "./dto/design.dto";
 import { mockDesign } from "./design.testData";
+import { JwtModule } from "@nestjs/jwt";
+import * as UpLoadImg from "../utils/UploadImg";
 
 describe("DesignController", () => {
   let controller: DesignController;
+  const mockUploadImgToS3 = jest.spyOn(UpLoadImg, "upLoadImgTo3S");
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DesignController],
+      imports: [JwtModule],
       providers: [
         {
           provide: DesignService,
@@ -48,28 +52,15 @@ describe("DesignController", () => {
 
   describe("create()", () => {
     it("should create a new design", async () => {
-      const createDesignDto: DesignDto = mockDesign;
-
-      expect(controller.create(createDesignDto)).resolves.toEqual({
-        _id: "1",
-        ...createDesignDto,
-      });
+      controller.create(mockDesign);
+      expect(mockUploadImgToS3).toBeCalled();
     });
   });
 
   describe("updateDesign", () => {
     it("should update a new Design", () => {
-      const designDto: DesignDto = mockDesign;
-      const updateDesign = {
-        ...designDto,
-        designName: designDto.designName,
-        tileColor: designDto.tileColor,
-        courtSize: designDto.courtSize,
-      };
-      expect(controller.update(Object("1"), updateDesign)).resolves.toEqual({
-        _id: "1",
-        ...designDto,
-      });
+      controller.update(Object("1"), mockDesign);
+      expect(mockUploadImgToS3).toBeCalled();
     });
   });
 
