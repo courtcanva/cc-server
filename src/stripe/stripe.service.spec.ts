@@ -12,7 +12,10 @@ import {
   mockPaymentOrderData,
   mockUpdatePaymentInfo,
   mockOrder,
+  mockExpireDay,
 } from "./stripe.testData";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
+import { ExpireDay } from "src/expire_day/schemas/expireDay.schema";
 
 describe("StripeService", () => {
   let service: StripeService;
@@ -29,6 +32,19 @@ describe("StripeService", () => {
     findByIdAndUpdate: jest.fn().mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockOrder),
+      }) as any,
+    ),
+  };
+
+  const mockExpireDayModal = {
+    findOne: jest.fn().mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
+      }) as any,
+    ),
+    update: jest.fn().mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
       }) as any,
     ),
   };
@@ -52,6 +68,7 @@ describe("StripeService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        ExpireDayService,
         StripeService,
         OrderService,
         { provide: Connection, useValue: {} },
@@ -62,6 +79,10 @@ describe("StripeService", () => {
         {
           provide: getModelToken(Order.name),
           useValue: mockOrderModel,
+        },
+        {
+          provide: getModelToken(ExpireDay.name),
+          useValue: mockExpireDayModal,
         },
       ],
     }).compile();

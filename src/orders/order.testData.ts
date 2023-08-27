@@ -2,6 +2,9 @@ export const mockOrder = {
   user_id: "user123",
   status: "unpaid",
   depositRatio: 0.02,
+  isExpired: false,
+  expireDay: 7,
+  expiredAt: new Date(),
   items: [
     {
       image: "test",
@@ -90,4 +93,11 @@ export const mockOrderInDatabase = {
 export const mockOrderArrayWithTotal = {
   data: [{ ...mockOrder }, { ...mockOrder }, { ...mockOrder }],
   total: 3,
+};
+
+export const mockExpireDay = {
+  _id: "646c53e0b18b324ebb5af060",
+  expireDays: 7,
+  createdAt: "2023-05-23T05:49:20.501Z",
+  updatedAt: "2023-05-23T05:49:20.501Z",
 };

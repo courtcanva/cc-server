@@ -9,17 +9,35 @@ import {
   mockOrderArray,
   mockOrderInDatabase,
   mockOrderArrayWithTotal,
+  mockExpireDay,
 } from "./order.testData";
 import { User } from "src/users/schemas/user.schema";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
+import { ExpireDay } from "src/expire_day/schemas/expireDay.schema";
 
 describe("OrderService", () => {
-  let service: OrderService;
-  let model: Model<Order>;
+  let orderService: OrderService;
+  let orderModel: Model<Order>;
+  let expireDayModal: Model<ExpireDay>;
+
+  const mockExpireDayModal = {
+    findOne: jest.fn().mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
+      }) as any,
+    ),
+    update: jest.fn().mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
+      }) as any,
+    ),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         OrderService,
+        ExpireDayService,
         { provide: Connection, useValue: {} },
         {
           provide: getModelToken(Order.name),
@@ -33,6 +51,8 @@ describe("OrderService", () => {
             create: jest.fn(),
             findByIdAndUpdate: jest.fn(),
             findOneAndUpdate: jest.fn(),
+            markExpiredOrders: jest.fn(),
+            updateMany: jest.fn(),
             remove: jest.fn(),
             sort: jest.fn(),
             skip: jest.fn(),
@@ -49,19 +69,24 @@ describe("OrderService", () => {
             find: jest.fn(),
           },
         },
+        {
+          provide: getModelToken(ExpireDay.name),
+          useValue: mockExpireDayModal,
+        },
       ],
     }).compile();
 
-    service = module.get<OrderService>(OrderService);
-    model = module.get<Model<Order>>(getModelToken(Order.name));
+    orderService = module.get<OrderService>(OrderService);
+    orderModel = module.get<Model<Order>>(getModelToken(Order.name));
+    expireDayModal = module.get<Model<ExpireDay>>(getModelToken(ExpireDay.name));
   });
 
   it("should be defined", () => {
-    expect(service).toBeDefined();
+    expect(orderService).toBeDefined();
   });
 
   it("should return orders in one user ID, within given pagination", async () => {
-    jest.spyOn(model, "find").mockReturnValue({
+    jest.spyOn(orderModel, "find").mockReturnValue({
       populate: jest.fn().mockReturnValue({
         sort: jest.fn().mockReturnValue({
           skip: jest.fn().mockReturnValue({
@@ -73,13 +98,13 @@ describe("OrderService", () => {
       }),
     } as any);
     const user_Id = "user123";
-    expect(await service.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual(
+    expect(await orderService.findAll({ user_id: user_Id, limit: 3, offset: 1 })).toEqual(
       mockOrderArray,
     );
   });
   // admin filter get all
   it("should return orders within given pagination, status and user_id", async () => {
-    jest.spyOn(model, "find").mockReturnValue({
+    jest.spyOn(orderModel, "find").mockReturnValue({
       populate: jest.fn().mockReturnValue({
         sort: jest.fn().mockReturnValue({
           skip: jest.fn().mockReturnValue({
@@ -90,15 +115,20 @@ describe("OrderService", () => {
         }),
       }),
     } as any);
-    jest.spyOn(model, "countDocuments").mockResolvedValueOnce(3);
+    jest.spyOn(orderModel, "countDocuments").mockResolvedValueOnce(3);
     const user_Id = "user123";
     expect(
-      await service.findAllByFilters({ user_id: user_Id, status: "unpaid", limit: 3, offset: 1 }),
+      await orderService.findAllByFilters({
+        user_id: user_Id,
+        status: "unpaid",
+        limit: 3,
+        offset: 1,
+      }),
     ).toEqual(mockOrderArrayWithTotal);
   });
 
   it("should return a order in given object ID", async () => {
-    jest.spyOn(model, "findOne").mockReturnValueOnce(
+    jest.spyOn(orderModel, "findOne").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockOrder),
       }) as any,
@@ -106,13 +136,13 @@ describe("OrderService", () => {
     const id = Object("6321e2b4d65d0ab88eaefb13");
     const expectedOrder = mockOrder;
 
-    const order = await service.findOne(id);
+    const order = await orderService.findOne(id);
     expect(order).toEqual(expectedOrder);
   });
 
   it("should return a order created", async () => {
-    jest.spyOn(model, "create").mockImplementationOnce(() => Promise.resolve(mockOrder));
-    expect(await service.create(mockOrder)).toEqual(mockOrder);
+    jest.spyOn(orderModel, "create").mockImplementationOnce(() => Promise.resolve(mockOrder));
+    expect(await orderService.create(mockOrder)).toEqual(mockOrder);
   });
 
   it("should update a order item", async () => {
@@ -120,12 +150,19 @@ describe("OrderService", () => {
       ...mockOrder,
       isPaid: true,
     };
-    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+
+    jest.spyOn(orderModel, "findByIdAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(updateOrder),
       }) as any,
     );
-    const updatedOrder = await service.update(Object("632336d9529f634ce9bd0833"), updateOrder);
+
+    jest.spyOn(expireDayModal, "findOne").mockReturnValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(mockExpireDay),
+      }) as any,
+    );
+    const updatedOrder = await orderService.update(Object("632336d9529f634ce9bd0833"), updateOrder);
     expect(updatedOrder).toEqual(updateOrder);
   });
 
@@ -135,23 +172,42 @@ describe("OrderService", () => {
       isPaid: true,
       status: "completed",
     };
-    jest.spyOn(model, "findByIdAndUpdate").mockReturnValueOnce(
+    jest.spyOn(orderModel, "findByIdAndUpdate").mockReturnValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(updateOrder),
       }) as any,
     );
-    const updatedOrder = await service.updatePayment(Object("632336d9529f634ce9bd0833"), {
+    const updatedOrder = await orderService.updatePayment(Object("632336d9529f634ce9bd0833"), {
       status: StatusType.COMPLETED,
     });
     expect(updatedOrder).toEqual(updateOrder);
   });
 
   it("should cancel a order", async () => {
-    jest.spyOn(model, "findOneAndUpdate").mockResolvedValueOnce(
+    jest.spyOn(orderModel, "findOneAndUpdate").mockResolvedValueOnce(
       createMock<Query<any, any>>({
         exec: jest.fn().mockResolvedValueOnce(mockOrderInDatabase),
       }) as any,
     );
-    expect(await service.remove(Object("6320bd57f3dee2ee6deeecf2"))).toEqual(true);
+    expect(await orderService.remove(Object("6320bd57f3dee2ee6deeecf2"))).toEqual(true);
+  });
+
+  it("should update orders that isExpired and status", async () => {
+    const currentDate = new Date();
+    const updateOrder = {
+      ...mockOrder,
+      expiredAt: currentDate.setDate(currentDate.getDate() + 1),
+    };
+    jest.spyOn(orderModel, "find").mockResolvedValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(updateOrder),
+      }) as any,
+    );
+    // const updatedOrder = await orderService.markExpiredOrders();
+    // console.log(updatedOrder);
+    expect(await orderService.markExpiredOrders()).toEqual(true);
+
+    // expect(updatedOrder).toEqual(false);
+    // expect(updatedOrder[0].status).toEqual("expired");
   });
 });

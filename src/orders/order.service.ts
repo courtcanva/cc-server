@@ -6,10 +6,14 @@ import { FindAllOrderDto, GetOrdersFilterDto } from "./dto/findAllOrder.dto";
 import { CreateOrderDto } from "./dto/createOrder.dto";
 import { UpdateOrderDto } from "./dto/updateOrder.dto";
 import { PaginationQueryDto } from "src/utils/PaginationDto/pagination-query.dto";
+import { ExpireDayService } from "src/expire_day/expireDay.service";
 
 @Injectable()
 export class OrderService {
-  constructor(@InjectModel(Order.name) private readonly orderModel: Model<Order>) {}
+  constructor(
+    @InjectModel(Order.name) private readonly orderModel: Model<Order>,
+    private readonly expireDayService: ExpireDayService,
+  ) {}
   //findAll is for cc-app order, need exact search
   async findAll(findAllOrder: FindAllOrderDto & PaginationQueryDto): Promise<Order[]> {
     const { user_id, limit = 0, offset = 0 } = findAllOrder;
@@ -19,6 +23,8 @@ export class OrderService {
     const optionalQuery: { [key: string]: any } = {};
     if (user_id) optionalQuery.user_id = user_id;
 
+    await this.markExpiredOrders();
+
     return await this.orderModel
       .find({ ...optionalQuery })
       .populate("paymentInfo")
@@ -26,6 +32,19 @@ export class OrderService {
       .skip(offset)
       .limit(limit)
       .exec();
+  }
+
+  async markExpiredOrders(): Promise<any> {
+    const nowDate = new Date();
+    await this.orderModel.updateMany(
+      { status: StatusType.UNPAID, isExpired: false, expiredAt: { $lt: nowDate } },
+      { $set: { isExpired: true, status: StatusType.EXPIRED } },
+    );
+    const findExpiredOrder = await this.orderModel.find({ isExpired: true });
+    if (!findExpiredOrder) {
+      return false;
+    }
+    return true;
   }
 
   //find is for admin only
@@ -37,6 +56,9 @@ export class OrderService {
       ...(user_id ? { user_id: { $regex: user_id, $options: "i" } } : {}),
       ...(status ? { status } : {}),
     };
+
+    await this.markExpiredOrders();
+
     const ordersData = await this.orderModel
       .find(filterQuery)
       .populate("paymentInfo")
@@ -62,15 +84,25 @@ export class OrderService {
   }
 
   async create(createOrder: CreateOrderDto): Promise<Order> {
+    const expireDay = await this.expireDayService.findOne();
     const order = await this.orderModel.create({
       ...createOrder,
+      expireDay: expireDay.expireDays,
+      expiredAt: new Date().getTime() + expireDay.expireDays * 24 * 3600 * 1000,
+      isExpired: false,
     });
     return order;
   }
 
   async update(id: ObjectId, updateOrder: UpdateOrderDto): Promise<Order> {
+    const expireDay = await this.expireDayService.findOne();
+    const newExpiredAt = new Date().getTime() + expireDay.expireDays * 24 * 3600 * 1000;
     const order = await this.orderModel
-      .findByIdAndUpdate({ _id: id }, { $set: updateOrder }, { new: true })
+      .findByIdAndUpdate(
+        { _id: id },
+        { $set: { ...updateOrder, expiredAt: newExpiredAt } },
+        { new: true },
+      )
       .exec();
     if (!order) {
       throw new NotFoundException(`Order #${id} not found`);

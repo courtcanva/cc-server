@@ -149,10 +149,20 @@ export const mockPaymentInfoDb = {
   __v: 0,
 };
 
+export const mockExpireDay = {
+  _id: "646c53e0b18b324ebb5af060",
+  expireDays: 7,
+  createdAt: "2023-05-23T05:49:20.501Z",
+  updatedAt: "2023-05-23T05:49:20.501Z",
+};
+
 export const mockOrder = {
   user_id: "user123",
   status: "unpaid",
   depositRatio: 0.02,
+  isExpired: false,
+  expiredAt: "2023-08-11T08:05:19.452Z",
+  expireDay: 7,
   items: [
     {
       image: "test",
