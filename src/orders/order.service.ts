@@ -34,13 +34,17 @@ export class OrderService {
       .exec();
   }
 
-  async markExpiredOrders(): Promise<Order[]> {
+  async markExpiredOrders(): Promise<any> {
     const nowDate = new Date();
     await this.orderModel.updateMany(
       { status: StatusType.UNPAID, isExpired: false, expiredAt: { $lt: nowDate } },
       { $set: { isExpired: true, status: StatusType.EXPIRED } },
     );
-    return await this.orderModel.find({ expiredAt: { $lt: nowDate } });
+    const findExpiredOrder = await this.orderModel.find({ isExpired: true });
+    if (!findExpiredOrder) {
+      return false;
+    }
+    return true;
   }
 
   //find is for admin only

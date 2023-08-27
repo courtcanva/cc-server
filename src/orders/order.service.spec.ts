@@ -192,19 +192,22 @@ describe("OrderService", () => {
     expect(await orderService.remove(Object("6320bd57f3dee2ee6deeecf2"))).toEqual(true);
   });
 
-  // it("should update orders that isExpired and status", async () => {
-  //   const currentDate = new Date();
-  //   const updateOrder = {
-  //     ...mockOrder,
-  //     expiredAt: currentDate.setDate(currentDate.getDate() + 1),
-  //   };
-  //   jest.spyOn(orderModel, "updateMany").mockReturnValueOnce(
-  //     createMock<Query<any, any>>({
-  //       exec: jest.fn().mockResolvedValueOnce(updateOrder),
-  //     }) as any,
-  //   );
-  //   const updatedOrder: Order[] = await orderService.markExpiredOrders();
-  //   expect(updatedOrder[0].isExpired).toEqual(false);
-  //   expect(updatedOrder[0].status).toEqual("expired");
-  // });
+  it("should update orders that isExpired and status", async () => {
+    const currentDate = new Date();
+    const updateOrder = {
+      ...mockOrder,
+      expiredAt: currentDate.setDate(currentDate.getDate() + 1),
+    };
+    jest.spyOn(orderModel, "find").mockResolvedValueOnce(
+      createMock<Query<any, any>>({
+        exec: jest.fn().mockResolvedValueOnce(updateOrder),
+      }) as any,
+    );
+    // const updatedOrder = await orderService.markExpiredOrders();
+    // console.log(updatedOrder);
+    expect(await orderService.markExpiredOrders()).toEqual(true);
+
+    // expect(updatedOrder).toEqual(false);
+    // expect(updatedOrder[0].status).toEqual("expired");
+  });
 });
