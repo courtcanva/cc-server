@@ -43,7 +43,7 @@ export const mockDesign = {
   },
   image: "image-URL",
   badgeImage: {
-    badgeImageUrl: "badgeImage-URL",
+    badgeImageUrl: "http://badgeImage-URL.jpg",
     width: 90,
     height: 90,
   },
@@ -95,7 +95,7 @@ export const mockDesignArray = [
     },
     image: "image-URL",
     badgeImage: {
-      badgeImageUrl: "badgeImage-URL",
+      badgeImageUrl: "http://badgeImage-URL.jpg",
       width: 90,
       height: 90,
     },
@@ -145,7 +145,7 @@ export const mockDesignArray = [
     },
     image: "image-URL",
     badgeImage: {
-      badgeImageUrl: "badgeImage-URL",
+      badgeImageUrl: "http://badgeImage-URL.jpg",
       width: 90,
       height: 90,
     },
