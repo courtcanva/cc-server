@@ -38,6 +38,13 @@ export class Design extends Document {
 
   @Prop({ type: String })
   image: string;
+
+  @Prop({ type: Object })
+  badgeImage: {
+    badgeImageUrl: string | null;
+    width: number;
+    height: number;
+  };
 }
 
 export const DesignSchema = SchemaFactory.createForClass(Design);

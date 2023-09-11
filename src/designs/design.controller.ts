@@ -19,16 +19,36 @@ export class DesignController {
   @Post()
   @UseGuards(AuthGuard)
   async create(@Body() createDesignDto: DesignDto): Promise<Design> {
-    const createDesign = { ...createDesignDto, image: await upLoadImgTo3S(createDesignDto.image) };
+    const createBadgeImage = {
+      ...createDesignDto.badgeImage,
+      badgeImageUrl:
+        createDesignDto.badgeImage.badgeImageUrl &&
+        !createDesignDto.badgeImage.badgeImageUrl.startsWith("http")
+          ? await upLoadImgTo3S(createDesignDto.badgeImage.badgeImageUrl)
+          : createDesignDto.badgeImage.badgeImageUrl,
+    };
+    const createDesign = {
+      ...createDesignDto,
+      image: await upLoadImgTo3S(createDesignDto.image),
+      badgeImage: createBadgeImage,
+    };
     return await this.designService.create(createDesign);
   }
 
   @Put(":_id")
   @UseGuards(AuthGuard)
   async update(@Param("_id") _id: ObjectId, @Body() designDto: DesignDto): Promise<Design> {
+    const updateBadgeImage = {
+      ...designDto.badgeImage,
+      badgeImageUrl:
+        designDto.badgeImage.badgeImageUrl && !designDto.badgeImage.badgeImageUrl.startsWith("http")
+          ? await upLoadImgTo3S(designDto.badgeImage.badgeImageUrl)
+          : designDto.badgeImage.badgeImageUrl,
+    };
     const updateDesign = {
       ...designDto,
       image: await upLoadImgTo3S(designDto.image),
+      badgeImage: updateBadgeImage,
     };
     return await this.designService.update(_id, updateDesign);
   }

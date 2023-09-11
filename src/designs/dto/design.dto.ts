@@ -42,4 +42,12 @@ export class DesignDto {
   @IsString()
   @IsNotEmpty()
   readonly image: string;
+
+  @IsObject()
+  @IsNotEmpty()
+  readonly badgeImage: {
+    badgeImageUrl: string | null;
+    width: number;
+    height: number;
+  };
 }
