@@ -42,6 +42,11 @@ export const mockDesign = {
     lineBorderWidth: 200,
   },
   image: "image-URL",
+  badgeImage: {
+    badgeImageUrl: "badgeImage-URL",
+    width: 90,
+    height: 90,
+  },
 };
 
 export const mockDesignArray = [
@@ -89,6 +94,11 @@ export const mockDesignArray = [
       lineBorderWidth: 200,
     },
     image: "image-URL",
+    badgeImage: {
+      badgeImageUrl: "badgeImage-URL",
+      width: 90,
+      height: 90,
+    },
   },
   {
     user_id: "user123",
@@ -134,5 +144,10 @@ export const mockDesignArray = [
       lineBorderWidth: 200,
     },
     image: "image-URL",
+    badgeImage: {
+      badgeImageUrl: "badgeImage-URL",
+      width: 90,
+      height: 90,
+    },
   },
 ];

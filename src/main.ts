@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bodyParser: false,
   });
-  app.use(json({ limit: "1mb" }));
+  app.use(json({ limit: "3mb" }));
   app.enableCors();
   app.set("trust proxy", 1);
   app.useGlobalPipes(
