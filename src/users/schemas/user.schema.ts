@@ -18,6 +18,10 @@ export class User extends Document {
 
   @Prop()
   @Optional()
+  profileImgUrl: string;
+
+  @Prop()
+  @Optional()
   password: string;
 
   @Prop({ default: false })

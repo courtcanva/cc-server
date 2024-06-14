@@ -80,6 +80,7 @@ export class AuthService {
         email: email,
         firstName: user.firstName,
         lastName: user.lastName,
+        profileImgUrl: user.profileImgUrl,
         tokens,
         needConnection: false,
       };
@@ -94,6 +95,7 @@ export class AuthService {
         email: email,
         firstName: user.firstName,
         lastName: user.lastName,
+        profileImgUrl: user.profileImgUrl,
         tokens,
         needConnection: !user.googleId,
       };
@@ -137,12 +139,13 @@ export class AuthService {
 
     const tokens = await this.getTokens(user._id, user.email);
     await this.updateRtHash(user._id, tokens.refreshToken);
-    const { _id, email, firstName, lastName, isActivated } = user;
+    const { _id, email, firstName, lastName, profileImgUrl, isActivated } = user;
     const respond = {
       userId: _id,
       email,
       firstName,
       lastName,
+      profileImgUrl,
       tokens,
       isActivated,
     };
@@ -202,7 +205,15 @@ export class AuthService {
     try {
       const { userId, otp } = body;
       const user = await this.userModel.findById(userId);
-      const { otp: userOTPRecord, otpExpiresAt, _id, email, firstName, lastName } = user;
+      const {
+        otp: userOTPRecord,
+        otpExpiresAt,
+        _id,
+        email,
+        firstName,
+        lastName,
+        profileImgUrl,
+      } = user;
       if (otpExpiresAt.getTime() < Date.now()) {
         await this.userModel.updateOne(
           { _id },
@@ -228,6 +239,7 @@ export class AuthService {
             email,
             firstName,
             lastName,
+            profileImgUrl,
             tokens,
             isActivated: true,
           };
